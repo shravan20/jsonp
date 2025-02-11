@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Previewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .tabs {
+            margin-bottom: 10px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background-color: #e0e0e0;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .tab-button.active {
+            background-color: #fff;
+            font-weight: bold;
+        }
+
+        #json-input {
+            width: 100%;
+            height: 200px;
+            padding: 10px;
+            margin-bottom: 20px;
+            font-family: monospace;
+        }
+
+        .preview-section {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .preview-section.active {
+            display: block;
+        }
+
+        #raw-json {
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+
+        .tree-node {
+            margin-left: 20px;
+        }
+
+        .tree-key {
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .tree-key:hover {
+            text-decoration: underline;
+        }
+
+        .collapsed::after {
+            content: "▶";
+            font-size: 10px;
+            margin-left: 5px;
+        }
+
+        .expanded::after {
+            content: "▼";
+            font-size: 10px;
+            margin-left: 5px;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JSON Preview</h1>
+        
+        <textarea id="json-input" placeholder="Enter JSON here..."></textarea>
+        
+        <div class="tabs">
+            <button class="tab-button active" onclick="showTab('raw')">Raw JSON</button>
+            <button class="tab-button" onclick="showTab('tree')">Tree View</button>
+            <button class="tab-button" onclick="showTab('error')">Errors</button>
+        </div>
+
+        <div id="raw-preview" class="preview-section active">
+            <pre id="raw-json"></pre>
+        </div>
+
+        <div id="tree-preview" class="preview-section">
+            <div id="tree-view"></div>
+        </div>
+
+        <div id="error-preview" class="preview-section">
+            <div id="error-message"></div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Tab buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.toggle('active', button.textContent.includes(tabName));
+            });
+
+            // Tab content
+            document.querySelectorAll('.preview-section').forEach(section => {
+                section.classList.toggle('active', section.id === `${tabName}-preview`);
+            });
+        }
+
+        function createTreeView(data, parentElement) {
+            parentElement.innerHTML = '';
+            
+            function processNode(value, parent, key) {
+                const node = document.createElement('div');
+                node.className = 'tree-node';
+
+                if (typeof value === 'object' && value !== null) {
+                    const keySpan = document.createElement('span');
+                    keySpan.className = 'tree-key collapsed';
+                    keySpan.textContent = key || '';
+                    keySpan.onclick = () => {
+                        keySpan.classList.toggle('collapsed');
+                        keySpan.classList.toggle('expanded');
+                        node.childNodes[1].classList.toggle('hidden');
+                    };
+
+                    const children = document.createElement('div');
+                    children.className = 'tree-children';
+                    
+                    if (Array.isArray(value)) {
+                        keySpan.textContent = `${key || ''} [${value.length}]`;
+                        value.forEach((item, index) => {
+                            processNode(item, children, index);
+                        });
+                    } else {
+                        keySpan.textContent = `${key || ''} {${Object.keys(value).length}}`;
+                        Object.entries(value).forEach(([k, v]) => {
+                            processNode(v, children, k);
+                        });
+                    }
+
+                    node.appendChild(keySpan);
+                    node.appendChild(children);
+                    parent.appendChild(node);
+                } else {
+                    node.textContent = `${key}: ${value}`;
+                    parent.appendChild(node);
+                }
+            }
+
+            processNode(data, parentElement);
+        }
+
+        function updatePreview() {
+            const input = document.getElementById('json-input').value;
+            const rawPreview = document.getElementById('raw-json');
+            const errorMessage = document.getElementById('error-message');
+
+            try {
+                const parsed = JSON.parse(input);
+                rawPreview.textContent = JSON.stringify(parsed, null, 2);
+                createTreeView(parsed, document.getElementById('tree-view'));
+                errorMessage.textContent = '';
+                showTab('raw');
+            } catch (e) {
+                errorMessage.textContent = `Error: ${e.message}`;
+                showTab('error');
+            }
+        }
+
+        // Event listeners
+        document.getElementById('json-input').addEventListener('input', updatePreview);
+        
+        // Initial preview
+        updatePreview();
+    </script>
+</body>
+</html>
