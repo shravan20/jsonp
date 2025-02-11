@@ -218,6 +218,9 @@
             `;
             document.getElementById('tabs-container').insertBefore(tabButton, document.querySelector('.add-tab-button'));
 
+            // Add event listener for double-click to make tab name editable
+            tabButton.addEventListener('dblclick', () => makeTabNameEditable(tabId));
+
             // Add tab content
             const tabContent = document.createElement('div');
             tabContent.id = tabId;
@@ -431,7 +434,7 @@
         // Add event listener for the first tab
         document.querySelector('#tab1 .json-input').addEventListener('input', () => updatePreview('tab1'));
 
-        // Add event listener for tab name editing
+        // Add event listener for tab name editing on initial tabs
         document.querySelectorAll('.tab-button').forEach(button => {
             button.addEventListener('dblclick', () => makeTabNameEditable(button.getAttribute('data-tab')));
         });
