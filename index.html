@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Preview with Search</title>
+    <title>Multitab JSONPreviewer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -138,12 +138,15 @@
         .highlight {
             background-color: yellow;
             font-weight: bold;
+            padding: 2px;
+            border-radius: 3px;
         }
+
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>JSON Preview with Search</h1>
+        <div class="container">
+        <h1>Multitab JSONPreviewer</h1>
 
         <div class="tabs" id="tabs-container">
             <button class="tab-button active" data-tab="tab1" onclick="switchTab('tab1')">Tab 1</button>
@@ -228,6 +231,13 @@
 
             // Add event listener for JSON input
             tabContent.querySelector('.json-input').addEventListener('input', () => updatePreview(tabId));
+
+            // Add event listener for Enter key in search input
+            tabContent.querySelector('.search-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchJSON(tabId);
+                }
+            });
 
             // Switch to the new tab
             switchTab(tabId);
@@ -323,13 +333,14 @@
             }
         }
 
-        // Function to search JSON keys or values
+        // Function to search JSON in both Raw and Tree views
         function searchJSON(tabId) {
             const searchInput = document.querySelector(`#${tabId} .search-input`).value.trim().toLowerCase();
+            const rawPreview = document.querySelector(`#${tabId} .raw-json`);
             const treeView = document.querySelector(`#${tabId} .tree-view`);
-            
+
             // Remove previous highlights
-            treeView.querySelectorAll('.highlight').forEach(highlight => {
+            document.querySelectorAll(`#${tabId} .highlight`).forEach(highlight => {
                 const parent = highlight.parentNode;
                 parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
             });
@@ -340,34 +351,31 @@
             const escapedSearch = searchInput.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regex = new RegExp(`(${escapedSearch})`, 'gi');
 
-            // Recursive function to highlight text
-            function highlightNode(node) {
-                if (node.nodeType === Node.TEXT_NODE) {
-                    const matches = node.nodeValue.match(regex);
-                    if (matches) {
-                        const span = document.createElement('span');
-                        span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
-                        node.parentNode.replaceChild(span, node);
-                    }
-                } 
-                else if (node.nodeType === Node.ELEMENT_NODE && node.childNodes) {
-                    node.childNodes.forEach(child => highlightNode(child));
-                }
+            // Highlight in Raw JSON
+            if (rawPreview.classList.contains('active')) {
+                const rawContent = rawPreview.textContent;
+                rawPreview.innerHTML = rawContent.replace(regex, '<span class="highlight">$1</span>');
             }
 
-            // Start highlighting from root
-            treeView.childNodes.forEach(child => highlightNode(child));
-        }
-
-        // Add event listener for Enter key in search input
-        document.querySelectorAll('.search-input').forEach(input => {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    const tabId = e.target.closest('.json-tab-content').id;
-                    searchJSON(tabId);
+            // Highlight in Tree View
+            if (treeView.classList.contains('active')) {
+                function highlightNode(node) {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        const matches = node.nodeValue.match(regex);
+                        if (matches) {
+                            const span = document.createElement('span');
+                            span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
+                            node.parentNode.replaceChild(span, node);
+                        }
+                    } 
+                    else if (node.nodeType === Node.ELEMENT_NODE && node.childNodes) {
+                        node.childNodes.forEach(child => highlightNode(child));
+                    }
                 }
-            });
-        });
+
+                treeView.childNodes.forEach(child => highlightNode(child));
+            }
+        }
 
         // Add event listener for the first tab
         document.querySelector('#tab1 .json-input').addEventListener('input', () => updatePreview('tab1'));
