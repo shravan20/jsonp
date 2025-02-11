@@ -13,6 +13,7 @@ function getActiveMode() {
 }
 
 function saveGlobalState() {
+
     const state = {
         darkMode: document.body.classList.contains("dark-mode"),
         activeMode: getActiveMode(),
@@ -38,6 +39,7 @@ function saveGlobalState() {
             tabs: []
         }
     };
+
     // Formatter tabs
     document
         .querySelectorAll("#formatter-tabs-container .tab-button[data-tab]")
@@ -50,6 +52,7 @@ function saveGlobalState() {
                 document.querySelector("#" + tabId + " .json-input")?.value || "";
             state.formatter.tabs.push({ id: tabId, name, color, content });
         });
+
     // Compare tabs
     document
         .querySelectorAll("#compare-tabs-container .tab-button[data-tab]")
@@ -69,6 +72,7 @@ function saveGlobalState() {
                 rightContent
             });
         });
+
     // Codegen tabs
     document
         .querySelectorAll("#codegen-tabs-container .tab-button[data-tab]")
@@ -89,6 +93,7 @@ function loadGlobalState() {
     const stateStr = localStorage.getItem("jsonToolState");
     if (!stateStr) return;
     const state = JSON.parse(stateStr);
+
     // Dark Mode
     if (state.darkMode) document.body.classList.add("dark-mode");
     else document.body.classList.remove("dark-mode");
@@ -100,11 +105,14 @@ function loadGlobalState() {
     ftc
         .querySelectorAll(".tab-button[data-tab]")
         .forEach((btn) => btn.remove());
+
     document.getElementById("formatter-tab-contents").innerHTML = "";
     formatterTabCount = 0;
+
     state.formatter.tabs.forEach((tabData) => {
         createFormatterTab(tabData);
     });
+
     if (state.formatter.activeTab)
         switchFormatterTab(state.formatter.activeTab);
 
@@ -113,6 +121,7 @@ function loadGlobalState() {
     ctc
         .querySelectorAll(".tab-button[data-tab]")
         .forEach((btn) => btn.remove());
+
     document.getElementById("compare-tab-contents").innerHTML = "";
     compareTabCount = 0;
     state.compare.tabs.forEach((tabData) => {
@@ -125,6 +134,7 @@ function loadGlobalState() {
     cgtc
         .querySelectorAll(".tab-button[data-tab]")
         .forEach((btn) => btn.remove());
+
     document.getElementById("codegen-tab-contents").innerHTML = "";
     codegenTabCount = 0;
     state.codegen.tabs.forEach((tabData) => {
@@ -155,15 +165,19 @@ function switchMode(mode) {
 }
 
 /* ========== Formatter Functions ========== */
+
 let formatterTabCount = 0;
+
 function addFormatterTab() {
     createFormatterTab();
     switchFormatterTab("formatterTab" + formatterTabCount);
     saveGlobalState();
 }
+
 function createFormatterTab(tabData = null) {
     formatterTabCount++;
     const tabId = "formatterTab" + formatterTabCount;
+
     // Create tab button
     const tabButton = document.createElement("button");
     tabButton.className = "tab-button";
@@ -182,6 +196,7 @@ function createFormatterTab(tabData = null) {
     );
     const addButton = tabsContainer.querySelector(".add-tab-button");
     tabsContainer.insertBefore(tabButton, addButton);
+
     // Create tab content
     const tabContent = document.createElement("div");
     tabContent.id = tabId;
@@ -215,6 +230,7 @@ function createFormatterTab(tabData = null) {
     document
         .getElementById("formatter-tab-contents")
         .appendChild(tabContent);
+
     // Set content if provided
     if (tabData && tabData.content) {
         tabContent.querySelector(".json-input").value = tabData.content;
@@ -227,6 +243,7 @@ function createFormatterTab(tabData = null) {
     textarea.addEventListener("input", () => updateFormatterPreview(tabId));
     updateFormatterPreview(tabId);
 }
+
 function switchFormatterTab(tabId) {
     document
         .querySelectorAll("#formatter-tab-contents .json-tab-content")
@@ -243,6 +260,7 @@ function switchFormatterTab(tabId) {
         });
     saveGlobalState();
 }
+
 function updateFormatterPreview(tabId) {
     const tabContent = document.getElementById(tabId);
     const textarea = tabContent.querySelector(".json-input");
@@ -262,6 +280,7 @@ function updateFormatterPreview(tabId) {
     }
     saveGlobalState();
 }
+
 function showFormatterPreviewTab(tabId, previewType) {
     const tabContent = document.getElementById(tabId);
     const previews = tabContent.querySelectorAll(".preview-section");
@@ -279,6 +298,7 @@ function showFormatterPreviewTab(tabId, previewType) {
         );
     });
 }
+
 function searchFormatterJSON(tabId) {
     const tabContent = document.getElementById(tabId);
     const searchInput = tabContent
@@ -323,10 +343,12 @@ function searchFormatterJSON(tabId) {
     }
     saveGlobalState();
 }
+
 function updateFormatterTabColor(tabId, colorValue) {
     // If needed, update visual indicators here.
     saveGlobalState();
 }
+
 function uploadFormatterJSON(tabId, inputElement) {
     if (inputElement.files && inputElement.files[0]) {
         const file = inputElement.files[0];
@@ -342,6 +364,7 @@ function uploadFormatterJSON(tabId, inputElement) {
         inputElement.value = "";
     }
 }
+
 function downloadFormatterJSON(tabId) {
     const tabContent = document.getElementById(tabId);
     const content = tabContent.querySelector(".json-input").value;
@@ -355,6 +378,7 @@ function downloadFormatterJSON(tabId) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+
 function closeFormatterTab(tabId, event) {
     if (event) {
         event.stopPropagation();
@@ -376,12 +400,15 @@ function closeFormatterTab(tabId, event) {
 }
 
 /* ========== Compare Functions ========== */
+
 let compareTabCount = 0;
+
 function addCompareTab() {
     createCompareTab();
     switchCompareTab("compareTab" + compareTabCount);
     saveGlobalState();
 }
+
 function createCompareTab() {
     compareTabCount++;
     const tabId = "compareTab" + compareTabCount;
@@ -423,6 +450,7 @@ function createCompareTab() {
     rightTA.addEventListener("blur", () => autoFormatTextarea(rightTA));
     saveGlobalState();
 }
+
 // Create Compare tab using saved data
 function createCompareTabWithData(tabData) {
     compareTabCount++;
@@ -465,6 +493,7 @@ function createCompareTabWithData(tabData) {
     rightTA.addEventListener("blur", () => autoFormatTextarea(rightTA));
     saveGlobalState();
 }
+
 function switchCompareTab(tabId) {
     document
         .querySelectorAll("#compare-tab-contents .json-tab-content")
@@ -481,6 +510,7 @@ function switchCompareTab(tabId) {
         });
     saveGlobalState();
 }
+
 function compareJSONs(tabId) {
     const tabContent = document.getElementById(tabId);
     const leftTA = tabContent.querySelector(".json-input-left");
@@ -560,12 +590,15 @@ function closeCompareTab(tabId, event) {
 }
 
 /* ========== CodeGen Functions ========== */
+
 let codegenTabCount = 0;
+
 function addCodegenTab() {
     createCodegenTab();
     switchCodegenTab("codegenTab" + codegenTabCount);
     saveGlobalState();
 }
+
 function createCodegenTab() {
     codegenTabCount++;
     const tabId = "codegenTab" + codegenTabCount;
@@ -607,6 +640,7 @@ function createCodegenTab() {
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     saveGlobalState();
 }
+
 function createCodegenTabWithData(tabData) {
     codegenTabCount++;
     const tabId = tabData.id;
@@ -649,6 +683,7 @@ function createCodegenTabWithData(tabData) {
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     saveGlobalState();
 }
+
 function switchCodegenTab(tabId) {
     document
         .querySelectorAll("#codegen-tab-contents .json-tab-content")
@@ -665,6 +700,7 @@ function switchCodegenTab(tabId) {
         });
     saveGlobalState();
 }
+
 function generateCode(tabId) {
     const tabContent = document.getElementById(tabId);
     const textarea = tabContent.querySelector(".json-input");
@@ -686,6 +722,7 @@ function generateCode(tabId) {
     outputPre.textContent = code;
     saveGlobalState();
 }
+
 function closeCodegenTab(tabId, event) {
     if (event) {
         event.stopPropagation();
@@ -715,6 +752,7 @@ function autoFormatTextarea(textarea) {
         // Do nothing if invalid
     }
 }
+
 function createTreeView(data, parentElement) {
     parentElement.innerHTML = "";
     function processNode(value, parent, key) {
@@ -755,6 +793,7 @@ function createTreeView(data, parentElement) {
     }
     processNode(data, parentElement);
 }
+
 function openTabRenameTooltip(tabId, mode) {
     let containerSelector;
     if (mode === "formatter")
@@ -794,6 +833,7 @@ function openTabRenameTooltip(tabId, mode) {
         saveGlobalState();
     }
 }
+
 function generateTypeScript(obj, interfaceName) {
     let result = `interface ${interfaceName} {\n`;
     for (let key in obj) {
@@ -825,6 +865,7 @@ function generateTypeScript(obj, interfaceName) {
     result += `}\n`;
     return result;
 }
+
 function generatePython(obj, className) {
     let result = `from dataclasses import dataclass\nfrom typing import Any, List\n\n`;
     result += `@dataclass\nclass ${className}:\n`;
@@ -863,6 +904,7 @@ function generatePython(obj, className) {
     }
     return result;
 }
+
 function generateGo(obj, structName) {
     let result = `type ${structName} struct {\n`;
     for (let key in obj) {
@@ -902,15 +944,19 @@ function generateGo(obj, structName) {
     result += `}\n`;
     return result;
 }
+
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+
 /* ========== Shortcut Modal & Dark Mode ========== */
 function toggleShortcutModal() {
     const modal = document.getElementById("shortcut-modal");
     modal.style.display =
         modal.style.display === "block" ? "none" : "block";
 }
+
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
     saveGlobalState();
@@ -925,6 +971,8 @@ function toggleDarkMode() {
             });
     }
 }
+
+
 /* ========== Keyboard Shortcuts ========== */
 document.addEventListener("keydown", (e) => {
     if (
@@ -955,6 +1003,8 @@ document.addEventListener("keydown", (e) => {
         if (modal.style.display === "block") toggleShortcutModal();
     }
 });
+
+
 /* ========== Initialization ========== */
 window.addEventListener("load", () => {
     loadGlobalState();
