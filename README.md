@@ -1,4 +1,4 @@
-# JSONP - JSONPreviewer
+# JSONP - Multitab JSON Previewer
 
 A simple, open-source web-based tool to preview and explore JSON data. This tool allows you to view JSON in both Raw and Tree formats, with features like search, syntax highlighting, and collapsible nodes.
 
