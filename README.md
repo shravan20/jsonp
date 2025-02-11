@@ -5,6 +5,7 @@ A simple, open-source web-based tool to preview and explore JSON data. This tool
 ## Features
 
 - Multiple Tabs: Work with multiple JSON files simultaneously.
+- Tab Name Editing: You can name the tabs for easier identification
 - Raw JSON View: View JSON in a formatted, syntax-highlighted raw format.
 - Tree View: Explore JSON in a collapsible tree structure.
 - Search Functionality: Search for keys or values in both Raw and Tree views.
