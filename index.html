@@ -13,49 +13,57 @@
       color: #333;
       transition: background-color 0.3s, color 0.3s;
     }
-    
     .container {
       max-width: 1000px;
       margin: 0 auto;
     }
-    
     h1 {
       display: inline-block;
       margin-right: 20px;
     }
-    
-    .dark-mode-toggle {
+    .dark-mode-toggle,
+    .shortcut-preview-button {
       padding: 10px 20px;
       background-color: #007bff;
       color: white;
       border: none;
       cursor: pointer;
       border-radius: 3px;
+      margin-right: 10px;
     }
-    
     .tabs {
       display: flex;
       margin-bottom: 10px;
       flex-wrap: wrap;
     }
-    
     .tab-button {
       padding: 10px 20px;
-      background-color: #e0e0e0;
+      background-color: #333333;
       border: none;
       cursor: pointer;
       margin-right: 5px;
       position: relative;
       border-radius: 3px;
       transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
     }
-    
     .tab-button.active {
-      background-color: #fff;
       font-weight: bold;
+      background-color: #555555;
     }
-    
-    .tab-button input {
+    .tab-button .tab-color-indicator {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 5px;
+      border: 1px solid #aaa;
+    }
+    .tab-button .tab-name {
+      margin-right: 5px;
+    }
+    .tab-button input.tab-edit {
       position: absolute;
       top: 0;
       left: 0;
@@ -68,15 +76,26 @@
       text-align: center;
       display: none;
     }
-    
+    .tab-button .tab-color-picker {
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      border: none;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+    .tab-button .close-tab {
+      margin-left: 5px;
+      color: red;
+      font-weight: bold;
+      cursor: pointer;
+    }
     .json-tab-content {
       display: none;
     }
-    
     .json-tab-content.active {
       display: block;
     }
-    
     textarea {
       width: 100%;
       height: 200px;
@@ -86,11 +105,9 @@
       border: 1px solid #ccc;
       border-radius: 3px;
     }
-    
     .search-container {
       margin-bottom: 20px;
     }
-    
     .search-container input {
       padding: 10px;
       width: 300px;
@@ -98,7 +115,6 @@
       border: 1px solid #ccc;
       border-radius: 3px;
     }
-    
     .search-container button {
       padding: 10px 20px;
       background-color: #007bff;
@@ -108,15 +124,12 @@
       border-radius: 3px;
       margin-left: 5px;
     }
-    
     .search-container button:hover {
       background-color: #0056b3;
     }
-    
     .upload-download-container {
       margin-bottom: 20px;
     }
-    
     .upload-download-container button {
       padding: 10px 20px;
       background-color: #28a745;
@@ -126,11 +139,9 @@
       border-radius: 3px;
       margin-right: 5px;
     }
-    
     .upload-download-container button:hover {
       background-color: #1e7e34;
     }
-    
     .add-tab-button {
       padding: 10px 20px;
       background-color: #007bff;
@@ -140,11 +151,9 @@
       margin-left: 10px;
       border-radius: 3px;
     }
-    
     .add-tab-button:hover {
       background-color: #0056b3;
     }
-    
     .preview-section {
       display: none;
       background-color: white;
@@ -152,94 +161,104 @@
       border-radius: 5px;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-    
     .preview-section.active {
       display: block;
     }
-    
     .tree-node {
       margin-left: 20px;
     }
-    
     .tree-key {
       color: #007bff;
       cursor: pointer;
     }
-    
     .tree-key:hover {
       text-decoration: underline;
     }
-    
     .collapsed::after {
       content: "▶";
       font-size: 10px;
       margin-left: 5px;
     }
-    
     .expanded::after {
       content: "▼";
       font-size: 10px;
       margin-left: 5px;
     }
-    
     .tree-children {
       margin-left: 20px;
     }
-    
     .hidden {
       display: none;
     }
-    
     .error {
       color: red;
       font-weight: bold;
     }
-    
     .highlight {
       background-color: yellow;
       font-weight: bold;
       padding: 2px;
       border-radius: 3px;
     }
-    
     /* Dark Mode Styles */
     body.dark-mode {
       background-color: #121212;
       color: #e0e0e0;
     }
-    
     body.dark-mode textarea {
       background-color: #2e2e2e;
       color: #e0e0e0;
       border: 1px solid #555;
     }
-    
     body.dark-mode .tab-button {
-      background-color: #333;
       color: #e0e0e0;
     }
-    
-    body.dark-mode .tab-button.active {
-      background-color: #555;
-    }
-    
     body.dark-mode .preview-section {
       background-color: #2e2e2e;
       color: #e0e0e0;
     }
-    
     body.dark-mode .search-container input {
       background-color: #2e2e2e;
       color: #e0e0e0;
       border: 1px solid #555;
     }
-    
     body.dark-mode .upload-download-container button {
       background-color: #218838;
     }
-    
     body.dark-mode .upload-download-container button:hover {
       background-color: #1c7430;
+    }
+    /* Modal (Shortcut Panel) Styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 5px;
+      width: 400px;
+      position: relative;
+    }
+    .close-modal {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    body.dark-mode .modal-content {
+      background-color: #2e2e2e;
+      color: #e0e0e0;
     }
   </style>
 </head>
@@ -248,18 +267,30 @@
     <div style="display: flex; align-items: center; margin-bottom: 20px;">
       <h1>Multitab JSON Previewer</h1>
       <button class="dark-mode-toggle" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+      <button class="shortcut-preview-button" onclick="toggleShortcutModal()">Shortcuts</button>
     </div>
-
     <div class="tabs" id="tabs-container">
-      <!-- Tab buttons will be (re)created from saved state if available -->
+      <!-- Tab buttons will be recreated from saved state if available -->
       <button class="add-tab-button" onclick="addTab()">+ Add Tab</button>
     </div>
+    <!-- Tab content containers will be created dynamically -->
+  </div>
 
-    <!-- Tab content containers will be (re)created from saved state if available -->
+  <!-- Shortcut Modal -->
+  <div id="shortcut-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-modal" onclick="toggleShortcutModal()">&times;</span>
+      <h2>Keyboard Shortcuts</h2>
+      <ul>
+        <li><strong>Ctrl + T</strong>: New Tab</li>
+        <li><strong>Ctrl + W</strong>: Close Current Tab</li>
+        <li><strong>Ctrl + /</strong>: Show/Hide Shortcut Panel</li>
+      </ul>
+    </div>
   </div>
 
   <script>
-    let tabCount = 0; // Will be updated when tabs are created
+    let tabCount = 0; // Updated as tabs are created
 
     /* ----------------------- Persistence Functions ----------------------- */
     // Save current state to localStorage
@@ -273,14 +304,15 @@
       document.querySelectorAll('.tab-button[data-tab]').forEach(button => {
         const tabId = button.getAttribute('data-tab');
         const tabName = button.querySelector('.tab-name').textContent;
+        const color = button.querySelector('.tab-color-picker').value;
         const content = document.querySelector(`#${tabId} .json-input`).value;
         state.tabs.push({
           id: tabId,
           name: tabName,
+          color: color,
           content: content
         });
       });
-
       localStorage.setItem('jsonPreviewerState', JSON.stringify(state));
     }
 
@@ -297,7 +329,7 @@
         document.body.classList.remove('dark-mode');
       }
 
-      // Clear any existing tab buttons (except the add-tab button) and tab content containers
+      // Remove existing tab buttons (except the add-tab button) and tab content containers
       const tabsContainer = document.getElementById('tabs-container');
       const addTabButton = document.querySelector('.add-tab-button');
       tabsContainer.querySelectorAll('.tab-button').forEach(btn => btn.remove());
@@ -313,30 +345,35 @@
         }
       });
 
-      // Switch to the saved active tab (if it exists)
+      // Switch to the saved active tab (if exists)
       if (state.activeTab) {
         switchTab(state.activeTab);
       }
-      // Save state (in case ids or order got normalized)
       saveState();
     }
 
     /* ----------------------- Tab Creation & Management ----------------------- */
-    // Create a new tab. If `tabData` is provided, its name and content are used.
-    // The parameter `isFirst` indicates whether this is the first tab.
+    // Create a new tab. If tabData is provided, its name, content, and color are used.
+    // isFirst indicates whether to immediately switch to the new tab.
     function createTab(tabData = null, isFirst = false) {
       tabCount++;
       const tabId = `tab${tabCount}`;
 
-      // Create tab button
+      // Determine name and color
+      const nameText = tabData ? tabData.name : `Tab ${tabCount}`;
+      const colorValue = tabData && tabData.color ? tabData.color : '#e0e0e0';
+
+      // Create tab button with a color indicator, name, color picker, and a close button.
       const tabButton = document.createElement('button');
       tabButton.className = 'tab-button';
       tabButton.setAttribute('data-tab', tabId);
       tabButton.onclick = () => switchTab(tabId);
-      const nameText = tabData ? tabData.name : `Tab ${tabCount}`;
       tabButton.innerHTML = `
+        <span class="tab-color-indicator" style="background-color: ${colorValue};"></span>
         <span class="tab-name">${nameText}</span>
         <input type="text" class="tab-edit" onblur="renameTab('${tabId}')" onkeypress="handleTabNameEdit(event, '${tabId}')" />
+        <input type="color" class="tab-color-picker" value="${colorValue}" onchange="updateTabColor('${tabId}', this.value)">
+        <span class="close-tab" onclick="closeTab('${tabId}', event)">×</span>
       `;
       tabButton.addEventListener('dblclick', () => makeTabNameEditable(tabId));
 
@@ -351,32 +388,26 @@
       tabContent.className = 'json-tab-content';
       tabContent.innerHTML = `
         <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
-        
         <div class="search-container">
           <input type="text" class="search-input" placeholder="Search keys or values..." />
           <button onclick="searchJSON('${tabId}')">Search</button>
         </div>
-        
         <div class="upload-download-container">
           <input type="file" class="upload-json" style="display:none" onchange="uploadJSON('${tabId}', this)">
           <button onclick="document.querySelector('#${tabId} .upload-json').click()">Upload JSON</button>
           <button onclick="downloadJSON('${tabId}')">Download JSON</button>
         </div>
-
         <div class="tabs">
           <button class="tab-button active" onclick="showPreviewTab('${tabId}', 'raw')">Raw JSON</button>
           <button class="tab-button" onclick="showPreviewTab('${tabId}', 'tree')">Tree View</button>
           <button class="tab-button" onclick="showPreviewTab('${tabId}', 'error')">Errors</button>
         </div>
-
         <div id="${tabId}-raw-preview" class="preview-section active">
           <pre class="raw-json"></pre>
         </div>
-
         <div id="${tabId}-tree-preview" class="preview-section">
           <div class="tree-view"></div>
         </div>
-
         <div id="${tabId}-error-preview" class="preview-section">
           <div class="error-message"></div>
         </div>
@@ -387,7 +418,6 @@
       if (tabData && tabData.content) {
         tabContent.querySelector('.json-input').value = tabData.content;
       }
-      // Update preview based on current content
       updatePreview(tabId);
 
       // Add event listeners for JSON input and search input
@@ -398,14 +428,13 @@
         }
       });
 
-      // If this is the first tab, switch to it immediately
       if (isFirst) {
         switchTab(tabId);
       }
       saveState();
     }
 
-    // Called when the user clicks the add-tab button
+    // Called when clicking the add-tab button
     function addTab() {
       createTab();
       switchTab(`tab${tabCount}`);
@@ -427,27 +456,22 @@
     }
 
     /* ----------------------- Preview, Search, and JSON Functions ----------------------- */
-    // Show one of the preview sections: Raw, Tree, or Error.
     function showPreviewTab(tabId, previewType) {
       const previewSections = document.querySelectorAll(`#${tabId} .preview-section`);
       previewSections.forEach(section => {
         section.classList.toggle('active', section.id === `${tabId}-${previewType}-preview`);
       });
-
       // Update preview tab buttons inside the tab content
       document.querySelectorAll(`#${tabId} .tabs .tab-button`).forEach(button => {
         button.classList.toggle('active', button.textContent.toLowerCase().includes(previewType));
       });
     }
 
-    // Build a tree view of the parsed JSON.
     function createTreeView(data, parentElement) {
       parentElement.innerHTML = '';
-
       function processNode(value, parent, key) {
         const node = document.createElement('div');
         node.className = 'tree-node';
-
         if (typeof value === 'object' && value !== null) {
           const keySpan = document.createElement('span');
           keySpan.className = 'tree-key collapsed';
@@ -457,10 +481,8 @@
             keySpan.classList.toggle('expanded');
             children.classList.toggle('hidden');
           };
-
           const children = document.createElement('div');
           children.className = 'tree-children';
-
           if (Array.isArray(value)) {
             value.forEach((item, index) => {
               processNode(item, children, index);
@@ -470,7 +492,6 @@
               processNode(v, children, k);
             });
           }
-
           node.appendChild(keySpan);
           node.appendChild(children);
           parent.appendChild(node);
@@ -482,12 +503,10 @@
       processNode(data, parentElement);
     }
 
-    // Update the preview sections based on the JSON input.
     function updatePreview(tabId) {
       const input = document.querySelector(`#${tabId} .json-input`).value;
       const rawPreview = document.querySelector(`#${tabId} .raw-json`);
       const errorMessage = document.querySelector(`#${tabId} .error-message`);
-
       try {
         const parsed = JSON.parse(input);
         rawPreview.textContent = JSON.stringify(parsed, null, 2);
@@ -501,31 +520,22 @@
       saveState();
     }
 
-    // Highlight search matches in Raw JSON and Tree view.
     function searchJSON(tabId) {
       const searchInput = document.querySelector(`#${tabId} .search-input`).value.trim().toLowerCase();
       const rawPreview = document.querySelector(`#${tabId} .raw-json`);
       const treeView = document.querySelector(`#${tabId} .tree-view`);
-
       // Remove previous highlights
       document.querySelectorAll(`#${tabId} .highlight`).forEach(highlight => {
         const parent = highlight.parentNode;
         parent.replaceChild(document.createTextNode(highlight.textContent), highlight);
       });
-
       if (!searchInput) return;
-
-      // Escape regex special characters
       const escapedSearch = searchInput.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       const regex = new RegExp(`(${escapedSearch})`, 'gi');
-
-      // Highlight in Raw JSON if active
       if (rawPreview.classList.contains('active')) {
         const rawContent = rawPreview.textContent;
         rawPreview.innerHTML = rawContent.replace(regex, '<span class="highlight">$1</span>');
       }
-
-      // Highlight in Tree View if active
       if (treeView.classList.contains('active')) {
         function highlightNode(node) {
           if (node.nodeType === Node.TEXT_NODE) {
@@ -543,33 +553,37 @@
       }
     }
 
-    /* ----------------------- Tab Name Editing ----------------------- */
+    /* ----------------------- Tab Name & Color Editing ----------------------- */
     function renameTab(tabId) {
       const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
       const tabNameSpan = tabButton.querySelector('.tab-name');
       const tabEditInput = tabButton.querySelector('.tab-edit');
-
       tabNameSpan.textContent = tabEditInput.value || `Tab ${tabId.replace('tab', '')}`;
       tabEditInput.style.display = 'none';
       tabNameSpan.style.display = 'inline';
       saveState();
     }
-
     function handleTabNameEdit(event, tabId) {
       if (event.key === 'Enter') {
         renameTab(tabId);
       }
     }
-
     function makeTabNameEditable(tabId) {
       const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
       const tabNameSpan = tabButton.querySelector('.tab-name');
       const tabEditInput = tabButton.querySelector('.tab-edit');
-
       tabEditInput.value = tabNameSpan.textContent;
       tabNameSpan.style.display = 'none';
       tabEditInput.style.display = 'inline';
       tabEditInput.focus();
+    }
+    function updateTabColor(tabId, colorValue) {
+      const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+      const colorIndicator = tabButton.querySelector('.tab-color-indicator');
+      colorIndicator.style.backgroundColor = colorValue;
+      const colorPicker = tabButton.querySelector('.tab-color-picker');
+      colorPicker.value = colorValue;
+      saveState();
     }
 
     /* ----------------------- File Upload/Download ----------------------- */
@@ -584,10 +598,9 @@
           updatePreview(tabId);
         };
         reader.readAsText(file);
-        inputElement.value = ''; // reset file input
+        inputElement.value = '';
       }
     }
-
     function downloadJSON(tabId) {
       const content = document.querySelector(`#${tabId} .json-input`).value;
       const blob = new Blob([content], { type: 'application/json' });
@@ -601,17 +614,62 @@
       URL.revokeObjectURL(url);
     }
 
-    /* ----------------------- Dark Mode Toggle ----------------------- */
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
+    /* ----------------------- Close Tab (with Confirmation) ----------------------- */
+    function closeTab(tabId, event) {
+      if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+      }
+      if (!confirm('Are you sure you want to close this tab?')) return;
+      const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+      const tabContent = document.getElementById(tabId);
+      if (tabButton) tabButton.remove();
+      if (tabContent) tabContent.remove();
+      const remainingTabs = document.querySelectorAll('.json-tab-content');
+      if (remainingTabs.length > 0) {
+        switchTab(remainingTabs[remainingTabs.length - 1].id);
+      }
       saveState();
     }
 
-    /* ----------------------- Initialize ----------------------- */
-    // When the page loads, attempt to load saved state; if none exists, create an initial tab.
+    /* ----------------------- Shortcut Modal ----------------------- */
+    function toggleShortcutModal() {
+      const modal = document.getElementById('shortcut-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    /* ----------------------- Keyboard Shortcuts ----------------------- */
+    document.addEventListener('keydown', function(e) {
+      // Ctrl+T: New Tab
+      if (e.ctrlKey && e.key.toLowerCase() === 't') {
+        e.preventDefault();
+        addTab();
+      }
+      // Ctrl+W: Close current tab
+      if (e.ctrlKey && e.key.toLowerCase() === 'w') {
+        e.preventDefault();
+        const activeTab = document.querySelector('.json-tab-content.active');
+        if (activeTab) {
+          closeTab(activeTab.id);
+        }
+      }
+      // Ctrl+/ or Ctrl+?: Toggle shortcut modal
+      if (e.ctrlKey && (e.key === '/' || e.key === '?')) {
+        e.preventDefault();
+        toggleShortcutModal();
+      }
+      // Esc key to close the modal if open
+      if (e.key === 'Escape') {
+        const modal = document.getElementById('shortcut-modal');
+        if (modal.style.display === 'block') {
+          toggleShortcutModal();
+        }
+      }
+    });
+
+    /* ----------------------- Initialization ----------------------- */
     window.addEventListener('load', () => {
       loadState();
-      // If no tabs exist after loadState, create a default first tab.
       if (tabCount === 0) {
         createTab(null, true);
       }
