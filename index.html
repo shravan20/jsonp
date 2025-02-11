@@ -201,140 +201,70 @@
 
     <script>
         let tabCount = 1;
-        let isLoading = false; // flag to prevent saving during load
-
-         // Save current state to localStorage
-        function saveState() {
-            if (isLoading) return;
-
-            const state = {
-                tabCount: tabCount,
-                activeTab: document.querySelector('.json-tab-content.active').id,
-                tabs: []
-            };
-
-            document.querySelectorAll('.json-tab-content').forEach(tabContent => {
-                const tabId = tabContent.id;
-                const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
-                const tabName = tabButton.querySelector('.tab-name').textContent;
-                const jsonInput = tabContent.querySelector('.json-input').value;
-                let previewType = 'raw';
-                tabContent.querySelectorAll('.preview-section').forEach(section => {
-                    if (section.classList.contains('active')) {
-                        previewType = section.id.replace(`${tabId}-`, '').replace('-preview', '');
-                    }
-                });
-                const searchQuery = tabContent.querySelector('.search-input').value;
-
-                state.tabs.push({
-                    id: tabId,
-                    name: tabName,
-                    json: jsonInput,
-                    previewType: previewType,
-                    searchQuery: searchQuery
-                });
-            });
-
-            localStorage.setItem('multitabJsonPreviewerState', JSON.stringify(state));
-        }
-
-        // Load saved state from localStorage
-        function loadState() {
-            const savedState = localStorage.getItem('multitabJsonPreviewerState');
-            if (!savedState) return;
-
-            isLoading = true;
-            const state = JSON.parse(savedState);
-
-            // Clear existing tabs except default (tab1)
-            document.querySelectorAll('.json-tab-content').forEach(tab => {
-                if (tab.id !== 'tab1') tab.remove();
-            });
-            document.querySelectorAll('.tab-button[data-tab]').forEach(button => {
-                if (button.getAttribute('data-tab') !== 'tab1') button.remove();
-            });
-
-            state.tabs.forEach(tabData => {
-                const tabId = tabData.id;
-                if (tabId === 'tab1') {
-                    // Update default tab
-                    const tabButton = document.querySelector(`[data-tab="tab1"]`);
-                    tabButton.querySelector('.tab-name').textContent = tabData.name;
-                    document.querySelector('#tab1 .json-input').value = tabData.json;
-                    document.querySelector('#tab1 .search-input').value = tabData.searchQuery;
-                    showPreviewTab('tab1', tabData.previewType);
-                    updatePreview('tab1');
-                } else {
-                    createTab(tabId, tabData.name, tabData.json, tabData.previewType, tabData.searchQuery);
-                }
-            });
-
-            // Set active tab and tab count
-            if (state.activeTab) switchTab(state.activeTab);
-            tabCount = Math.max(...state.tabs.map(t => parseInt(t.id.replace('tab', ''))) || 1;
-            isLoading = false;
-        }
-
-        function createTab(tabId, tabName, jsonContent, previewType, searchQuery) {
-            // Create tab button
-            const tabButton = document.createElement('button');
-            tabButton.className = 'tab-button';
-            tabButton.setAttribute('data-tab', tabId);
-            tabButton.innerHTML = `
-                <span class="tab-name">${tabName}</span>
-                <input type="text" class="tab-edit" onblur="renameTab('${tabId}')" onkeypress="handleTabNameEdit(event, '${tabId}')" />
-            `;
-            tabButton.onclick = () => switchTab(tabId);
-            tabButton.addEventListener('dblclick', () => makeTabNameEditable(tabId));
-            document.getElementById('tabs-container').insertBefore(tabButton, document.querySelector('.add-tab-button'));
-
-            // Create tab content
-            const tabContent = document.createElement('div');
-            tabContent.id = tabId;
-            tabContent.className = 'json-tab-content';
-            tabContent.innerHTML = `
-                <textarea class="json-input">${jsonContent || ''}</textarea>
-                <div class="search-container">
-                    <input type="text" class="search-input" value="${searchQuery || ''}" />
-                    <button onclick="searchJSON('${tabId}')">Search</button>
-                </div>
-                <div class="tabs">
-                    <button class="tab-button" onclick="showPreviewTab('${tabId}', 'raw')">Raw JSON</button>
-                    <button class="tab-button" onclick="showPreviewTab('${tabId}', 'tree')">Tree View</button>
-                    <button class="tab-button" onclick="showPreviewTab('${tabId}', 'error')">Errors</button>
-                </div>
-                <div id="${tabId}-raw-preview" class="preview-section"></div>
-                <div id="${tabId}-tree-preview" class="preview-section"></div>
-                <div id="${tabId}-error-preview" class="preview-section"></div>
-            `;
-
-            // Set initial preview state
-            showPreviewTab(tabId, previewType);
-            document.querySelector('.container').appendChild(tabContent);
-
-            // Add event listeners
-            tabContent.querySelector('.json-input').addEventListener('input', () => {
-                updatePreview(tabId);
-                saveState();
-            });
-            tabContent.querySelector('.search-input').addEventListener('input', saveState);
-            tabContent.querySelector('.search-input').addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') searchJSON(tabId);
-            });
-
-            // Trigger initial search if needed
-            if (searchQuery) searchJSON(tabId);
-            updatePreview(tabId);
-        }
-        
 
         // Function to add a new tab
         function addTab() {
             tabCount++;
             const tabId = `tab${tabCount}`;
-            createTab(tabId, `Tab ${tabCount}`, '', 'raw', '');
+
+            // Add tab button
+            const tabButton = document.createElement('button');
+            tabButton.className = 'tab-button';
+            tabButton.setAttribute('data-tab', tabId);
+            tabButton.onclick = () => switchTab(tabId);
+            tabButton.innerHTML = `
+                <span class="tab-name">Tab ${tabCount}</span>
+                <input type="text" class="tab-edit" onblur="renameTab('${tabId}')" onkeypress="handleTabNameEdit(event, '${tabId}')" />
+            `;
+            document.getElementById('tabs-container').insertBefore(tabButton, document.querySelector('.add-tab-button'));
+
+            // Add event listener for double-click to make tab name editable
+            tabButton.addEventListener('dblclick', () => makeTabNameEditable(tabId));
+
+            // Add tab content
+            const tabContent = document.createElement('div');
+            tabContent.id = tabId;
+            tabContent.className = 'json-tab-content';
+            tabContent.innerHTML = `
+                <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
+                
+                <div class="search-container">
+                    <input type="text" class="search-input" placeholder="Search keys or values..." />
+                    <button onclick="searchJSON('${tabId}')">Search</button>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-button active" onclick="showPreviewTab('${tabId}', 'raw')">Raw JSON</button>
+                    <button class="tab-button" onclick="showPreviewTab('${tabId}', 'tree')">Tree View</button>
+                    <button class="tab-button" onclick="showPreviewTab('${tabId}', 'error')">Errors</button>
+                </div>
+
+                <div id="${tabId}-raw-preview" class="preview-section active">
+                    <pre class="raw-json"></pre>
+                </div>
+
+                <div id="${tabId}-tree-preview" class="preview-section">
+                    <div class="tree-view"></div>
+                </div>
+
+                <div id="${tabId}-error-preview" class="preview-section">
+                    <div class="error-message"></div>
+                </div>
+            `;
+            document.querySelector('.container').appendChild(tabContent);
+
+            // Add event listener for JSON input
+            tabContent.querySelector('.json-input').addEventListener('input', () => updatePreview(tabId));
+
+            // Add event listener for Enter key in search input
+            tabContent.querySelector('.search-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    searchJSON(tabId);
+                }
+            });
+
+            // Switch to the new tab
             switchTab(tabId);
-            saveState();
         }
 
         // Function to switch between tabs
@@ -351,7 +281,6 @@
             document.querySelectorAll('.tab-button').forEach(button => {
                 button.classList.toggle('active', button.getAttribute('data-tab') === tabId);
             });
-            saveState();
         }
 
         // Function to show the preview tab (Raw, Tree, Error)
@@ -365,7 +294,6 @@
             document.querySelectorAll(`#${tabId} .tab-button`).forEach(button => {
                 button.classList.toggle('active', button.textContent.includes(previewType));
             });
-            saveState();
         }
 
         // Function to create a tree view
@@ -482,7 +410,6 @@
             tabNameSpan.textContent = tabEditInput.value || `Tab ${tabId.replace('tab', '')}`;
             tabEditInput.style.display = 'none';
             tabNameSpan.style.display = 'inline';
-            saveState();
         }
 
         // Function to handle tab name editing
@@ -504,16 +431,13 @@
             tabEditInput.focus();
         }
 
-        // Initial setup
-        document.addEventListener('DOMContentLoaded', () => {
-            // Set up default tab listeners
-            document.querySelector('#tab1 .json-input').addEventListener('input', () => updatePreview('tab1'));
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.addEventListener('dblclick', () => makeTabNameEditable(btn.dataset.tab));
-            });
-            loadState(); // Load saved state after initial setup
+        // Add event listener for the first tab
+        document.querySelector('#tab1 .json-input').addEventListener('input', () => updatePreview('tab1'));
+
+        // Add event listener for tab name editing on initial tabs
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('dblclick', () => makeTabNameEditable(button.getAttribute('data-tab')));
         });
-        
     </script>
 </body>
 </html>
