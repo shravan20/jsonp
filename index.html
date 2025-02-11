@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSON Previewer with Multi-Tabs</title>
+    <title>JSON Preview with Multi-Tabs</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -85,6 +85,14 @@
             content: "▼";
             font-size: 10px;
             margin-left: 5px;
+        }
+
+        .tree-children {
+            margin-left: 20px;
+        }
+
+        .hidden {
+            display: none;
         }
 
         .error {
@@ -228,23 +236,21 @@
                 if (typeof value === 'object' && value !== null) {
                     const keySpan = document.createElement('span');
                     keySpan.className = 'tree-key collapsed';
-                    keySpan.textContent = key || '';
+                    keySpan.textContent = key || (Array.isArray(value) ? `[${value.length}]` : `{${Object.keys(value).length}}`);
                     keySpan.onclick = () => {
                         keySpan.classList.toggle('collapsed');
                         keySpan.classList.toggle('expanded');
-                        node.childNodes[1].classList.toggle('hidden');
+                        children.classList.toggle('hidden');
                     };
 
                     const children = document.createElement('div');
                     children.className = 'tree-children';
 
                     if (Array.isArray(value)) {
-                        keySpan.textContent = `${key || ''} [${value.length}]`;
                         value.forEach((item, index) => {
                             processNode(item, children, index);
                         });
                     } else {
-                        keySpan.textContent = `${key || ''} {${Object.keys(value).length}}`;
                         Object.entries(value).forEach(([k, v]) => {
                             processNode(v, children, k);
                         });
