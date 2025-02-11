@@ -63,19 +63,6 @@
     .tab-button .tab-name {
       margin-right: 5px;
     }
-    .tab-button input.tab-edit {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: none;
-      font-size: inherit;
-      font-family: inherit;
-      text-align: center;
-      display: none;
-    }
     .tab-button .tab-color-picker {
       width: 20px;
       height: 20px;
@@ -276,6 +263,21 @@
       font-weight: bold;
       background-color: #555555;
     }
+    /* Tooltip for Tab Renaming */
+    .tab-rename-tooltip {
+      position: absolute;
+      z-index: 1000;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    body.dark-mode .tab-rename-tooltip {
+      background-color: #2e2e2e;
+      color: #e0e0e0;
+      border: 1px solid #555;
+    }
   </style>
 </head>
 <body>
@@ -384,14 +386,15 @@
       tabButton.className = 'tab-button';
       tabButton.setAttribute('data-tab', tabId);
       tabButton.onclick = () => switchTab(tabId);
+      // Note: Removed the inline text input (.tab-edit)
       tabButton.innerHTML = `
         <span class="tab-color-indicator" style="background-color: ${colorValue};"></span>
         <span class="tab-name">${nameText}</span>
-        <input type="text" class="tab-edit" onblur="renameTab('${tabId}')" onkeypress="handleTabNameEdit(event, '${tabId}')" />
         <input type="color" class="tab-color-picker" value="${colorValue}" onchange="updateTabColor('${tabId}', this.value)">
         <span class="close-tab" onclick="closeTab('${tabId}', event)">×</span>
       `;
-      tabButton.addEventListener('dblclick', () => makeTabNameEditable(tabId));
+      // On double-click, open the tooltip input for renaming
+      tabButton.addEventListener('dblclick', () => openTabRenameTooltip(tabId));
 
       // Insert the new tab button before the add-tab button
       const tabsContainer = document.getElementById('tabs-container');
@@ -570,29 +573,51 @@
     }
 
     /* ----------------------- Tab Name & Color Editing ----------------------- */
-    function renameTab(tabId) {
+    // New function to open a tooltip for renaming the tab
+    function openTabRenameTooltip(tabId) {
       const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
-      const tabNameSpan = tabButton.querySelector('.tab-name');
-      const tabEditInput = tabButton.querySelector('.tab-edit');
-      tabNameSpan.textContent = tabEditInput.value || `Tab ${tabId.replace('tab', '')}`;
-      tabEditInput.style.display = 'none';
-      tabNameSpan.style.display = 'inline';
-      saveState();
-    }
-    function handleTabNameEdit(event, tabId) {
-      if (event.key === 'Enter') {
-        renameTab(tabId);
+      // Remove any existing tooltip
+      const existingTooltip = document.querySelector('.tab-rename-tooltip');
+      if (existingTooltip) {
+        existingTooltip.remove();
+      }
+      // Create tooltip element
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tab-rename-tooltip';
+      // Position tooltip relative to the tab button
+      const rect = tabButton.getBoundingClientRect();
+      tooltip.style.left = `${rect.left}px`;
+      tooltip.style.top = `${rect.bottom + window.scrollY + 5}px`;
+      
+      // Create input element
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.value = tabButton.querySelector('.tab-name').textContent;
+      input.style.width = '150px';
+      // When Enter is pressed or the input loses focus, finalize the rename
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          finalizeRename();
+        } else if (e.key === 'Escape') {
+          tooltip.remove();
+        }
+      });
+      input.addEventListener('blur', finalizeRename);
+      
+      tooltip.appendChild(input);
+      document.body.appendChild(tooltip);
+      input.focus();
+
+      function finalizeRename() {
+        const newName = input.value.trim();
+        if (newName) {
+          tabButton.querySelector('.tab-name').textContent = newName;
+          saveState();
+        }
+        tooltip.remove();
       }
     }
-    function makeTabNameEditable(tabId) {
-      const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
-      const tabNameSpan = tabButton.querySelector('.tab-name');
-      const tabEditInput = tabButton.querySelector('.tab-edit');
-      tabEditInput.value = tabNameSpan.textContent;
-      tabNameSpan.style.display = 'none';
-      tabEditInput.style.display = 'inline';
-      tabEditInput.focus();
-    }
+
     function updateTabColor(tabId, colorValue) {
       const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
       const colorIndicator = tabButton.querySelector('.tab-color-indicator');
