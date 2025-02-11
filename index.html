@@ -38,7 +38,7 @@
     }
     .tab-button {
       padding: 10px 20px;
-      background-color: #333333;
+      background-color: #e0e0e0;
       border: none;
       cursor: pointer;
       margin-right: 5px;
@@ -50,7 +50,7 @@
     }
     .tab-button.active {
       font-weight: bold;
-      background-color: #555555;
+      background-color: #ffffff;
     }
     .tab-button .tab-color-indicator {
       display: inline-block;
@@ -259,6 +259,22 @@
     body.dark-mode .modal-content {
       background-color: #2e2e2e;
       color: #e0e0e0;
+    }
+    body.dark-mode .tab-button {
+      padding: 10px 20px;
+      background-color: #333333;
+      border: none;
+      cursor: pointer;
+      margin-right: 5px;
+      position: relative;
+      border-radius: 3px;
+      transition: background-color 0.3s;
+      display: flex;
+      align-items: center;
+    }
+    body.dark-mode .tab-button.active {
+      font-weight: bold;
+      background-color: #555555;
     }
   </style>
 </head>
@@ -636,6 +652,12 @@
     function toggleShortcutModal() {
       const modal = document.getElementById('shortcut-modal');
       modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    /* ----------------------- Dark Mode Toggle ----------------------- */
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      saveState();
     }
 
     /* ----------------------- Keyboard Shortcuts ----------------------- */
