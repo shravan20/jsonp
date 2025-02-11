@@ -163,7 +163,7 @@
     <div class="container">
         <h1>Multitab JSON Previewer</h1>
 
-    <div class="tabs" id="tabs-container">
+        <div class="tabs" id="tabs-container">
             <button class="tab-button active" data-tab="tab1" onclick="switchTab('tab1')">
                 <span class="tab-name">Tab 1</span>
                 <input type="text" class="tab-edit" onblur="renameTab('tab1')" onkeypress="handleTabNameEdit(event, 'tab1')" />
@@ -180,9 +180,9 @@
             </div>
 
             <div class="tabs">
-                <button class="tab-button active" onclick="showPreviewTab('tab1', 'raw')">Raw JSON</button>
-                <button class="tab-button" onclick="showPreviewTab('tab1', 'tree')">Tree View</button>
-                <button class="tab-button" onclick="showPreviewTab('tab1', 'error')">Errors</button>
+                <button class="tab-button active" data-preview-type="raw" onclick="showPreviewTab('tab1', 'raw')">Raw JSON</button>
+                <button class="tab-button" data-preview-type="tree" onclick="showPreviewTab('tab1', 'tree')">Tree View</button>
+                <button class="tab-button" data-preview-type="error" onclick="showPreviewTab('tab1', 'error')">Errors</button>
             </div>
 
             <div id="tab1-raw-preview" class="preview-section active">
@@ -201,9 +201,9 @@
 
     <script>
         let tabCount = 1;
-        let isLoading = false; // Flag to prevent saving during load
+        let isLoading = false;
 
-        // Save current state to localStorage
+        // Save state to localStorage
         function saveState() {
             if (isLoading) return;
 
@@ -238,7 +238,7 @@
             localStorage.setItem('multitabJsonPreviewerState', JSON.stringify(state));
         }
 
-        // Load saved state from localStorage
+        // Load state from localStorage
         function loadState() {
             const savedState = localStorage.getItem('multitabJsonPreviewerState');
             if (!savedState) return;
@@ -269,13 +269,12 @@
                 }
             });
 
-            // Set active tab and tab count
             if (state.activeTab) switchTab(state.activeTab);
             tabCount = state.tabCount;
             isLoading = false;
         }
 
-        // Create a new tab
+        // Create new tab
         function createTab(tabId, tabName, jsonContent, previewType, searchQuery) {
             // Create tab button
             const tabButton = document.createElement('button');
@@ -300,9 +299,9 @@
                     <button onclick="searchJSON('${tabId}')">Search</button>
                 </div>
                 <div class="tabs">
-                    <button class="tab-button" onclick="showPreviewTab('${tabId}', 'raw')">Raw JSON</button>
-                    <button class="tab-button" onclick="showPreviewTab('${tabId}', 'tree')">Tree View</button>
-                    <button class="tab-button" onclick="showPreviewTab('${tabId}', 'error')">Errors</button>
+                    <button class="tab-button" data-preview-type="raw" onclick="showPreviewTab('${tabId}', 'raw')">Raw JSON</button>
+                    <button class="tab-button" data-preview-type="tree" onclick="showPreviewTab('${tabId}', 'tree')">Tree View</button>
+                    <button class="tab-button" data-preview-type="error" onclick="showPreviewTab('${tabId}', 'error')">Errors</button>
                 </div>
                 <div id="${tabId}-raw-preview" class="preview-section"></div>
                 <div id="${tabId}-tree-preview" class="preview-section"></div>
@@ -323,12 +322,11 @@
                 if (e.key === 'Enter') searchJSON(tabId);
             });
 
-            // Trigger initial search if needed
             if (searchQuery) searchJSON(tabId);
             updatePreview(tabId);
         }
 
-        // Add a new tab
+        // Add new tab
         function addTab() {
             tabCount++;
             const tabId = `tab${tabCount}`;
@@ -337,7 +335,7 @@
             saveState();
         }
 
-        // Switch between tabs
+        // Switch tabs
         function switchTab(tabId) {
             document.querySelectorAll('.json-tab-content').forEach(tab => {
                 tab.classList.remove('active');
@@ -351,21 +349,21 @@
             saveState();
         }
 
-        // Show preview tab (Raw, Tree, Error)
+        // Show preview tabs
         function showPreviewTab(tabId, previewType) {
             const previewSections = document.querySelectorAll(`#${tabId} .preview-section`);
             previewSections.forEach(section => {
                 section.classList.toggle('active', section.id === `${tabId}-${previewType}-preview`);
             });
 
-            document.querySelectorAll(`#${tabId} .tab-button`).forEach(button => {
-                button.classList.toggle('active', button.textContent.includes(previewType));
+            document.querySelectorAll(`#${tabId} .tab-button[data-preview-type]`).forEach(button => {
+                button.classList.toggle('active', button.getAttribute('data-preview-type') === previewType);
             });
 
             saveState();
         }
 
-        // Update JSON preview
+        // Update preview
         function updatePreview(tabId) {
             const input = document.querySelector(`#${tabId} .json-input`).value;
             const rawPreview = document.querySelector(`#${tabId} .raw-json`);
@@ -466,7 +464,7 @@
             }
         }
 
-        // Rename a tab
+        // Rename tab
         function renameTab(tabId) {
             const tabButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
             const tabNameSpan = tabButton.querySelector('.tab-name');
@@ -479,7 +477,7 @@
             saveState();
         }
 
-        // Handle tab name editing
+        // Handle tab name edit
         function handleTabNameEdit(event, tabId) {
             if (event.key === 'Enter') {
                 renameTab(tabId);
@@ -504,7 +502,7 @@
             document.querySelectorAll('.tab-button').forEach(btn => {
                 btn.addEventListener('dblclick', () => makeTabNameEditable(btn.dataset.tab));
             });
-            loadState(); // Load saved state
+            loadState();
         });
     </script>
 </body>
