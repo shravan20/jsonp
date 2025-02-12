@@ -216,6 +216,10 @@ textarea {
 .tree-children {
     margin-left: 20px;
 }
+  
+.hidden {
+    display: none;
+}
 
 .error {
     color: red;
