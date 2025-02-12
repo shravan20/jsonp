@@ -106,6 +106,7 @@ function loadGlobalState() {
     if (state.codegen.activeTab) switchCodegenTab(state.codegen.activeTab);
 }
 
+/* ========== COPY FUNCTIONS ========== */
 function copyRawJSON(tabId) {
     const rawPre = document.querySelector(`#${tabId}-raw-preview .raw-json`);
     copyToClipboard(rawPre.textContent, "JSON copied to clipboard");
