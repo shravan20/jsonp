@@ -365,3 +365,18 @@ body:not(.dark-mode) .github-button {
 body:not(.dark-mode) .contribute-button {
     background-color: #28a745;
 }
+
+/* Add copy button styling */
+.copy-button {
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+.copy-button:hover {
+    background-color: #218838;
+}
