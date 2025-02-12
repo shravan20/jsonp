@@ -312,3 +312,52 @@ body.dark-mode .tab-rename-tooltip {
     color: #e0e0e0;
     border: 1px solid #555;
 }
+
+.github-links {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.github-button,
+.contribute-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 0 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    background-color: #333;
+    transition: background-color 0.3s;
+}
+
+.github-button:hover {
+    background-color: #444;
+}
+
+.contribute-button {
+    background-color: #2ea44f;
+}
+
+.contribute-button:hover {
+    background-color: #22863a;
+}
+
+.github-button i,
+.contribute-button i {
+    margin-right: 8px;
+}
+
+/* Dark mode adjustments */
+body.dark-mode .github-button,
+body.dark-mode .contribute-button {
+    color: #fff;
+}
+
+body:not(.dark-mode) .github-button {
+    background-color: #24292e;
+}
+
+body:not(.dark-mode) .contribute-button {
+    background-color: #28a745;
+}
