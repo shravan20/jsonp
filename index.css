@@ -193,8 +193,9 @@ textarea {
 }
 
 .tree-key {
-    color: #007bff;
-    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 2px 5px;
+    border-radius: 3px;
 }
 
 .tree-key:hover {
@@ -216,7 +217,7 @@ textarea {
 .tree-children {
     margin-left: 20px;
 }
-  
+
 .hidden {
     display: none;
 }
@@ -379,4 +380,118 @@ body:not(.dark-mode) .contribute-button {
 
 .copy-button:hover {
     background-color: #218838;
+}
+
+/*  */
+.tree-view {
+    font-family: 'Courier New', monospace;
+    line-height: 1.5;
+}
+
+.tree-node {
+    position: relative;
+    margin-left: 16px;
+}
+
+.tree-node::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 0;
+    height: 100%;
+    border-left: 1px solid #666;
+}
+
+.tree-key {
+    cursor: pointer;
+    position: relative;
+    padding: 2px 5px;
+    border-radius: 3px;
+    transition: background-color 0.2s;
+}
+
+.tree-key:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.tree-key::before {
+    content: '▶';
+    font-size: 0.8em;
+    margin-right: 5px;
+    transition: transform 0.2s;
+}
+
+.tree-key:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+.tree-key.expanded::before {
+    transform: rotate(90deg);
+}
+
+.type-string {
+    color: #4CAF50;
+}
+
+.type-number {
+    color: #2196F3;
+}
+
+.type-boolean {
+    color: #9C27B0;
+}
+
+.type-null {
+    color: #666;
+}
+
+.type-object {
+    color: #FF9800;
+}
+
+.type-array {
+    color: #E91E63;
+}
+
+.node-info {
+    font-size: 0.8em;
+    color: #888;
+    margin-left: 5px;
+}
+
+.tree-context-menu {
+    position: fixed;
+    background: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.tree-context-menu-item {
+    padding: 5px 15px;
+    cursor: pointer;
+}
+
+.tree-context-menu-item:hover {
+    background: #f0f0f0;
+}
+
+body.dark-mode .tree-context-menu {
+    background: #333;
+    border-color: #555;
+}
+
+body.dark-mode .tree-context-menu-item:hover {
+    background: #444;
+}
+
+.toggle-all-btn {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
 }
