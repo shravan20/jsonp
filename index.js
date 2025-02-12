@@ -1,91 +1,67 @@
-
 /* ========== Global Persistence Functions ========== */
 function getActiveMode() {
-    if (
-        document.getElementById("formatter-section").style.display !== "none"
-    )
-        return "formatter";
-    if (document.getElementById("compare-section").style.display !== "none")
-        return "compare";
-    if (document.getElementById("codegen-section").style.display !== "none")
-        return "codegen";
+    if (document.getElementById("formatter-section").style.display !== "none") return "formatter";
+    if (document.getElementById("compare-section").style.display !== "none") return "compare";
+    if (document.getElementById("codegen-section").style.display !== "none") return "codegen";
     return "formatter";
 }
 
 function saveGlobalState() {
-
     const state = {
         darkMode: document.body.classList.contains("dark-mode"),
         activeMode: getActiveMode(),
         formatter: {
-            activeTab:
-                document.querySelector(
-                    "#formatter-tab-contents .json-tab-content.active"
-                )?.id || "",
-            tabs: []
+            activeTab: document.querySelector("#formatter-tab-contents .json-tab-content.active")?.id || "",
+            tabs: [],
         },
         compare: {
-            activeTab:
-                document.querySelector(
-                    "#compare-tab-contents .json-tab-content.active"
-                )?.id || "",
-            tabs: []
+            activeTab: document.querySelector("#compare-tab-contents .json-tab-content.active")?.id || "",
+            tabs: [],
         },
         codegen: {
-            activeTab:
-                document.querySelector(
-                    "#codegen-tab-contents .json-tab-content.active"
-                )?.id || "",
-            tabs: []
-        }
+            activeTab: document.querySelector("#codegen-tab-contents .json-tab-content.active")?.id || "",
+            tabs: [],
+        },
     };
-
     // Formatter tabs
-    document
-        .querySelectorAll("#formatter-tabs-container .tab-button[data-tab]")
-        .forEach((btn) => {
-            const tabId = btn.getAttribute("data-tab");
-            const name = btn.querySelector(".tab-name").textContent;
-            const color =
-                btn.querySelector(".tab-color-picker")?.value || "#e0e0e0";
-            const content =
-                document.querySelector("#" + tabId + " .json-input")?.value || "";
-            state.formatter.tabs.push({ id: tabId, name, color, content });
+    document.querySelectorAll("#formatter-tabs-container .tab-button[data-tab]").forEach((btn) => {
+        const tabId = btn.getAttribute("data-tab");
+        const name = btn.querySelector(".tab-name").textContent;
+        const color = btn.querySelector(".tab-color-picker")?.value || "#e0e0e0";
+        const content = document.querySelector("#" + tabId + " .json-input")?.value || "";
+        state.formatter.tabs.push({
+            id: tabId,
+            name,
+            color,
+            content
         });
-
+    });
     // Compare tabs
-    document
-        .querySelectorAll("#compare-tabs-container .tab-button[data-tab]")
-        .forEach((btn) => {
-            const tabId = btn.getAttribute("data-tab");
-            const name = btn.querySelector(".tab-name").textContent;
-            const leftContent =
-                document.querySelector("#" + tabId + " .json-input-left")
-                    ?.value || "";
-            const rightContent =
-                document.querySelector("#" + tabId + " .json-input-right")
-                    ?.value || "";
-            state.compare.tabs.push({
-                id: tabId,
-                name,
-                leftContent,
-                rightContent
-            });
+    document.querySelectorAll("#compare-tabs-container .tab-button[data-tab]").forEach((btn) => {
+        const tabId = btn.getAttribute("data-tab");
+        const name = btn.querySelector(".tab-name").textContent;
+        const leftContent = document.querySelector("#" + tabId + " .json-input-left")?.value || "";
+        const rightContent = document.querySelector("#" + tabId + " .json-input-right")?.value || "";
+        state.compare.tabs.push({
+            id: tabId,
+            name,
+            leftContent,
+            rightContent
         });
-
+    });
     // Codegen tabs
-    document
-        .querySelectorAll("#codegen-tabs-container .tab-button[data-tab]")
-        .forEach((btn) => {
-            const tabId = btn.getAttribute("data-tab");
-            const name = btn.querySelector(".tab-name").textContent;
-            const input =
-                document.querySelector("#" + tabId + " .json-input")?.value || "";
-            const lang =
-                document.getElementById("lang-select-" + tabId)?.value ||
-                "typescript";
-            state.codegen.tabs.push({ id: tabId, name, input, lang });
+    document.querySelectorAll("#codegen-tabs-container .tab-button[data-tab]").forEach((btn) => {
+        const tabId = btn.getAttribute("data-tab");
+        const name = btn.querySelector(".tab-name").textContent;
+        const input = document.querySelector("#" + tabId + " .json-input")?.value || "";
+        const lang = document.getElementById("lang-select-" + tabId)?.value || "typescript";
+        state.codegen.tabs.push({
+            id: tabId,
+            name,
+            input,
+            lang
         });
+    });
     localStorage.setItem("jsonToolState", JSON.stringify(state));
 }
 
@@ -93,7 +69,6 @@ function loadGlobalState() {
     const stateStr = localStorage.getItem("jsonToolState");
     if (!stateStr) return;
     const state = JSON.parse(stateStr);
-
     // Dark Mode
     if (state.darkMode) document.body.classList.add("dark-mode");
     else document.body.classList.remove("dark-mode");
@@ -102,26 +77,17 @@ function loadGlobalState() {
 
     // Load Formatter tabs
     const ftc = document.getElementById("formatter-tabs-container");
-    ftc
-        .querySelectorAll(".tab-button[data-tab]")
-        .forEach((btn) => btn.remove());
-
+    ftc.querySelectorAll(".tab-button[data-tab]").forEach((btn) => btn.remove());
     document.getElementById("formatter-tab-contents").innerHTML = "";
     formatterTabCount = 0;
-
     state.formatter.tabs.forEach((tabData) => {
         createFormatterTab(tabData);
     });
-
-    if (state.formatter.activeTab)
-        switchFormatterTab(state.formatter.activeTab);
+    if (state.formatter.activeTab) switchFormatterTab(state.formatter.activeTab);
 
     // Load Compare tabs
     const ctc = document.getElementById("compare-tabs-container");
-    ctc
-        .querySelectorAll(".tab-button[data-tab]")
-        .forEach((btn) => btn.remove());
-
+    ctc.querySelectorAll(".tab-button[data-tab]").forEach((btn) => btn.remove());
     document.getElementById("compare-tab-contents").innerHTML = "";
     compareTabCount = 0;
     state.compare.tabs.forEach((tabData) => {
@@ -131,10 +97,7 @@ function loadGlobalState() {
 
     // Load Codegen tabs
     const cgtc = document.getElementById("codegen-tabs-container");
-    cgtc
-        .querySelectorAll(".tab-button[data-tab]")
-        .forEach((btn) => btn.remove());
-
+    cgtc.querySelectorAll(".tab-button[data-tab]").forEach((btn) => btn.remove());
     document.getElementById("codegen-tab-contents").innerHTML = "";
     codegenTabCount = 0;
     state.codegen.tabs.forEach((tabData) => {
@@ -143,14 +106,41 @@ function loadGlobalState() {
     if (state.codegen.activeTab) switchCodegenTab(state.codegen.activeTab);
 }
 
+function copyRawJSON(tabId) {
+    const rawPre = document.querySelector(`#${tabId}-raw-preview .raw-json`);
+    copyToClipboard(rawPre.textContent, "JSON copied to clipboard");
+}
+
+function copyCompareLeft(tabId) {
+    const leftTA = document.querySelector(`#${tabId} .json-input-left`);
+    copyToClipboard(leftTA.value, "Left JSON copied");
+}
+
+function copyCompareRight(tabId) {
+    const rightTA = document.querySelector(`#${tabId} .json-input-right`);
+    copyToClipboard(rightTA.value, "Right JSON copied");
+}
+
+function copyCodeOutput(tabId) {
+    const codePre = document.querySelector(`#${tabId} .code-output`);
+    copyToClipboard(codePre.textContent, "Code copied");
+}
+
+function copyToClipboard(text, successMessage) {
+    navigator.clipboard.writeText(text).then(() => {
+        alert(successMessage);
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+        alert("Copy failed");
+    });
+}
+
 /* ========== Mode Selector ========== */
 function switchMode(mode) {
     document.getElementById("formatter-section").style.display = "none";
     document.getElementById("compare-section").style.display = "none";
     document.getElementById("codegen-section").style.display = "none";
-    document
-        .querySelectorAll(".mode-selector button")
-        .forEach((btn) => btn.classList.remove("active"));
+    document.querySelectorAll(".mode-selector button").forEach((btn) => btn.classList.remove("active"));
     if (mode === "formatter") {
         document.getElementById("formatter-section").style.display = "block";
         document.getElementById("mode-formatter-btn").classList.add("active");
@@ -165,7 +155,6 @@ function switchMode(mode) {
 }
 
 /* ========== Formatter Functions ========== */
-
 let formatterTabCount = 0;
 
 function addFormatterTab() {
@@ -177,87 +166,76 @@ function addFormatterTab() {
 function createFormatterTab(tabData = null) {
     formatterTabCount++;
     const tabId = "formatterTab" + formatterTabCount;
-
     // Create tab button
     const tabButton = document.createElement("button");
     tabButton.className = "tab-button";
     tabButton.setAttribute("data-tab", tabId);
     tabButton.onclick = () => switchFormatterTab(tabId);
-    tabButton.innerHTML = `<span class="tab-name">${tabData && tabData.name ? tabData.name : "Tab " + formatterTabCount
-        }</span>
-    <input type="color" class="tab-color-picker" value="${tabData && tabData.color ? tabData.color : "#e0e0e0"
-        }" onchange="updateFormatterTabColor('${tabId}', this.value)">
-    <span class="close-tab" onclick="closeFormatterTab('${tabId}', event)">×</span>`;
-    tabButton.addEventListener("dblclick", () =>
-        openTabRenameTooltip(tabId, "formatter")
-    );
-    const tabsContainer = document.getElementById(
-        "formatter-tabs-container"
-    );
+    tabButton.innerHTML = `<span class="tab-name">${tabData && tabData.name ? tabData.name : "Tab " + formatterTabCount}</span>
+             <input type="color" class="tab-color-picker" value="${tabData && tabData.color ? tabData.color : "#e0e0e0"}" onchange="updateFormatterTabColor('${tabId}', this.value)">
+             <span class="close-tab" onclick="closeFormatterTab('${tabId}', event)">×</span>`;
+    tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "formatter"));
+    const tabsContainer = document.getElementById("formatter-tabs-container");
     const addButton = tabsContainer.querySelector(".add-tab-button");
     tabsContainer.insertBefore(tabButton, addButton);
-
     // Create tab content
     const tabContent = document.createElement("div");
     tabContent.id = tabId;
     tabContent.className = "json-tab-content";
     tabContent.innerHTML = `
-    <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
-    <div class="search-container">
-        <input type="text" class="search-input" placeholder="Search keys or values..." />
-        <button onclick="searchFormatterJSON('${tabId}')">Search</button>
-    </div>
-    <div class="upload-download-container">
-        <input type="file" class="upload-json" style="display:none" onchange="uploadFormatterJSON('${tabId}', this)">
-            <button onclick="document.querySelector('#${tabId} .upload-json').click()">Upload JSON</button>
-            <button onclick="downloadFormatterJSON('${tabId}')">Download JSON</button>
-    </div>
-    <div class="tabs">
-        <button class="tab-button active" onclick="showFormatterPreviewTab('${tabId}', 'raw')">Raw JSON</button>
-        <button class="tab-button" onclick="showFormatterPreviewTab('${tabId}', 'tree')">Tree View</button>
-        <button class="tab-button" onclick="showFormatterPreviewTab('${tabId}', 'error')">Errors</button>
-    </div>
-    <div id="${tabId}-raw-preview" class="preview-section active">
-        <pre class="raw-json"></pre>
-    </div>
-    <div id="${tabId}-tree-preview" class="preview-section">
-        <div class="tree-view"></div>
-    </div>
-    <div id="${tabId}-error-preview" class="preview-section">
-        <div class="error-message"></div>
-    </div>
-    `;
-    document
-        .getElementById("formatter-tab-contents")
-        .appendChild(tabContent);
-
+             <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
+             <div class="search-container">
+               <input type="text" class="search-input" placeholder="Search keys or values..." />
+               <button onclick="searchFormatterJSON('${tabId}')">Search</button>
+             </div>
+             <div class="upload-download-container">
+               <input type="file" class="upload-json" style="display:none" onchange="uploadFormatterJSON('${tabId}', this)">
+               <button onclick="document.querySelector('#${tabId} .upload-json').click()">Upload JSON</button>
+               <button onclick="downloadFormatterJSON('${tabId}')">Download JSON</button>
+             </div>
+             <div class="tabs">
+               <button class="tab-button active" onclick="showFormatterPreviewTab('${tabId}', 'raw')">Raw JSON</button>
+               <button class="tab-button" onclick="showFormatterPreviewTab('${tabId}', 'tree')">Tree View</button>
+               <button class="tab-button" onclick="showFormatterPreviewTab('${tabId}', 'error')">Errors</button>
+             </div>
+             <div id="${tabId}-raw-preview" class="preview-section active">
+               <pre class="raw-json"></pre>
+             </div>
+             <div id="${tabId}-tree-preview" class="preview-section">
+               <div class="tree-view"></div>
+             </div>
+             <div id="${tabId}-error-preview" class="preview-section">
+               <div class="error-message"></div>
+             </div>
+             
+             <div id="${tabId}-raw-preview" class="preview-section active">
+                    <button class="copy-button" onclick="copyRawJSON('${tabId}')">Copy</button>
+                    <pre class="raw-json"></pre>
+                </div>
+                <div id="${tabId}-tree-preview" class="preview-section">
+                    <button class="copy-button" onclick="copyRawJSON('${tabId}')">Copy JSON</button>
+                    <div class="tree-view"></div>
+                </div>
+           `;
+    document.getElementById("formatter-tab-contents").appendChild(tabContent);
     // Set content if provided
     if (tabData && tabData.content) {
         tabContent.querySelector(".json-input").value = tabData.content;
     }
     const textarea = tabContent.querySelector(".json-input");
-    textarea.addEventListener("paste", () =>
-        setTimeout(() => autoFormatTextarea(textarea), 100)
-    );
+    textarea.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(textarea), 100));
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     textarea.addEventListener("input", () => updateFormatterPreview(tabId));
     updateFormatterPreview(tabId);
 }
 
 function switchFormatterTab(tabId) {
-    document
-        .querySelectorAll("#formatter-tab-contents .json-tab-content")
-        .forEach((tab) => tab.classList.remove("active"));
+    document.querySelectorAll("#formatter-tab-contents .json-tab-content").forEach((tab) => tab.classList.remove("active"));
     const selectedTab = document.getElementById(tabId);
     if (selectedTab) selectedTab.classList.add("active");
-    document
-        .querySelectorAll("#formatter-tabs-container .tab-button[data-tab]")
-        .forEach((btn) => {
-            btn.classList.toggle(
-                "active",
-                btn.getAttribute("data-tab") === tabId
-            );
-        });
+    document.querySelectorAll("#formatter-tabs-container .tab-button[data-tab]").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+    });
     saveGlobalState();
 }
 
@@ -285,26 +263,17 @@ function showFormatterPreviewTab(tabId, previewType) {
     const tabContent = document.getElementById(tabId);
     const previews = tabContent.querySelectorAll(".preview-section");
     previews.forEach((section) => {
-        section.classList.toggle(
-            "active",
-            section.id === `${tabId}-${previewType}-preview`
-        );
+        section.classList.toggle("active", section.id === `${tabId}-${previewType}-preview`);
     });
     const buttons = tabContent.querySelectorAll(".tabs .tab-button");
     buttons.forEach((btn) => {
-        btn.classList.toggle(
-            "active",
-            btn.textContent.toLowerCase().includes(previewType)
-        );
+        btn.classList.toggle("active", btn.textContent.toLowerCase().includes(previewType));
     });
 }
 
 function searchFormatterJSON(tabId) {
     const tabContent = document.getElementById(tabId);
-    const searchInput = tabContent
-        .querySelector(".search-input")
-        .value.trim()
-        .toLowerCase();
+    const searchInput = tabContent.querySelector(".search-input").value.trim().toLowerCase();
     const rawPreview = tabContent.querySelector(".raw-json");
     const treeView = tabContent.querySelector(".tree-view");
     tabContent.querySelectorAll(".highlight").forEach((el) => {
@@ -312,16 +281,10 @@ function searchFormatterJSON(tabId) {
         parent.replaceChild(document.createTextNode(el.textContent), el);
     });
     if (!searchInput) return;
-    const regex = new RegExp(
-        `(${searchInput.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
-        "gi"
-    );
+    const regex = new RegExp(`(${searchInput.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
     if (rawPreview.classList.contains("active")) {
         const content = rawPreview.textContent;
-        rawPreview.innerHTML = content.replace(
-            regex,
-            '<span class="highlight">$1</span>'
-        );
+        rawPreview.innerHTML = content.replace(regex, '<span class="highlight">$1</span>');
     }
     if (treeView.classList.contains("active")) {
         function highlightNode(node) {
@@ -329,10 +292,7 @@ function searchFormatterJSON(tabId) {
                 const matches = node.nodeValue.match(regex);
                 if (matches) {
                     const span = document.createElement("span");
-                    span.innerHTML = node.nodeValue.replace(
-                        regex,
-                        '<span class="highlight">$1</span>'
-                    );
+                    span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
                     node.parentNode.replaceChild(span, node);
                 }
             } else if (node.nodeType === Node.ELEMENT_NODE && node.childNodes) {
@@ -368,7 +328,9 @@ function uploadFormatterJSON(tabId, inputElement) {
 function downloadFormatterJSON(tabId) {
     const tabContent = document.getElementById(tabId);
     const content = tabContent.querySelector(".json-input").value;
-    const blob = new Blob([content], { type: "application/json" });
+    const blob = new Blob([content], {
+        type: "application/json"
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -385,22 +347,16 @@ function closeFormatterTab(tabId, event) {
         event.preventDefault();
     }
     if (!confirm("Are you sure you want to close this tab?")) return;
-    const tabButton = document.querySelector(
-        `#formatter-tabs-container .tab-button[data-tab="${tabId}"]`
-    );
+    const tabButton = document.querySelector(`#formatter-tabs-container .tab-button[data-tab="${tabId}"]`);
     const tabContent = document.getElementById(tabId);
     if (tabButton) tabButton.remove();
     if (tabContent) tabContent.remove();
-    const remaining = document.querySelectorAll(
-        "#formatter-tab-contents .json-tab-content"
-    );
-    if (remaining.length > 0)
-        switchFormatterTab(remaining[remaining.length - 1].id);
+    const remaining = document.querySelectorAll("#formatter-tab-contents .json-tab-content");
+    if (remaining.length > 0) switchFormatterTab(remaining[remaining.length - 1].id);
     saveGlobalState();
 }
 
 /* ========== Compare Functions ========== */
-
 let compareTabCount = 0;
 
 function addCompareTab() {
@@ -418,10 +374,8 @@ function createCompareTab() {
     tabButton.setAttribute("data-tab", tabId);
     tabButton.onclick = () => switchCompareTab(tabId);
     tabButton.innerHTML = `<span class="tab-name">Tab ${compareTabCount}</span>
-    <span class="close-tab" onclick="closeCompareTab('${tabId}', event)">×</span>`;
-    tabButton.addEventListener("dblclick", () =>
-        openTabRenameTooltip(tabId, "compare")
-    );
+             <span class="close-tab" onclick="closeCompareTab('${tabId}', event)">×</span>`;
+    tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "compare"));
     const tabsContainer = document.getElementById("compare-tabs-container");
     const addButton = tabsContainer.querySelector(".add-tab-button");
     tabsContainer.insertBefore(tabButton, addButton);
@@ -430,27 +384,22 @@ function createCompareTab() {
     tabContent.id = tabId;
     tabContent.className = "json-tab-content";
     tabContent.innerHTML = `
-    <div style="display:flex; gap:10px;">
-        <textarea class="json-input-left" placeholder="Enter Left JSON" style="width:48%; height:200px;"></textarea>
-        <textarea class="json-input-right" placeholder="Enter Right JSON" style="width:48%; height:200px;"></textarea>
-    </div>
-    <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
-    <div class="compare-result" style="margin-top:10px;"></div>
-    `;
+             <div style="display:flex; gap:10px;">
+               <textarea class="json-input-left" placeholder="Enter Left JSON" style="width:48%; height:200px;"></textarea>
+               <textarea class="json-input-right" placeholder="Enter Right JSON" style="width:48%; height:200px;"></textarea>
+             </div>
+             <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
+             <div class="compare-result" style="margin-top:10px;"></div>
+           `;
     document.getElementById("compare-tab-contents").appendChild(tabContent);
     const leftTA = tabContent.querySelector(".json-input-left");
     const rightTA = tabContent.querySelector(".json-input-right");
-    leftTA.addEventListener("paste", () =>
-        setTimeout(() => autoFormatTextarea(leftTA), 100)
-    );
+    leftTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(leftTA), 100));
     leftTA.addEventListener("blur", () => autoFormatTextarea(leftTA));
-    rightTA.addEventListener("paste", () =>
-        setTimeout(() => autoFormatTextarea(rightTA), 100)
-    );
+    rightTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(rightTA), 100));
     rightTA.addEventListener("blur", () => autoFormatTextarea(rightTA));
     saveGlobalState();
 }
-
 // Create Compare tab using saved data
 function createCompareTabWithData(tabData) {
     compareTabCount++;
@@ -460,10 +409,8 @@ function createCompareTabWithData(tabData) {
     tabButton.setAttribute("data-tab", tabId);
     tabButton.onclick = () => switchCompareTab(tabId);
     tabButton.innerHTML = `<span class="tab-name">${tabData.name}</span>
-    <span class="close-tab" onclick="closeCompareTab('${tabId}', event)">×</span>`;
-    tabButton.addEventListener("dblclick", () =>
-        openTabRenameTooltip(tabId, "compare")
-    );
+             <span class="close-tab" onclick="closeCompareTab('${tabId}', event)">×</span>`;
+    tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "compare"));
     const tabsContainer = document.getElementById("compare-tabs-container");
     const addButton = tabsContainer.querySelector(".add-tab-button");
     tabsContainer.insertBefore(tabButton, addButton);
@@ -471,43 +418,32 @@ function createCompareTabWithData(tabData) {
     tabContent.id = tabId;
     tabContent.className = "json-tab-content";
     tabContent.innerHTML = `
-    <div style="display:flex; gap:10px;">
-        <textarea class="json-input-left" placeholder="Enter Left JSON" style="width:48%; height:200px;"></textarea>
-        <textarea class="json-input-right" placeholder="Enter Right JSON" style="width:48%; height:200px;"></textarea>
-    </div>
-    <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
-    <div class="compare-result" style="margin-top:10px;"></div>
-    `;
+             <div style="display:flex; gap:10px;">
+               <textarea class="json-input-left" placeholder="Enter Left JSON" style="width:48%; height:200px;"></textarea>
+               <textarea class="json-input-right" placeholder="Enter Right JSON" style="width:48%; height:200px;"></textarea>
+             </div>
+             <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
+             <div class="compare-result" style="margin-top:10px;"></div>
+           `;
     document.getElementById("compare-tab-contents").appendChild(tabContent);
     const leftTA = tabContent.querySelector(".json-input-left");
     const rightTA = tabContent.querySelector(".json-input-right");
     leftTA.value = tabData.leftContent;
     rightTA.value = tabData.rightContent;
-    leftTA.addEventListener("paste", () =>
-        setTimeout(() => autoFormatTextarea(leftTA), 100)
-    );
+    leftTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(leftTA), 100));
     leftTA.addEventListener("blur", () => autoFormatTextarea(leftTA));
-    rightTA.addEventListener("paste", () =>
-        setTimeout(() => autoFormatTextarea(rightTA), 100)
-    );
+    rightTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(rightTA), 100));
     rightTA.addEventListener("blur", () => autoFormatTextarea(rightTA));
     saveGlobalState();
 }
 
 function switchCompareTab(tabId) {
-    document
-        .querySelectorAll("#compare-tab-contents .json-tab-content")
-        .forEach((tab) => tab.classList.remove("active"));
+    document.querySelectorAll("#compare-tab-contents .json-tab-content").forEach((tab) => tab.classList.remove("active"));
     const selectedTab = document.getElementById(tabId);
     if (selectedTab) selectedTab.classList.add("active");
-    document
-        .querySelectorAll("#compare-tabs-container .tab-button[data-tab]")
-        .forEach((btn) => {
-            btn.classList.toggle(
-                "active",
-                btn.getAttribute("data-tab") === tabId
-            );
-        });
+    document.querySelectorAll("#compare-tabs-container .tab-button[data-tab]").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+    });
     saveGlobalState();
 }
 
@@ -533,7 +469,13 @@ function compareJSONs(tabId) {
     }
     const leftFormatted = JSON.stringify(leftObj, null, 2);
     const rightFormatted = JSON.stringify(rightObj, null, 2);
-    resultDiv.innerHTML = diffJSONsPreview(leftFormatted, rightFormatted);
+    resultDiv.innerHTML = `
+                <div style="margin-bottom: 10px;">
+                    <button class="copy-button" onclick="copyCompareLeft('${tabId}')">Copy Left</button>
+                    <button class="copy-button" onclick="copyCompareRight('${tabId}')">Copy Right</button>
+                </div>
+                ${diffJSONsPreview(leftFormatted, rightFormatted)}
+            `
     leftTA.value = leftFormatted;
     rightTA.value = rightFormatted;
     saveGlobalState();
@@ -543,9 +485,7 @@ function diffJSONsPreview(leftText, rightText) {
     const isDarkMode = document.body.classList.contains("dark-mode");
     // Choose a diff color based on the theme:
     // For light mode, use a light red; for dark mode, use a darker or more muted red.
-    const diffStyle = isDarkMode
-        ? "background-color:#662222;"
-        : "background-color:#ddd;";
+    const diffStyle = isDarkMode ? "background-color:#662222;" : "background-color:#ddd;";
 
     const leftLines = leftText.split("\n");
     const rightLines = rightText.split("\n");
@@ -557,13 +497,13 @@ function diffJSONsPreview(leftText, rightText) {
         // Apply diffStyle if the lines differ
         const style = lLine === rLine ? "" : diffStyle;
         html += `<tr>
-            <td style="width:50%; padding:2px; border:1px solid #ddd; ${style}">
-                <pre style="margin:0;">${lLine}</pre>
-            </td>
-            <td style="width:50%; padding:2px; border:1px solid #ddd; ${style}">
-                <pre style="margin:0;">${rLine}</pre>
-            </td>
-        </tr>`;
+           <td style="width:50%; padding:2px; border:1px solid #ddd; ${style}">
+             <pre style="margin:0;">${lLine}</pre>
+           </td>
+           <td style="width:50%; padding:2px; border:1px solid #ddd; ${style}">
+             <pre style="margin:0;">${rLine}</pre>
+           </td>
+         </tr>`;
     }
     html += "</table>";
     return html;
@@ -575,22 +515,16 @@ function closeCompareTab(tabId, event) {
         event.preventDefault();
     }
     if (!confirm("Are you sure you want to close this tab?")) return;
-    const tabButton = document.querySelector(
-        `#compare-tabs-container .tab-button[data-tab="${tabId}"]`
-    );
+    const tabButton = document.querySelector(`#compare-tabs-container .tab-button[data-tab="${tabId}"]`);
     const tabContent = document.getElementById(tabId);
     if (tabButton) tabButton.remove();
     if (tabContent) tabContent.remove();
-    const remaining = document.querySelectorAll(
-        "#compare-tab-contents .json-tab-content"
-    );
-    if (remaining.length > 0)
-        switchCompareTab(remaining[remaining.length - 1].id);
+    const remaining = document.querySelectorAll("#compare-tab-contents .json-tab-content");
+    if (remaining.length > 0) switchCompareTab(remaining[remaining.length - 1].id);
     saveGlobalState();
 }
 
 /* ========== CodeGen Functions ========== */
-
 let codegenTabCount = 0;
 
 function addCodegenTab() {
@@ -608,10 +542,8 @@ function createCodegenTab() {
     tabButton.setAttribute("data-tab", tabId);
     tabButton.onclick = () => switchCodegenTab(tabId);
     tabButton.innerHTML = `<span class="tab-name">Tab ${codegenTabCount}</span>
-    <span class="close-tab" onclick="closeCodegenTab('${tabId}', event)">×</span>`;
-    tabButton.addEventListener("dblclick", () =>
-        openTabRenameTooltip(tabId, "codegen")
-    );
+             <span class="close-tab" onclick="closeCodegenTab('${tabId}', event)">×</span>`;
+    tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "codegen"));
     const tabsContainer = document.getElementById("codegen-tabs-container");
     const addButton = tabsContainer.querySelector(".add-tab-button");
     tabsContainer.insertBefore(tabButton, addButton);
@@ -620,23 +552,22 @@ function createCodegenTab() {
     tabContent.id = tabId;
     tabContent.className = "json-tab-content";
     tabContent.innerHTML = `
-    <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
-    <div style="margin-top:10px;">
-        <label for="lang-select-${tabId}">Select Language:</label>
-        <select id="lang-select-${tabId}">
-            <option value="typescript">TypeScript</option>
-            <option value="python">Python</option>
-            <option value="go">Go</option>
-        </select>
-        <button onclick="generateCode('${tabId}')">Generate Code</button>
-    </div>
-    <pre class="code-output" style="margin-top:10px; overflow:auto;"></pre>
-    `;
+             <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
+             <div style="margin-top:10px;">
+               <label for="lang-select-${tabId}">Select Language:</label>
+               <select id="lang-select-${tabId}">
+                 <option value="typescript">TypeScript</option>
+                 <option value="python">Python</option>
+                 <option value="go">Go</option>
+               </select>
+               <button onclick="generateCode('${tabId}')">Generate Code</button>
+               <button class="copy-button" onclick="copyCodeOutput('${tabId}')">Copy Code</button>
+             </div>
+             <pre class="code-output" style="margin-top:10px; overflow:auto;"></pre>
+           `;
     document.getElementById("codegen-tab-contents").appendChild(tabContent);
     const textarea = tabContent.querySelector(".json-input");
-    textarea.addEventListener("paste", () =>
-        setTimeout(() => autoFormatTextarea(textarea), 100)
-    );
+    textarea.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(textarea), 100));
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     saveGlobalState();
 }
@@ -649,10 +580,8 @@ function createCodegenTabWithData(tabData) {
     tabButton.setAttribute("data-tab", tabId);
     tabButton.onclick = () => switchCodegenTab(tabId);
     tabButton.innerHTML = `<span class="tab-name">${tabData.name}</span>
-    <span class="close-tab" onclick="closeCodegenTab('${tabId}', event)">×</span>`;
-    tabButton.addEventListener("dblclick", () =>
-        openTabRenameTooltip(tabId, "codegen")
-    );
+             <span class="close-tab" onclick="closeCodegenTab('${tabId}', event)">×</span>`;
+    tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "codegen"));
     const tabsContainer = document.getElementById("codegen-tabs-container");
     const addButton = tabsContainer.querySelector(".add-tab-button");
     tabsContainer.insertBefore(tabButton, addButton);
@@ -660,44 +589,35 @@ function createCodegenTabWithData(tabData) {
     tabContent.id = tabId;
     tabContent.className = "json-tab-content";
     tabContent.innerHTML = `
-    <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
-    <div style="margin-top:10px;">
-        <label for="lang-select-${tabId}">Select Language:</label>
-        <select id="lang-select-${tabId}">
-            <option value="typescript">TypeScript</option>
-            <option value="python">Python</option>
-            <option value="go">Go</option>
-        </select>
-        <button onclick="generateCode('${tabId}')">Generate Code</button>
-    </div>
-    <pre class="code-output" style="margin-top:10px; overflow:auto;"></pre>
-    `;
+             <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
+             <div style="margin-top:10px;">
+               <label for="lang-select-${tabId}">Select Language:</label>
+               <select id="lang-select-${tabId}">
+                 <option value="typescript">TypeScript</option>
+                 <option value="python">Python</option>
+                 <option value="go">Go</option>
+               </select>
+               <button onclick="generateCode('${tabId}')">Generate Code</button>
+             </div>
+             <pre class="code-output" style="margin-top:10px; overflow:auto;"></pre>
+           `;
     document.getElementById("codegen-tab-contents").appendChild(tabContent);
     const textarea = tabContent.querySelector(".json-input");
     textarea.value = tabData.input;
     const selectElem = document.getElementById("lang-select-" + tabId);
     selectElem.value = tabData.lang;
-    textarea.addEventListener("paste", () =>
-        setTimeout(() => autoFormatTextarea(textarea), 100)
-    );
+    textarea.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(textarea), 100));
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     saveGlobalState();
 }
 
 function switchCodegenTab(tabId) {
-    document
-        .querySelectorAll("#codegen-tab-contents .json-tab-content")
-        .forEach((tab) => tab.classList.remove("active"));
+    document.querySelectorAll("#codegen-tab-contents .json-tab-content").forEach((tab) => tab.classList.remove("active"));
     const selectedTab = document.getElementById(tabId);
     if (selectedTab) selectedTab.classList.add("active");
-    document
-        .querySelectorAll("#codegen-tabs-container .tab-button[data-tab]")
-        .forEach((btn) => {
-            btn.classList.toggle(
-                "active",
-                btn.getAttribute("data-tab") === tabId
-            );
-        });
+    document.querySelectorAll("#codegen-tabs-container .tab-button[data-tab]").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+    });
     saveGlobalState();
 }
 
@@ -729,17 +649,12 @@ function closeCodegenTab(tabId, event) {
         event.preventDefault();
     }
     if (!confirm("Are you sure you want to close this tab?")) return;
-    const tabButton = document.querySelector(
-        `#codegen-tabs-container .tab-button[data-tab="${tabId}"]`
-    );
+    const tabButton = document.querySelector(`#codegen-tabs-container .tab-button[data-tab="${tabId}"]`);
     const tabContent = document.getElementById(tabId);
     if (tabButton) tabButton.remove();
     if (tabContent) tabContent.remove();
-    const remaining = document.querySelectorAll(
-        "#codegen-tab-contents .json-tab-content"
-    );
-    if (remaining.length > 0)
-        switchCodegenTab(remaining[remaining.length - 1].id);
+    const remaining = document.querySelectorAll("#codegen-tab-contents .json-tab-content");
+    if (remaining.length > 0) switchCodegenTab(remaining[remaining.length - 1].id);
     saveGlobalState();
 }
 
@@ -755,18 +670,14 @@ function autoFormatTextarea(textarea) {
 
 function createTreeView(data, parentElement) {
     parentElement.innerHTML = "";
+
     function processNode(value, parent, key) {
         const node = document.createElement("div");
         node.className = "tree-node";
         if (typeof value === "object" && value !== null) {
             const keySpan = document.createElement("span");
             keySpan.className = "tree-key collapsed";
-            keySpan.textContent =
-                key !== undefined
-                    ? key
-                    : Array.isArray(value)
-                        ? `[${value.length}]`
-                        : `{${Object.keys(value).length}}`;
+            keySpan.textContent = key !== undefined ? key : Array.isArray(value) ? `[${value.length}]` : `{${Object.keys(value).length}}`;
             keySpan.onclick = () => {
                 keySpan.classList.toggle("collapsed");
                 keySpan.classList.toggle("expanded");
@@ -775,13 +686,9 @@ function createTreeView(data, parentElement) {
             const children = document.createElement("div");
             children.className = "tree-children";
             if (Array.isArray(value)) {
-                value.forEach((item, index) =>
-                    processNode(item, children, index)
-                );
+                value.forEach((item, index) => processNode(item, children, index));
             } else {
-                Object.entries(value).forEach(([k, v]) =>
-                    processNode(v, children, k)
-                );
+                Object.entries(value).forEach(([k, v]) => processNode(v, children, k));
             }
             node.appendChild(keySpan);
             node.appendChild(children);
@@ -796,15 +703,10 @@ function createTreeView(data, parentElement) {
 
 function openTabRenameTooltip(tabId, mode) {
     let containerSelector;
-    if (mode === "formatter")
-        containerSelector = "#formatter-tabs-container";
-    else if (mode === "compare")
-        containerSelector = "#compare-tabs-container";
-    else if (mode === "codegen")
-        containerSelector = "#codegen-tabs-container";
-    const tabButton = document.querySelector(
-        containerSelector + ` .tab-button[data-tab="${tabId}"]`
-    );
+    if (mode === "formatter") containerSelector = "#formatter-tabs-container";
+    else if (mode === "compare") containerSelector = "#compare-tabs-container";
+    else if (mode === "codegen") containerSelector = "#codegen-tabs-container";
+    const tabButton = document.querySelector(containerSelector + ` .tab-button[data-tab="${tabId}"]`);
     const existingTooltip = document.querySelector(".tab-rename-tooltip");
     if (existingTooltip) existingTooltip.remove();
     const tooltip = document.createElement("div");
@@ -824,6 +726,7 @@ function openTabRenameTooltip(tabId, mode) {
     tooltip.appendChild(input);
     document.body.appendChild(tooltip);
     input.focus();
+
     function finalizeRename() {
         const newName = input.value.trim();
         if (newName) {
@@ -910,7 +813,7 @@ function generateGo(obj, structName) {
     for (let key in obj) {
         if (!obj.hasOwnProperty(key)) continue;
         const value = obj[key];
-        let goType = "interface{ }";
+        let goType = "interface{}";
         if (value === null) {
             goType = "interface{}";
         } else if (Array.isArray(value)) {
@@ -924,7 +827,7 @@ function generateGo(obj, structName) {
                     if (typeof elem === "number") goType = "[]float64";
                     else if (typeof elem === "string") goType = "[]string";
                     else if (typeof elem === "boolean") goType = "[]bool";
-                    else goType = "[]interface{ }";
+                    else goType = "[]interface{}";
                 }
             } else {
                 goType = "[]interface{}";
@@ -948,50 +851,31 @@ function generateGo(obj, structName) {
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
-
 /* ========== Shortcut Modal & Dark Mode ========== */
 function toggleShortcutModal() {
     const modal = document.getElementById("shortcut-modal");
-    modal.style.display =
-        modal.style.display === "block" ? "none" : "block";
+    modal.style.display = modal.style.display === "block" ? "none" : "block";
 }
 
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
     saveGlobalState();
     // If the Compare section is visible, update all diff previews
-    if (
-        document.getElementById("compare-section").style.display !== "none"
-    ) {
-        document
-            .querySelectorAll("#compare-tab-contents .json-tab-content")
-            .forEach((tab) => {
-                compareJSONs(tab.id);
-            });
+    if (document.getElementById("compare-section").style.display !== "none") {
+        document.querySelectorAll("#compare-tab-contents .json-tab-content").forEach((tab) => {
+            compareJSONs(tab.id);
+        });
     }
 }
-
-
 /* ========== Keyboard Shortcuts ========== */
 document.addEventListener("keydown", (e) => {
-    if (
-        e.ctrlKey &&
-        e.key.toLowerCase() === "t" &&
-        document.getElementById("formatter-section").style.display !== "none"
-    ) {
+    if (e.ctrlKey && e.key.toLowerCase() === "t" && document.getElementById("formatter-section").style.display !== "none") {
         e.preventDefault();
         addFormatterTab();
     }
-    if (
-        e.ctrlKey &&
-        e.key.toLowerCase() === "w" &&
-        document.getElementById("formatter-section").style.display !== "none"
-    ) {
+    if (e.ctrlKey && e.key.toLowerCase() === "w" && document.getElementById("formatter-section").style.display !== "none") {
         e.preventDefault();
-        const activeTab = document.querySelector(
-            "#formatter-tab-contents .json-tab-content.active"
-        );
+        const activeTab = document.querySelector("#formatter-tab-contents .json-tab-content.active");
         if (activeTab) closeFormatterTab(activeTab.id);
     }
     if (e.ctrlKey && (e.key === "/" || e.key === "?")) {
@@ -1003,16 +887,11 @@ document.addEventListener("keydown", (e) => {
         if (modal.style.display === "block") toggleShortcutModal();
     }
 });
-
-
 /* ========== Initialization ========== */
 window.addEventListener("load", () => {
     loadGlobalState();
     // If no saved state, create a default Formatter tab.
-    if (
-        document.getElementById("formatter-tab-contents").children.length ===
-        0
-    ) {
+    if (document.getElementById("formatter-tab-contents").children.length === 0) {
         addFormatterTab();
     }
 });
