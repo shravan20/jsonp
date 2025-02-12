@@ -1,4 +1,4 @@
-<h1 align="center">JSON Toolbox</h1>
+<h1 align="center">JSONP - Multi tab JSON toolkit</h1>
 
 <p align="center">
   A versatile web-based toolkit for working with JSON data. Open-source and works offline!
