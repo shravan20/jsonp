@@ -37,6 +37,7 @@
 - 🧩 Plugins/extensions system
 - 🌐 Collaborative editing
 - 📋 Smart copy-paste detection
+- ⭐ Move away from CDN and add it as part of the existing project as JS/CSS build files
 
 ## 🚀 Usage
 
