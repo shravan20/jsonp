@@ -8,13 +8,14 @@
   <img src="https://madewithlove.now.sh/in?heart=true&colorA=%23ff671f&colorB=%23046a38&text=India" alt="Made with Love in India">
 </p>
 
-
 ## ✨ Features
 
 - **Core Tools**
   - 🧹 JSON Formatter & Validator
   - 🔍 JSON Comparison (diff checker)
   - 💻 Code Generation (TypeScript, Python, Go)
+  - 🐍 Python - json-to-dict and dict-to-json
+  - 🧪 Mock Data Generator (with Faker support)
   
 - **Workflow**
   - 📑 Multi-tab interface
@@ -29,6 +30,7 @@
   - 🚦 Error highlighting
 
 ## 🚧 Planned Features
+
 - 🛠 JSON Schema generator
 - 🔄 JSON-to-XML conversion
 - 📊 Visual JSON chart view
@@ -37,6 +39,7 @@
 - 📋 Smart copy-paste detection
 
 ## 🚀 Usage
+
 1. Open `index.html` in any modern browser
 2. Drag & drop JSON files directly
 3. Use tabs to organize multiple documents
@@ -45,9 +48,12 @@
 > **Note**: All data stays local - nothing is uploaded to servers
 
 ## 🤝 Contributing
+
 We welcome contributions! Please see:
+
 - [Contribution Guidelines](https://github.com/shravan20/jsonp/blob/main/CONTRIBUTING.md)
 - [GitHub Repository](https://github.com/shravan20/jsonp)
 
 ## 📄 License
+
 MIT Licensed - Free for personal and commercial use
