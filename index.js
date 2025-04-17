@@ -142,7 +142,10 @@ function switchMode(mode) {
     document.getElementById("formatter-section").style.display = "none";
     document.getElementById("compare-section").style.display = "none";
     document.getElementById("codegen-section").style.display = "none";
+    document.getElementById("convert-section").style.display = "none";
+
     document.querySelectorAll(".mode-selector button").forEach((btn) => btn.classList.remove("active"));
+
     if (mode === "formatter") {
         document.getElementById("formatter-section").style.display = "block";
         document.getElementById("mode-formatter-btn").classList.add("active");
@@ -152,6 +155,9 @@ function switchMode(mode) {
     } else if (mode === "codegen") {
         document.getElementById("codegen-section").style.display = "block";
         document.getElementById("mode-codegen-btn").classList.add("active");
+    } else if (mode === "convert") {
+        document.getElementById("convert-section").style.display = "block";
+        document.getElementById("mode-convert-btn").classList.add("active");
     }
     saveGlobalState();
 }
@@ -973,6 +979,54 @@ function generateGo(obj, structName) {
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+/* ========== Convert to Dict Functions ========== */
+let currentConvertMode = "dict-to-json";
+
+function switchConvertDirection(mode) {
+    currentConvertMode = mode;
+    document.querySelectorAll("#convert-section .tab-button").forEach((btn) => {
+        btn.classList.toggle("active", btn.textContent.includes("Dict") === (mode === "dict-to-json"));
+    });
+    document.getElementById("convert-input").value = "";
+    document.getElementById("convert-output").textContent = "";
+}
+
+function convert() {
+    const input = document.getElementById("convert-input").value;
+    const output = document.getElementById("convert-output");
+
+    try {
+        if (currentConvertMode === "dict-to-json") {
+            // Convert Python dict string → JSON
+            const jsonCompatible = input
+                .replace(/'/g, '"')
+                .replace(/\bTrue\b/g, 'true')
+                .replace(/\bFalse\b/g, 'false')
+                .replace(/\bNone\b/g, 'null');
+            const parsed = JSON.parse(jsonCompatible);
+            output.textContent = JSON.stringify(parsed, null, 2);
+        } else {
+            // Convert JSON → Python dict string
+            const parsed = JSON.parse(input);
+            let dictStr = JSON.stringify(parsed, null, 2)
+                .replace(/"/g, "'")
+                .replace(/\btrue\b/g, "True")
+                .replace(/\bfalse\b/g, "False")
+                .replace(/\bnull\b/g, "None");
+            output.textContent = dictStr;
+        }
+    } catch (e) {
+        output.textContent = "Error: " + e.message;
+    }
+}
+
+function copyConvertOutput() {
+    const output = document.getElementById("convert-output").textContent;
+    copyToClipboard(output, "Copied!");
+}
+
+
 /* ========== Shortcut Modal & Dark Mode ========== */
 function toggleShortcutModal() {
     const modal = document.getElementById("shortcut-modal");
