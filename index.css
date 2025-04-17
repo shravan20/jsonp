@@ -498,3 +498,89 @@ body.dark-mode .tree-context-menu-item:hover {
     border-radius: 3px;
     cursor: pointer;
 }
+
+/* Mock date preview */
+.markdown-preview {
+    font-family: Arial, sans-serif;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    max-height: 500px;
+    overflow-y: auto;
+    line-height: 1.6;
+}
+
+.markdown-preview pre {
+    background: #f6f8fa;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto;
+}
+
+.markdown-preview code {
+    background: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: monospace;
+}
+
+#mock-tab-schema.active,
+#mock-tab-docs.active {
+    font-weight: bold;
+    background-color: #e0e0e0;
+}
+
+
+.mock-preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: monospace;
+}
+
+.mock-preview-table th,
+.mock-preview-table td {
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    text-align: left;
+}
+
+.mock-preview-table th {
+    background-color: #f5f5f5;
+}
+
+body.dark-mode .mock-preview-table th {
+    background-color: #333;
+    color: white;
+}
+
+body.dark-mode .markdown-preview {
+    background: #1e1e1e;
+    color: #e0e0e0;
+    border-color: #444;
+}
+
+body.dark-mode .markdown-preview h1,
+body.dark-mode .markdown-preview h2,
+body.dark-mode .markdown-preview h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .markdown-preview pre {
+    background: #2d2d2d;
+    color: #e0e0e0;
+}
+
+body.dark-mode .markdown-preview code {
+    background: #3a3a3a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .markdown-preview pre::-webkit-scrollbar {
+    height: 6px;
+}
+
+body.dark-mode .markdown-preview pre::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
+}

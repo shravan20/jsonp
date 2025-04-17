@@ -3,13 +3,22 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JSONP - Multi tab JSON toolkit</title>  
-    <link rel="icon" type="image/svg+xml" href="json.svg">
+    <title>JSONP - Multi tab JSON toolkit</title>
+    <link rel="icon" type="image/svg+xml" href="json.svg" />
     <link rel="stylesheet" href="index.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.0/+esm"
+      type="module"
+    ></script>
+    <script type="module">
+      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.0/+esm";
+      window.faker = faker;
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body>
     <div class="container">
@@ -34,7 +43,10 @@
           JSON to Code
         </button>
         <button id="mode-convert-btn" onclick="switchMode('convert')">
-          Dict ⇄ JSON
+          Dict ↔ JSON
+        </button>
+        <button id="mode-mockgen-btn" onclick="switchMode('mockgen')">
+          Mock Data
         </button>
       </div>
       <!-- Formatter Section -->
@@ -100,6 +112,88 @@
           class="code-output"
           style="margin-top: 10px"
         ></pre>
+      </div>
+      <!-- Mock Data Generator -->
+      <div id="mockgen-section" style="display: none">
+        <h2>Mock Data Generator</h2>
+
+        <!-- Tab Buttons -->
+        <div style="margin-bottom: 10px">
+          <button
+            onclick="switchMockTab('schema')"
+            id="mock-tab-schema"
+            class="active"
+          >
+            Schema Editor
+          </button>
+          <button onclick="switchMockTab('docs')" id="mock-tab-docs">
+            Docs
+          </button>
+        </div>
+
+        <!-- Schema Panel -->
+        <div id="mockgen-schema-panel">
+          <label for="mockgen-count">Number of Records:</label>
+          <input
+            type="number"
+            id="mockgen-count"
+            value="1"
+            min="1"
+            max="1000"
+            style="width: 60px"
+          />
+
+          <select onchange="loadMockPreset(this.value)">
+            <option value="">-- Preset --</option>
+            <option value="User">User</option>
+            <option value="Product">Product</option>
+          </select>
+
+          <div style="margin-top: 10px">
+            <textarea
+              id="mock-schema-input"
+              class="json-input"
+              placeholder="Enter schema here..."
+            ></textarea>
+          </div>
+
+          <div style="margin-top: 10px">
+            <button onclick="generateMockData()">Generate</button>
+            <button onclick="copyMockOutput('json')">Copy JSON</button>
+            <button onclick="copyMockOutput('csv')">Copy CSV</button>
+
+            <label style="margin-left: 20px">
+              <input
+                type="radio"
+                name="mock-view-mode"
+                value="json"
+                checked
+                onchange="updateMockView()"
+              />
+              JSON
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="mock-view-mode"
+                value="table"
+                onchange="updateMockView()"
+              />
+              Table
+            </label>
+          </div>
+
+          <p id="mock-stats" style="margin-top: 10px"></p>
+
+          <div id="mock-output-container" style="margin-top: 10px">
+            <pre id="mock-output" class="code-output"></pre>
+          </div>
+        </div>
+
+        <!-- Docs Panel -->
+        <div id="mockgen-docs-panel" style="display: none; margin-top: 20px">
+          <div id="mockgen-docs-preview" class="markdown-preview"></div>
+        </div>
       </div>
     </div>
     <!-- Shortcut Modal -->
