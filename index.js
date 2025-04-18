@@ -1174,6 +1174,43 @@ function copyMockOutput(format = "json") {
     copyToClipboard(text, `Copied ${format.toUpperCase()}!`);
 }
 
+function downloadFile(content, filename, type) {
+    const blob = new Blob([content], { type });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+  
+function exportMockOutput(format = "json") {
+    if (!Array.isArray(latestMockData) || latestMockData.length === 0) {
+        console.error("No data available to export.");
+        return;
+    }
+
+    let content = "";
+    let filename = "mock_data";
+
+    if (format === "json") {
+        content = JSON.stringify(latestMockData.length === 1 ? latestMockData[0] : latestMockData, null, 2);
+        filename += ".json";
+        downloadFile(content, filename, "application/json");
+    } else if (format === "csv") {
+        if (!latestMockData.length || typeof latestMockData[0] !== "object") return;
+
+        const keys = Object.keys(latestMockData[0]);
+        const rows = latestMockData.map(obj => keys.map(k => JSON.stringify(obj[k] ?? "")));
+        content = [keys.join(","), ...rows.map(r => r.join(","))].join("\n");
+        filename += ".csv";
+        downloadFile(content, filename, "text/csv");
+    }
+}
+
+
 
 const mockgenDocs = `
 # 🧪 Mock Data Schema Format
