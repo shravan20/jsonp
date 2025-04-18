@@ -1185,6 +1185,13 @@ function downloadFile(content, filename, type) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
   }
+
+  let userInputValue = ""; // This variable will store filename input from user using the following event listener:
+
+  document.getElementById("userInput").addEventListener("input", function (e) {
+      userInputValue = e.target.value;
+      //console.log("Saved input:", userInputValue); // Optional: see it live
+  });
   
 function exportMockOutput(format = "json") {
     if (!Array.isArray(latestMockData) || latestMockData.length === 0) {
@@ -1193,7 +1200,7 @@ function exportMockOutput(format = "json") {
     }
 
     let content = "";
-    let filename = "mock_data";
+    let filename = userInputValue !== "" ? userInputValue : "mock_data"; // Use user input if available
 
     if (format === "json") {
         content = JSON.stringify(latestMockData.length === 1 ? latestMockData[0] : latestMockData, null, 2);
