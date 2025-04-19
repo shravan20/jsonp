@@ -1122,6 +1122,11 @@ function updateMockView() {
     const mode = document.querySelector('input[name="mock-view-mode"]:checked').value;
     const container = document.getElementById("mock-output-container");
     container.innerHTML = "";
+    if (mode === "table") {
+        tableTools.style.display = "block"; // Show button
+      } else {
+        tableTools.style.display = "none";  // Hide button
+      }
 
     if (mode === "json") {
         const pre = document.createElement("pre");
@@ -1205,30 +1210,85 @@ document.getElementById("userInput").addEventListener("input", function (e) {
     userInputValue = e.target.value;
     //console.log("Saved input:", userInputValue); // Optional: see it live
 });
+function getHighlightedTableData() {
+    const selection = window.getSelection();
+    let selectedData = [];
+    
+    if (selection && selection.rangeCount > 0) {
+      // Get the selected range
+      const range = selection.getRangeAt(0);
+      
+      // Check if the selection is within the table
+      const tableElement = document.querySelector(".mock-preview-table");
+      if (!tableElement) return [];
+      
+      // Find all selected rows - either fully or partially selected
+      const selectedRows = [];
+      const rows = tableElement.querySelectorAll("tbody tr");
+      
+      rows.forEach(row => {
+        if (range.intersectsNode(row)) {
+          selectedRows.push(row);
+        }
+      });
+      
+      // Get the table headers
+      const headers = Array.from(tableElement.querySelectorAll("thead th"))
+        .map(th => th.textContent.trim());
+      
+      // Extract data from selected rows
+      selectedRows.forEach(row => {
+        const rowData = {};
+        Array.from(row.querySelectorAll("td")).forEach((cell, index) => {
+          if (index < headers.length) {
+            // Try to parse JSON if the cell contains an object
+            let cellValue = cell.textContent.trim();
+            try {
+              if (cellValue.startsWith('{') || cellValue.startsWith('[')) {
+                cellValue = JSON.parse(cellValue);
+              }
+            } catch (e) {
+              // If parsing fails, use the text content
+            }
+            rowData[headers[index]] = cellValue;
+          }
+        });
+        selectedData.push(rowData);
+      });
+    }
+    
+    //console.log("Selected data:", selectedData);
+    return selectedData;
+  };
 
-function exportMockOutput(format = "json") {
-    if (!Array.isArray(latestMockData) || latestMockData.length === 0) {
+
+  function exportMockOutput(format = "json") {
+    const selectedData = getHighlightedTableData();
+    // If there's selected data, use it; otherwise use all data
+    const dataToExport = selectedData.length > 0 ? selectedData : latestMockData;
+    
+    if (!Array.isArray(dataToExport) || dataToExport.length === 0) {
         console.error("No data available to export.");
         return;
     }
-
+    
     let content = "";
     let filename = userInputValue !== "" ? userInputValue : "mock_data"; // Use user input if available
 
     if (format === "json") {
-        content = JSON.stringify(latestMockData.length === 1 ? latestMockData[0] : latestMockData, null, 2);
+        content = JSON.stringify(dataToExport.length === 1 ? dataToExport[0] : dataToExport, null, 2);
         filename += ".json";
         downloadFile(content, filename, "application/json");
     } else if (format === "csv") {
-        if (!latestMockData.length || typeof latestMockData[0] !== "object") return;
+        if (!dataToExport.length || typeof dataToExport[0] !== "object") return;
 
-        const keys = Object.keys(latestMockData[0]);
-        const rows = latestMockData.map(obj => keys.map(k => JSON.stringify(obj[k] ?? "")));
+        const keys = Object.keys(dataToExport[0]);
+        const rows = dataToExport.map(obj => keys.map(k => JSON.stringify(obj[k] ?? "")));
         content = [keys.join(","), ...rows.map(r => r.join(","))].join("\n");
         filename += ".csv";
         downloadFile(content, filename, "text/csv");
     }
-}
+};
 
 
 

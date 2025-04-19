@@ -10,12 +10,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
-    <script
-      src="https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.0/+esm"
-      type="module"
-    ></script>
     <script type="module">
       import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.0/+esm";
+      // Optional: make it globally available if needed in non-module scripts
       window.faker = faker;
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -164,6 +161,10 @@
             <button onclick="exportMockOutput('json')">Export as JSON</button>
             <button onclick="exportMockOutput('csv')">Export as CSV</button>
             <input type="text" id="userInput" placeholder="File Download Name(optional)" />
+            <div id="tableTools" style="display: none;">
+              <button onclick="exportMockOutput('csv')">Download Highlighted Entries as CSV</button>
+              <button onclick="exportMockOutput('json')">Download Highlighted Entries as JSON</button>
+            </div>
 
             <label style="margin-left: 20px">
               <input
