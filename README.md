@@ -1,4 +1,4 @@
-<h1 align="center">JSONP - Multi tab JSON toolkit</h1>
+# JSONP - Multi tab JSON toolkit
 
 <p align="center">
   A versatile web-based toolkit for working with JSON data. Open-source and works offline!
@@ -12,22 +12,38 @@
 
 - **Core Tools**
   - 🧹 JSON Formatter & Validator
+    - Multi-tab support with color coding
+    - Tree view with expandable nodes
+    - Search functionality
+    - Error highlighting
   - 🔍 JSON Comparison (diff checker)
-  - 💻 Code Generation (TypeScript, Python, Go)
-  - 🐍 Python - json-to-dict and dict-to-json
-  - 🧪 Mock Data Generator (with Faker support)
+    - Side-by-side diff view
+    - Multi-tab support
+  - 💻 Code Generation
+    - TypeScript interfaces
+    - Python dataclasses
+    - Go structs
+  - 🐍 Python - json-to-dict and dict-to-json converter
+  - 🧪 Mock Data Generator
+    - Faker.js integration
+    - JSON/CSV export
+    - Table/JSON view modes
+    - Customizable schemas
+    - Built-in presets
   
 - **Workflow**
-  - 📑 Multi-tab interface
+  - 📑 Multi-tab interface with drag-and-drop reordering
   - 🌓 Dark/Light mode toggle
   - ⌨️ Keyboard shortcuts
   - 💾 Automatic local saving
+  - 🔄 Real-time previews
 
 - **Convenience**
   - 📤📥 Import/Export JSON files
   - 🌐 Browser-based (no install needed)
-  - 🔄 Real-time previews
+  - 🔄 Real-time validation
   - 🚦 Error highlighting
+  - 📋 Copy/paste support
 
 ## 🚧 Planned Features
 
@@ -47,6 +63,10 @@
 4. Toggle modes using the top buttons
 
 > **Note**: All data stays local - nothing is uploaded to servers
+
+## 📝 Changelog
+
+For a detailed list of changes and version history, please see the [CHANGELOG](./CHANGELOG/README.md) directory.
 
 ## 🤝 Contributing
 
