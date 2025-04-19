@@ -105,6 +105,11 @@ function loadGlobalState() {
         createCodegenTabWithData(tabData);
     });
     if (state.codegen.activeTab) switchCodegenTab(state.codegen.activeTab);
+
+    enableTabReordering("formatter-tabs-container");
+    enableTabReordering("compare-tabs-container");
+    enableTabReordering("codegen-tabs-container");
+
 }
 
 /* ========== COPY FUNCTIONS ========== */
@@ -241,6 +246,8 @@ function createFormatterTab(tabData = null) {
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     textarea.addEventListener("input", () => updateFormatterPreview(tabId));
     updateFormatterPreview(tabId);
+    enableTabReordering("formatter-tabs-container");
+
 }
 
 function switchFormatterTab(tabId) {
@@ -418,6 +425,8 @@ function createCompareTab() {
     rightTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(rightTA), 100));
     rightTA.addEventListener("blur", () => autoFormatTextarea(rightTA));
     saveGlobalState();
+    enableTabReordering("compare-tabs-container");
+
 }
 // Create Compare tab using saved data
 function createCompareTabWithData(tabData) {
@@ -454,6 +463,8 @@ function createCompareTabWithData(tabData) {
     rightTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(rightTA), 100));
     rightTA.addEventListener("blur", () => autoFormatTextarea(rightTA));
     saveGlobalState();
+    enableTabReordering("compare-tabs-container");
+
 }
 
 function switchCompareTab(tabId) {
@@ -628,6 +639,8 @@ function createCodegenTabWithData(tabData) {
     textarea.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(textarea), 100));
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     saveGlobalState();
+    enableTabReordering("codegen-tabs-container");
+
 }
 
 function switchCodegenTab(tabId) {
@@ -1184,15 +1197,15 @@ function downloadFile(content, filename, type) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  }
+}
 
-  let userInputValue = ""; // This variable will store filename input from user using the following event listener:
+let userInputValue = ""; // This variable will store filename input from user using the following event listener:
 
-  document.getElementById("userInput").addEventListener("input", function (e) {
-      userInputValue = e.target.value;
-      //console.log("Saved input:", userInputValue); // Optional: see it live
-  });
-  
+document.getElementById("userInput").addEventListener("input", function (e) {
+    userInputValue = e.target.value;
+    //console.log("Saved input:", userInputValue); // Optional: see it live
+});
+
 function exportMockOutput(format = "json") {
     if (!Array.isArray(latestMockData) || latestMockData.length === 0) {
         console.error("No data available to export.");
@@ -1313,6 +1326,51 @@ document.addEventListener("keydown", (e) => {
         if (modal.style.display === "block") toggleShortcutModal();
     }
 });
+
+/* ========== Tab reordering ========== */
+function enableTabReordering(containerId) {
+    const container = document.getElementById(containerId);
+    const tabButtons = container.querySelectorAll(".tab-button[data-tab]");
+
+    tabButtons.forEach((button) => {
+        button.draggable = true;
+
+        button.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", button.getAttribute("data-tab"));
+            button.classList.add("dragging");
+        });
+
+        button.addEventListener("dragend", () => {
+            button.classList.remove("dragging");
+            container.querySelectorAll(".tab-button").forEach(b => b.classList.remove("drag-over"));
+        });
+
+        button.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            button.classList.add("drag-over");
+        });
+
+        button.addEventListener("dragleave", () => {
+            button.classList.remove("drag-over");
+        });
+
+        button.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const draggedId = e.dataTransfer.getData("text/plain");
+            const draggedBtn = container.querySelector(`[data-tab="${draggedId}"]`);
+
+            button.classList.remove("drag-over");
+
+            if (draggedBtn && draggedBtn !== button) {
+                container.insertBefore(draggedBtn, button);
+                saveGlobalState();
+            }
+        });
+    });
+}
+
+
+
 /* ========== Initialization ========== */
 window.addEventListener("load", () => {
     loadGlobalState();
