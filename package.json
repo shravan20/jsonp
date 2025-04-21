@@ -1,0 +1,22 @@
+{
+  "name": "jsonp",
+  "version": "1.0.0",
+  "description": "Dev Tool Kit",
+  "main": "index.html",
+  "scripts": {
+    "version": "auto-changelog -p > CHANGELOG.md"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shravan20/jsonp.git"
+  },
+  "author": "@shravan20",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shravan20/jsonp/issues"
+  },
+  "homepage": "https://github.com/shravan20/jsonp#readme",
+  "devDependencies": {
+    "auto-changelog": "^2.5.0"
+  }
+}
