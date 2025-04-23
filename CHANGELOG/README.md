@@ -20,6 +20,7 @@ This directory contains the changelog for each release version of JSONP. Each fi
 14. v1.13.0 (f779cd8) - Latest updates
 15. v1.14.0 (aa31b10) - Tab Reordering Feature
 16. v1.14.1 (previous) - Large File Support and Enhanced Features
-17. v1.14.2 (current) - Documentation Updates
+17. v1.14.2 (previous) - Documentation Updates
+18. v1.14.3 (current) - Keyboard Shortcuts Enhancement
 
 Each version has its own changelog file with detailed information about the changes.

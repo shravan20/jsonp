@@ -36,7 +36,11 @@
 - **Workflow**
   - 📑 Multi-tab interface with drag-and-drop reordering
   - 🌓 Dark/Light mode toggle
-  - ⌨️ Keyboard shortcuts
+  - ⌨️ Comprehensive Keyboard Shortcuts
+    - Ctrl + T: New Tab
+    - Ctrl + W: Close Current Tab
+    - Ctrl + /: Show Shortcuts
+    - Esc: Close Modals
   - 💾 Automatic local saving
   - 🔄 Real-time previews
   - 📋 Presets available in every tab
@@ -65,6 +69,7 @@
 3. Use tabs to organize multiple documents
 4. Toggle modes using the top buttons
 5. Reorder tabs using drag-and-drop
+6. Use keyboard shortcuts for faster navigation
 
 > **Note**: All data stays local - nothing is uploaded to servers
 
