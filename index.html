@@ -22,7 +22,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="header-section">
+      <div style="display: flex; align-items: center; margin-bottom: 20px">
         <h1>JSONP - Multi tab JSON toolkit</h1>
         <button class="dark-mode-toggle" onclick="toggleDarkMode()">
           Toggle Dark Mode
@@ -31,7 +31,6 @@
           Shortcuts
         </button>
       </div>
-
       <!-- Mode Selector -->
       <div class="mode-selector">
         <button id="mode-formatter-btn" onclick="switchMode('formatter')">
@@ -50,7 +49,6 @@
           Mock Data
         </button>
       </div>
-
       <!-- Formatter Section -->
       <div id="formatter-section">
         <div id="formatter-tabs-container" class="tabs">
@@ -62,7 +60,6 @@
           <!-- Formatter tab contents will be dynamically added here -->
         </div>
       </div>
-
       <!-- Compare Section -->
       <div id="compare-section" style="display: none">
         <div id="compare-tabs-container" class="tabs">
@@ -74,7 +71,6 @@
           <!-- Compare tab contents will be dynamically added here -->
         </div>
       </div>
-
       <!-- Code Generator Section -->
       <div id="codegen-section" style="display: none">
         <div id="codegen-tabs-container" class="tabs">
@@ -86,7 +82,6 @@
           <!-- CodeGen tab contents will be dynamically added here -->
         </div>
       </div>
-
       <!-- Convert Section -->
       <div id="convert-section" style="display: none">
         <div class="tabs">
@@ -103,29 +98,27 @@
             JSON → Dict
           </button>
         </div>
-        <div class="convert-content">
-          <textarea
-            id="convert-input"
-            class="json-input"
-            placeholder="Paste here..."
-          ></textarea>
-          <div class="button-group">
-            <button onclick="convert()">Convert</button>
-            <button class="copy-button" onclick="copyConvertOutput()">
-              Copy Output
-            </button>
-            <button onclick="loadConvertExample('pythonDict')">Load Dict Example</button>
-            <button onclick="loadConvertExample('jsonObject')">Load JSON Example</button>
-          </div>
-          <pre id="convert-output" class="code-output"></pre>
-        </div>
+        <textarea
+          id="convert-input"
+          class="json-input"
+          placeholder="Paste here..."
+        ></textarea>
+        <button onclick="convert()">Convert</button>
+        <button class="copy-button" onclick="copyConvertOutput()">
+          Copy Output
+        </button>
+        <pre
+          id="convert-output"
+          class="code-output"
+          style="margin-top: 10px"
+        ></pre>
       </div>
-
       <!-- Mock Data Generator -->
       <div id="mockgen-section" style="display: none">
         <h2>Mock Data Generator</h2>
 
-        <div class="tabs">
+        <!-- Tab Buttons -->
+        <div style="margin-bottom: 10px">
           <button
             onclick="switchMockTab('schema')"
             id="mock-tab-schema"
@@ -140,24 +133,23 @@
 
         <!-- Schema Panel -->
         <div id="mockgen-schema-panel">
-          <div class="mockgen-controls">
-            <label for="mockgen-count">Number of Records:</label>
-            <input
-              type="number"
-              id="mockgen-count"
-              value="1"
-              min="1"
-              max="1000"
-            />
+          <label for="mockgen-count">Number of Records:</label>
+          <input
+            type="number"
+            id="mockgen-count"
+            value="1"
+            min="1"
+            max="1000"
+            style="width: 60px"
+          />
 
-            <select onchange="loadMockPreset(this.value)">
-              <option value="">-- Preset --</option>
-              <option value="User">User</option>
-              <option value="Product">Product</option>
-            </select>
-          </div>
+          <select onchange="loadMockPreset(this.value)">
+            <option value="">-- Preset --</option>
+            <option value="User">User</option>
+            <option value="Product">Product</option>
+          </select>
 
-          <div class="json-input-wrapper">
+          <div style="margin-top: 10px">
             <textarea
               id="mock-schema-input"
               class="json-input"
@@ -165,17 +157,15 @@
             ></textarea>
           </div>
 
-          <div class="button-group">
+          <div style="margin-top: 10px">
             <button onclick="generateMockData()">Generate</button>
             <button onclick="copyMockOutput('json')">Copy JSON</button>
             <button onclick="copyMockOutput('csv')">Copy CSV</button>
             <button onclick="exportMockOutput('json')">Export as JSON</button>
             <button onclick="exportMockOutput('csv')">Export as CSV</button>
             <input type="text" id="userInput" placeholder="File Download Name(optional)" />
-          </div>
 
-          <div class="view-mode-group">
-            <label>
+            <label style="margin-left: 20px">
               <input
                 type="radio"
                 name="mock-view-mode"
@@ -196,63 +186,62 @@
             </label>
           </div>
 
-          <p id="mock-stats"></p>
+          <p id="mock-stats" style="margin-top: 10px"></p>
 
-          <div id="mock-output-container">
-            <!-- Output will be dynamically added here -->
+          <div id="mock-output-container" style="margin-top: 10px">
+            <pre id="mock-output" class="code-output"></pre>
           </div>
         </div>
 
         <!-- Docs Panel -->
-        <div id="mockgen-docs-panel" style="display: none">
+        <div id="mockgen-docs-panel" style="display: none; margin-top: 20px">
           <div id="mockgen-docs-preview" class="markdown-preview"></div>
         </div>
       </div>
-
-      <!-- Shortcut Modal -->
-      <div id="shortcut-modal" class="modal">
-        <div class="modal-content">
-          <span class="close-modal" onclick="toggleShortcutModal()">&times;</span>
-          <h2>Keyboard Shortcuts</h2>
-          <ul>
-            <li>
-              <strong>Ctrl + T</strong>: New Formatter Tab (in Formatter mode)
-            </li>
-            <li>
-              <strong>Ctrl + W</strong>: Close Current Formatter Tab (in Formatter
-              mode)
-            </li>
-            <li><strong>Ctrl + /</strong>: Show/Hide Shortcut Panel</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="github-links">
-        <a
-          href="https://github.com/shravan20/jsonp"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="github-button"
-        >
-          <i class="fab fa-github"></i> View on GitHub
-        </a>
-        <a
-          href="https://github.com/shravan20/jsonp/blob/main/README.md"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="contribute-button"
-        >
-          <i class="fas fa-hands-helping"></i> Contribute
-        </a>
-      </div>
-
-      <p align="center">
-        <img
-          src="https://madewithlove.now.sh/in?heart=true&colorA=%23ff671f&colorB=%23046a38&text=India"
-          alt="Made with love with Open Source"
-        />
-      </p>
     </div>
+    <!-- Shortcut Modal -->
+    <div id="shortcut-modal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="toggleShortcutModal()">&times;</span>
+        <h2>Keyboard Shortcuts</h2>
+        <ul>
+          <li>
+            <strong>Ctrl + T</strong>: New Formatter Tab (in Formatter mode)
+          </li>
+          <li>
+            <strong>Ctrl + W</strong>: Close Current Formatter Tab (in Formatter
+            mode)
+          </li>
+          <li><strong>Ctrl + /</strong>: Show/Hide Shortcut Panel</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="github-links">
+      <a
+        href="https://github.com/shravan20/jsonp"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-button"
+      >
+        <i class="fab fa-github"></i> View on GitHub
+      </a>
+      <a
+        href="https://github.com/shravan20/jsonp/blob/main/README.md"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="contribute-button"
+      >
+        <i class="fas fa-hands-helping"></i> Contribute
+      </a>
+    </div>
+
+    <p align="center">
+      <img
+        src="https://madewithlove.now.sh/in?heart=true&colorA=%23ff671f&colorB=%23046a38&text=India"
+        alt="Made with love with Open Source"
+      />
+    </p>
     <script src="index.js"></script>
   </body>
 </html>
