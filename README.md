@@ -16,6 +16,7 @@
     - Tree view with expandable nodes
     - Search functionality
     - Error highlighting
+    - Support for large files (up to 40 MB)
   - 🔍 JSON Comparison (diff checker)
     - Side-by-side diff view
     - Multi-tab support
@@ -30,13 +31,19 @@
     - Table/JSON view modes
     - Customizable schemas
     - Built-in presets
+    - Export options for JSON and CSV
   
 - **Workflow**
   - 📑 Multi-tab interface with drag-and-drop reordering
   - 🌓 Dark/Light mode toggle
-  - ⌨️ Keyboard shortcuts
+  - ⌨️ Comprehensive Keyboard Shortcuts
+    - Ctrl + T: New Tab
+    - Ctrl + W: Close Current Tab
+    - Ctrl + /: Show Shortcuts
+    - Esc: Close Modals
   - 💾 Automatic local saving
   - 🔄 Real-time previews
+  - 📋 Presets available in every tab
 
 - **Convenience**
   - 📤📥 Import/Export JSON files
@@ -61,6 +68,8 @@
 2. Drag & drop JSON files directly
 3. Use tabs to organize multiple documents
 4. Toggle modes using the top buttons
+5. Reorder tabs using drag-and-drop
+6. Use keyboard shortcuts for faster navigation
 
 > **Note**: All data stays local - nothing is uploaded to servers
 
