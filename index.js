@@ -1,3 +1,4 @@
+
 /* ========== Global Persistence Functions ========== */
 function getActiveMode() {
     if (document.getElementById("formatter-section").style.display !== "none") return "formatter";
