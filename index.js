@@ -205,40 +205,33 @@ function createFormatterTab(tabData = null) {
              <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
              <div class="search-container">
                <input type="text" class="search-input" placeholder="Search keys or values..." />
-               <button onclick="searchFormatterJSON('${tabId}')">Search</button>
+               <button class="btn btn-primary" onclick="searchFormatterJSON('${tabId}')">Search</button>
              </div>
-             <div class="upload-download-container">
+             <div class="upload-download-container btn-group">
                <input type="file" class="upload-json" style="display:none" onchange="uploadFormatterJSON('${tabId}', this)">
-               <button onclick="document.querySelector('#${tabId} .upload-json').click()">Upload JSON</button>
-               <button onclick="downloadFormatterJSON('${tabId}')">Download JSON</button>
-               <div class="preset-examples">
-                 <button onclick="loadFormatterExample('${tabId}', 'simpleObject')">Load Simple Object</button>
-                 <button onclick="loadFormatterExample('${tabId}', 'arrayOfObjects')">Load Array Example</button>
+               <button class="btn btn-secondary" onclick="document.querySelector('#${tabId} .upload-json').click()">Upload JSON</button>
+               <button class="btn btn-secondary" onclick="downloadFormatterJSON('${tabId}')">Download JSON</button>
+               <div class="preset-examples btn-group">
+                 <button class="btn btn-secondary" onclick="loadFormatterExample('${tabId}', 'simpleObject')">Load Simple Object</button>
+                 <button class="btn btn-secondary" onclick="loadFormatterExample('${tabId}', 'arrayOfObjects')">Load Array Example</button>
                </div>
              </div>
-             <div class="tabs">
-               <button class="tab-button active" onclick="showFormatterPreviewTab('${tabId}', 'raw')">Raw JSON</button>
-               <button class="tab-button" onclick="showFormatterPreviewTab('${tabId}', 'tree')">Tree View</button>
-               <button class="tab-button" onclick="showFormatterPreviewTab('${tabId}', 'error')">Errors</button>
+             <div class="tabs btn-group">
+               <button class="btn btn-secondary active" onclick="showFormatterPreviewTab('${tabId}', 'raw')">Raw JSON</button>
+               <button class="btn btn-secondary" onclick="showFormatterPreviewTab('${tabId}', 'tree')">Tree View</button>
+               <button class="btn btn-secondary" onclick="showFormatterPreviewTab('${tabId}', 'error')">Errors</button>
              </div>
              <div id="${tabId}-raw-preview" class="preview-section active">
+               <button class="btn btn-primary" onclick="copyRawJSON('${tabId}')">Copy JSON</button>
                <pre class="raw-json"></pre>
              </div>
              <div id="${tabId}-tree-preview" class="preview-section">
+               <button class="btn btn-primary" onclick="copyRawJSON('${tabId}')">Copy JSON</button>
                <div class="tree-view"></div>
              </div>
              <div id="${tabId}-error-preview" class="preview-section">
                <div class="error-message"></div>
              </div>
-             
-             <div id="${tabId}-raw-preview" class="preview-section active">
-                    <button class="copy-button" onclick="copyRawJSON('${tabId}')">Copy</button>
-                    <pre class="raw-json"></pre>
-                </div>
-                <div id="${tabId}-tree-preview" class="preview-section">
-                    <button class="copy-button" onclick="copyRawJSON('${tabId}')">Copy JSON</button>
-                    <div class="tree-view"></div>
-                </div>
            `;
     document.getElementById("formatter-tab-contents").appendChild(tabContent);
     // Set content if provided
@@ -495,9 +488,9 @@ function createCompareTab() {
                <textarea class="json-input-left" placeholder="Enter Left JSON" style="width:48%; height:200px;"></textarea>
                <textarea class="json-input-right" placeholder="Enter Right JSON" style="width:48%; height:200px;"></textarea>
              </div>
-             <div class="button-group">
-               <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
-               <button onclick="loadCompareExample('${tabId}')">Load Version Example</button>
+             <div class="btn-group">
+               <button class="btn btn-primary" onclick="compareJSONs('${tabId}')">Compare JSONs</button>
+               <button class="btn btn-secondary" onclick="loadCompareExample('${tabId}')">Load Version Example</button>
              </div>
              <div class="compare-result" style="margin-top:10px;"></div>
            `;
@@ -534,9 +527,9 @@ function createCompareTabWithData(tabData) {
                <textarea class="json-input-left" placeholder="Enter Left JSON" style="width:48%; height:200px;"></textarea>
                <textarea class="json-input-right" placeholder="Enter Right JSON" style="width:48%; height:200px;"></textarea>
              </div>
-             <div class="button-group">
-               <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
-               <button onclick="loadCompareExample('${tabId}')">Load Version Example</button>
+             <div class="btn-group">
+               <button class="btn btn-primary" onclick="compareJSONs('${tabId}')">Compare JSONs</button>
+               <button class="btn btn-secondary" onclick="loadCompareExample('${tabId}')">Load Version Example</button>
              </div>
              <div class="compare-result" style="margin-top:10px;"></div>
            `;
@@ -670,16 +663,16 @@ function createCodegenTab() {
     tabContent.className = "json-tab-content";
     tabContent.innerHTML = `
              <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
-             <div class="codegen-controls">
+             <div class="codegen-controls btn-group">
                <label for="lang-select-${tabId}">Select Language:</label>
                <select id="lang-select-${tabId}">
                  <option value="typescript">TypeScript</option>
                  <option value="python">Python</option>
                  <option value="go">Go</option>
                </select>
-               <button onclick="generateCode('${tabId}')">Generate Code</button>
-               <button onclick="loadCodegenExample('${tabId}')">Load User Profile Example</button>
-               <button class="copy-button" onclick="copyCodeOutput('${tabId}')">Copy Code</button>
+               <button class="btn btn-primary" onclick="generateCode('${tabId}')">Generate Code</button>
+               <button class="btn btn-secondary" onclick="loadCodegenExample('${tabId}')">Load User Profile Example</button>
+               <button class="btn btn-secondary" onclick="copyCodeOutput('${tabId}')">Copy Code</button>
              </div>
              <pre class="code-output" style="margin-top:10px; overflow:auto;"></pre>
            `;
@@ -817,25 +810,52 @@ function createTreeView(data, parentElement) {
             // Get the size of the object/array
             const size = isArray ? value.length : Object.keys(value).length;
             
-            keySpan.innerHTML = `
-                <span>${displayKey}</span>
-                <span class="node-info">${isArray ? `[${size}]` : `{${size}}`}</span>
-            `;
+            // Create expand/collapse icon
+            const expandIcon = document.createElement("span");
+            expandIcon.className = "expand-icon";
+            expandIcon.innerHTML = "▾"; // Unicode triangle
+            
+            // Create key content
+            const keyContent = document.createElement("span");
+            keyContent.className = "key-content";
+            keyContent.textContent = displayKey;
+            
+            // Create size indicator
+            const sizeIndicator = document.createElement("span");
+            sizeIndicator.className = "node-info";
+            sizeIndicator.textContent = isArray ? `[${size}]` : `{${size}}`;
+            
+            // Assemble the key span
+            keySpan.appendChild(expandIcon);
+            if (displayKey) {
+                keySpan.appendChild(keyContent);
+                keySpan.appendChild(document.createTextNode(": "));
+            }
+            keySpan.appendChild(sizeIndicator);
 
             // Keyboard navigation
             keySpan.addEventListener('keydown', (e) => {
                 switch (e.key) {
                     case 'ArrowRight':
-                        if (keySpan.classList.contains('collapsed')) toggleNode();
+                        if (keySpan.classList.contains('collapsed')) {
+                            toggleNode(keySpan, children, value);
+                        }
                         break;
                     case 'ArrowLeft':
-                        if (!keySpan.classList.contains('collapsed')) toggleNode();
+                        if (!keySpan.classList.contains('collapsed')) {
+                            toggleNode(keySpan, children, value);
+                        }
                         break;
                     case 'ArrowDown':
                         focusNextNode(keySpan);
                         break;
                     case 'ArrowUp':
                         focusPreviousNode(keySpan);
+                        break;
+                    case 'Enter':
+                    case ' ':
+                        toggleNode(keySpan, children, value);
+                        e.preventDefault();
                         break;
                 }
             });
@@ -852,11 +872,12 @@ function createTreeView(data, parentElement) {
             
             // Mark as lazy-loadable if it has children
             if (size > 0) {
-                keySpan.classList.add('collapsed', 'lazy-load');
+                keySpan.classList.add('collapsed');
                 children.dataset.loaded = 'false';
-            }            const toggleNode = (keySpan, children, value) => {
+            }
+            
+            function toggleNode(keySpan, children, value) {
                 const isExpanding = keySpan.classList.contains('collapsed');
-                keySpan.classList.toggle('expanded');
                 keySpan.classList.toggle('collapsed');
                 
                 if (isExpanding) {
@@ -888,18 +909,20 @@ function createTreeView(data, parentElement) {
                             
                             loadNextChunk();
                         } else {
-                            // For objects, load all properties (usually not as numerous as array items)
+                            // For objects, load all properties
                             Object.entries(value).forEach(([k, v]) => {
                                 processNode(v, children, k, currentPath);
                             });
                         }
                         children.dataset.loaded = 'true';
-                        keySpan.classList.remove('lazy-load');
                     }
+                    children.style.display = 'block';
+                    keySpan.querySelector('.expand-icon').innerHTML = '▾';
+                } else {
+                    children.style.display = 'none';
+                    keySpan.querySelector('.expand-icon').innerHTML = '▸';
                 }
-                
-                children.style.display = isExpanding ? 'block' : 'none';
-            };
+            }
             
             keySpan.addEventListener('click', () => toggleNode(keySpan, children, value));
 
@@ -912,23 +935,35 @@ function createTreeView(data, parentElement) {
 
             node.appendChild(keySpan);
             node.appendChild(children);
-            parent.appendChild(node);
-        } else {
+            parent.appendChild(node);        } else {
+            // Leaf node (primitive value)
+            const valueContainer = document.createElement("div");
+            valueContainer.className = "tree-node";
+            
             const valueSpan = document.createElement("span");
-            valueSpan.innerHTML = `
-                <span class="tree-key">${key}: </span>
-                <span class="${getValueTypeClass(value)}">${formatValue(value)}</span>
-            `;
-
-            // Value context menu
+            valueSpan.className = "tree-key";
+            
+            const keySpan = document.createElement("span");
+            keySpan.className = "key-content";
+            keySpan.textContent = displayKey ? displayKey + ": " : "";
+            
+            const valueText = document.createElement("span");
+            valueText.className = getValueTypeClass(value);
+            valueText.textContent = formatValue(value);
+            
+            valueSpan.appendChild(keySpan);
+            valueSpan.appendChild(valueText);
+            
+            // Context menu for values
             valueSpan.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
                 showContextMenu(e, currentPath, value);
             });
-
-            node.appendChild(valueSpan);
-            parent.appendChild(node);
+            
+            valueContainer.appendChild(valueSpan);
+            parent.appendChild(valueContainer);
         }
+
 
         return node;
     }
@@ -1441,8 +1476,33 @@ function renderMockgenDocs() {
 /* ========== Shortcut Modal & Dark Mode ========== */
 function toggleShortcutModal() {
     const modal = document.getElementById("shortcut-modal");
-    modal.style.display = modal.style.display === "block" ? "none" : "block";
+    if (modal.style.display === "block") {
+        // Closing modal
+        modal.classList.remove("show");
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300); // Match transition duration
+    } else {
+        // Opening modal
+        modal.style.display = "block";
+        // Force reflow
+        modal.offsetHeight;
+        modal.classList.add("show");
+    }
 }
+
+// Close modal when clicking outside
+document.addEventListener("click", (e) => {
+    const modal = document.getElementById("shortcut-modal");
+    if (e.target === modal) {
+        toggleShortcutModal();
+    }
+});
+
+// Prevent clicks inside modal from closing it
+document.querySelector(".modal-content").addEventListener("click", (e) => {
+    e.stopPropagation();
+});
 
 function toggleDarkMode() {
     document.body.classList.toggle("dark-mode");
