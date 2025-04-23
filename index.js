@@ -211,6 +211,10 @@ function createFormatterTab(tabData = null) {
                <input type="file" class="upload-json" style="display:none" onchange="uploadFormatterJSON('${tabId}', this)">
                <button onclick="document.querySelector('#${tabId} .upload-json').click()">Upload JSON</button>
                <button onclick="downloadFormatterJSON('${tabId}')">Download JSON</button>
+               <div class="preset-examples">
+                 <button onclick="loadFormatterExample('${tabId}', 'simpleObject')">Load Simple Object</button>
+                 <button onclick="loadFormatterExample('${tabId}', 'arrayOfObjects')">Load Array Example</button>
+               </div>
              </div>
              <div class="tabs">
                <button class="tab-button active" onclick="showFormatterPreviewTab('${tabId}', 'raw')">Raw JSON</button>
@@ -338,15 +342,92 @@ function updateFormatterTabColor(tabId, colorValue) {
 function uploadFormatterJSON(tabId, inputElement) {
     if (inputElement.files && inputElement.files[0]) {
         const file = inputElement.files[0];
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            const content = e.target.result;
-            const tabContent = document.getElementById(tabId);
-            const textarea = tabContent.querySelector(".json-input");
-            textarea.value = content;
-            updateFormatterPreview(tabId);
-        };
-        reader.readAsText(file);
+        const tabContent = document.getElementById(tabId);
+        const textarea = tabContent.querySelector(".json-input");
+        const errorMessage = tabContent.querySelector(".error-message");
+        
+        // Show loading state
+        textarea.disabled = true;
+        textarea.value = "Loading file, please wait...";
+        showFormatterPreviewTab(tabId, 'error');
+        errorMessage.textContent = "Processing file...";
+        
+        try {
+            // Create a new worker
+            const worker = new Worker('formatter.worker.js');
+            
+            worker.onmessage = function(e) {
+                const response = e.data;
+                
+                if (response.type === 'success') {
+                    // Update the textarea with formatted JSON
+                    textarea.value = JSON.stringify(response.data, null, 2);
+                    
+                    // Show stats in the error section
+                    const stats = response.stats;
+                    errorMessage.innerHTML = `
+                        <div class="json-stats">
+                            <h4>JSON Statistics:</h4>
+                            <ul>
+                                <li>Total Keys: ${stats.totalKeys}</li>
+                                <li>Maximum Depth: ${stats.maxDepth}</li>
+                                <li>Arrays: ${stats.arrayCount}</li>
+                                <li>Objects: ${stats.objectCount}</li>
+                                <li>Value Types: ${stats.valueTypes.join(', ')}</li>
+                            </ul>
+                        </div>
+                    `;
+                    
+                    updateFormatterPreview(tabId);
+                } else if (response.type === 'summary') {
+                    // Handle large file summary view
+                    const sizeMB = (response.size / (1024 * 1024)).toFixed(2);
+                    errorMessage.innerHTML = `
+                        <div class="large-file-summary">
+                            <h4>Large File Detected</h4>
+                            <p>File size: ${sizeMB} MB</p>
+                            <p>${response.message}</p>
+                            <p>For better performance, consider:</p>
+                            <ul>
+                                <li>Using a smaller subset of the data</li>
+                                <li>Splitting the file into smaller chunks</li>
+                            </ul>
+                        </div>
+                    `;
+                    showFormatterPreviewTab(tabId, 'error');
+                    textarea.value = "File is too large for full preview";
+                    textarea.disabled = true;
+                } else if (response.type === 'error') {
+                    errorMessage.textContent = response.error;
+                    showFormatterPreviewTab(tabId, 'error');
+                }
+                
+                // Re-enable textarea unless it's a large file
+                if (response.type !== 'summary') {
+                    textarea.disabled = false;
+                }
+                
+                // Terminate the worker
+                worker.terminate();
+            };
+            
+            worker.onerror = function(error) {
+                errorMessage.textContent = `Worker Error: ${error.message}`;
+                showFormatterPreviewTab(tabId, 'error');
+                textarea.disabled = false;
+                worker.terminate();
+            };
+            
+            // Send the file to the worker
+            worker.postMessage(file);
+            
+        } catch (error) {
+            errorMessage.textContent = `Error initializing worker: ${error.message}`;
+            showFormatterPreviewTab(tabId, 'error');
+            textarea.disabled = false;
+        }
+        
+        // Clear the file input
         inputElement.value = "";
     }
 }
@@ -414,7 +495,10 @@ function createCompareTab() {
                <textarea class="json-input-left" placeholder="Enter Left JSON" style="width:48%; height:200px;"></textarea>
                <textarea class="json-input-right" placeholder="Enter Right JSON" style="width:48%; height:200px;"></textarea>
              </div>
-             <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
+             <div class="button-group">
+               <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
+               <button onclick="loadCompareExample('${tabId}')">Load Version Example</button>
+             </div>
              <div class="compare-result" style="margin-top:10px;"></div>
            `;
     document.getElementById("compare-tab-contents").appendChild(tabContent);
@@ -450,7 +534,10 @@ function createCompareTabWithData(tabData) {
                <textarea class="json-input-left" placeholder="Enter Left JSON" style="width:48%; height:200px;"></textarea>
                <textarea class="json-input-right" placeholder="Enter Right JSON" style="width:48%; height:200px;"></textarea>
              </div>
-             <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
+             <div class="button-group">
+               <button onclick="compareJSONs('${tabId}')">Compare JSONs</button>
+               <button onclick="loadCompareExample('${tabId}')">Load Version Example</button>
+             </div>
              <div class="compare-result" style="margin-top:10px;"></div>
            `;
     document.getElementById("compare-tab-contents").appendChild(tabContent);
@@ -583,7 +670,7 @@ function createCodegenTab() {
     tabContent.className = "json-tab-content";
     tabContent.innerHTML = `
              <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
-             <div style="margin-top:10px;">
+             <div class="codegen-controls">
                <label for="lang-select-${tabId}">Select Language:</label>
                <select id="lang-select-${tabId}">
                  <option value="typescript">TypeScript</option>
@@ -591,6 +678,7 @@ function createCodegenTab() {
                  <option value="go">Go</option>
                </select>
                <button onclick="generateCode('${tabId}')">Generate Code</button>
+               <button onclick="loadCodegenExample('${tabId}')">Load User Profile Example</button>
                <button class="copy-button" onclick="copyCodeOutput('${tabId}')">Copy Code</button>
              </div>
              <pre class="code-output" style="margin-top:10px; overflow:auto;"></pre>
@@ -600,9 +688,7 @@ function createCodegenTab() {
     textarea.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(textarea), 100));
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     saveGlobalState();
-}
-
-function createCodegenTabWithData(tabData) {
+}function createCodegenTabWithData(tabData) {
     codegenTabCount++;
     const tabId = tabData.id;
     const tabButton = document.createElement("button");
@@ -620,7 +706,7 @@ function createCodegenTabWithData(tabData) {
     tabContent.className = "json-tab-content";
     tabContent.innerHTML = `
              <textarea class="json-input" placeholder="Enter JSON here..."></textarea>
-             <div style="margin-top:10px;">
+             <div class="codegen-controls">
                <label for="lang-select-${tabId}">Select Language:</label>
                <select id="lang-select-${tabId}">
                  <option value="typescript">TypeScript</option>
@@ -628,6 +714,8 @@ function createCodegenTabWithData(tabData) {
                  <option value="go">Go</option>
                </select>
                <button onclick="generateCode('${tabId}')">Generate Code</button>
+               <button onclick="loadCodegenExample('${tabId}')">Load User Profile Example</button>
+               <button class="copy-button" onclick="copyCodeOutput('${tabId}')">Copy Code</button>
              </div>
              <pre class="code-output" style="margin-top:10px; overflow:auto;"></pre>
            `;
@@ -640,8 +728,8 @@ function createCodegenTabWithData(tabData) {
     textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
     saveGlobalState();
     enableTabReordering("codegen-tabs-container");
-
 }
+
 
 function switchCodegenTab(tabId) {
     document.querySelectorAll("#codegen-tab-contents .json-tab-content").forEach((tab) => tab.classList.remove("active"));
@@ -690,6 +778,16 @@ function closeCodegenTab(tabId, event) {
     saveGlobalState();
 }
 
+function loadCodegenExample(tabId) {
+    const example = CODEGEN_EXAMPLES.userProfile;
+    if (!example) return;
+    
+    const tabContent = document.getElementById(tabId);
+    const textarea = tabContent.querySelector(".json-input");
+    textarea.value = JSON.stringify(example.data, null, 2);
+    generateCode(tabId);
+}
+
 /* ========== Utility Functions ========== */
 function autoFormatTextarea(textarea) {
     try {
@@ -715,9 +813,13 @@ function createTreeView(data, parentElement) {
             const keySpan = document.createElement("span");
             keySpan.className = `tree-key ${isArray ? 'type-array' : 'type-object'}`;
             keySpan.tabIndex = 0;
+            
+            // Get the size of the object/array
+            const size = isArray ? value.length : Object.keys(value).length;
+            
             keySpan.innerHTML = `
                 <span>${displayKey}</span>
-                <span class="node-info">${isArray ? `[${value.length}]` : `{${Object.keys(value).length}}`}</span>
+                <span class="node-info">${isArray ? `[${size}]` : `{${size}}`}</span>
             `;
 
             // Keyboard navigation
@@ -747,14 +849,60 @@ function createTreeView(data, parentElement) {
             const children = document.createElement("div");
             children.className = "tree-children";
             children.style.display = "none";
-
-            const toggleNode = () => {
+            
+            // Mark as lazy-loadable if it has children
+            if (size > 0) {
+                keySpan.classList.add('collapsed', 'lazy-load');
+                children.dataset.loaded = 'false';
+            }            const toggleNode = (keySpan, children, value) => {
+                const isExpanding = keySpan.classList.contains('collapsed');
                 keySpan.classList.toggle('expanded');
                 keySpan.classList.toggle('collapsed');
-                children.style.display = children.style.display === 'none' ? 'block' : 'none';
+                
+                if (isExpanding) {
+                    // Load children if they haven't been loaded yet
+                    if (children.dataset.loaded === 'false') {
+                        if (Array.isArray(value)) {
+                            // For arrays, load in chunks of 100
+                            const CHUNK_SIZE = 100;
+                            let loadedCount = 0;
+                            
+                            function loadNextChunk() {
+                                const chunk = value.slice(loadedCount, loadedCount + CHUNK_SIZE);
+                                chunk.forEach((item, index) => {
+                                    processNode(item, children, loadedCount + index, currentPath);
+                                });
+                                loadedCount += chunk.length;
+                                
+                                if (loadedCount < value.length) {
+                                    const loadMore = document.createElement('button');
+                                    loadMore.className = 'load-more-btn';
+                                    loadMore.textContent = `Load more (${loadedCount} of ${value.length})`;
+                                    loadMore.onclick = () => {
+                                        loadMore.remove();
+                                        loadNextChunk();
+                                    };
+                                    children.appendChild(loadMore);
+                                }
+                            }
+                            
+                            loadNextChunk();
+                        } else {
+                            // For objects, load all properties (usually not as numerous as array items)
+                            Object.entries(value).forEach(([k, v]) => {
+                                processNode(v, children, k, currentPath);
+                            });
+                        }
+                        children.dataset.loaded = 'true';
+                        keySpan.classList.remove('lazy-load');
+                    }
+                }
+                
+                children.style.display = isExpanding ? 'block' : 'none';
             };
+            
+            keySpan.addEventListener('click', () => toggleNode(keySpan, children, value));
 
-            keySpan.addEventListener('click', toggleNode);
 
             if (isArray) {
                 value.forEach((item, index) => processNode(item, children, index, currentPath));
@@ -1370,6 +1518,162 @@ function enableTabReordering(containerId) {
 }
 
 
+
+/* ========== Example Presets ========== */
+const FORMATTER_EXAMPLES = {
+    simpleObject: {
+        name: "Simple Object",
+        data: {
+            id: 1,
+            name: "John Doe",
+            email: "john@example.com",
+            active: true,
+            preferences: {
+                theme: "dark",
+                notifications: true
+            }
+        }
+    },
+    arrayOfObjects: {
+        name: "Array of Objects",
+        data: [
+            {
+                id: 1,
+                name: "Product A",
+                price: 29.99,
+                inStock: true
+            },
+            {
+                id: 2,
+                name: "Product B",
+                price: 49.99,
+                inStock: false
+            },
+            {
+                id: 3,
+                name: "Product C",
+                price: 19.99,
+                inStock: true
+            }
+        ]
+    }
+};
+
+const COMPARE_EXAMPLES = {
+    versionComparison: {
+        name: "Version Comparison",
+        left: {
+            name: "my-app",
+            version: "1.0.0",
+            dependencies: {
+                "react": "^17.0.0",
+                "lodash": "^4.17.0",
+                "moment": "^2.29.0"
+            }
+        },
+        right: {
+            name: "my-app",
+            version: "2.0.0",
+            dependencies: {
+                "react": "^18.0.0",
+                "lodash": "^4.17.0",
+                "dayjs": "^1.0.0"
+            }
+        }
+    }
+};
+
+const CONVERT_EXAMPLES = {
+    pythonDict: {
+        name: "Python Dict",
+        data: "{'name': 'Alice', 'age': 30, 'scores': [85, 92, 78], 'active': True, 'data': None}"
+    },
+    jsonObject: {
+        name: "JSON Object",
+        data: {
+            name: "Alice",
+            age: 30,
+            scores: [85, 92, 78],
+            active: true,
+            data: null
+        }
+    }
+};
+const CODEGEN_EXAMPLES = {
+    userProfile: {
+        name: "User Profile",
+        data: {
+            user: {
+                id: 123456,
+                personalInfo: {
+                    firstName: "John",
+                    lastName: "Doe",
+                    email: "john.doe@example.com",
+                    dateOfBirth: "1990-01-01",
+                    phoneNumber: "+1-555-123-4567"
+                },
+                address: {
+                    street: "123 Main St",
+                    city: "Springfield",
+                    state: "IL",
+                    zipCode: "62701",
+                    country: "USA"
+                },
+                preferences: {
+                    theme: "dark",
+                    notifications: {
+                        email: true,
+                        sms: false,
+                        push: true
+                    },
+                    newsletter: true
+                },
+                stats: {
+                    joinDate: "2023-01-15",
+                    lastLogin: "2024-01-20T15:30:00Z",
+                    loginCount: 42,
+                    accountStatus: "active"
+                }
+            }
+        }
+    }
+};
+
+function loadFormatterExample(tabId, exampleType) {
+    const example = FORMATTER_EXAMPLES[exampleType];
+    if (!example) return;
+    
+    const tabContent = document.getElementById(tabId);
+    const textarea = tabContent.querySelector(".json-input");
+    textarea.value = JSON.stringify(example.data, null, 2);
+    updateFormatterPreview(tabId);
+}
+
+function loadCompareExample(tabId) {
+    const example = COMPARE_EXAMPLES.versionComparison;
+    const tabContent = document.getElementById(tabId);
+    const leftTA = tabContent.querySelector(".json-input-left");
+    const rightTA = tabContent.querySelector(".json-input-right");
+    
+    leftTA.value = JSON.stringify(example.left, null, 2);
+    rightTA.value = JSON.stringify(example.right, null, 2);
+    compareJSONs(tabId);
+}
+
+function loadConvertExample(type) {
+    const example = CONVERT_EXAMPLES[type];
+    if (!example) return;
+    
+    const input = document.getElementById("convert-input");
+    if (type === "pythonDict") {
+        switchConvertDirection("dict-to-json");
+        input.value = example.data;
+    } else {
+        switchConvertDirection("json-to-dict");
+        input.value = JSON.stringify(example.data, null, 2);
+    }
+    convert();
+}
 
 /* ========== Initialization ========== */
 window.addEventListener("load", () => {
