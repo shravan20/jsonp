@@ -1434,8 +1434,17 @@ function enableTabReordering(containerId) {
 /* ========== Initialization ========== */
 window.addEventListener("load", () => {
     loadGlobalState();
-    // If no saved state, create a default Formatter tab.
+
+    // If no saved state, create a default tabs.
     if (document.getElementById("formatter-tab-contents").children.length === 0) {
         addFormatterTab();
+    }
+
+    if (document.getElementById("compare-tab-contents").children.length === 0) {
+        addCompareTab();
+    }
+
+    if (document.getElementById("codegen-tab-contents").children.length === 0) {
+        addCodegenTab();
     }
 });
