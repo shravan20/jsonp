@@ -1679,6 +1679,12 @@ window.addEventListener("load", () => {
 });
 
 setInterval(() => {
+    const editorVisible = document.getElementById("editor-section").style.display !== "none";
     const activeTab = document.querySelector("#editor-tab-contents .json-tab-content.active");
-    if (activeTab) saveEditorContent(activeTab.id);
+
+    if (!Swal.isVisible() && editorVisible && activeTab) {
+        saveEditorContent(activeTab.id);
+    }
 }, 5000);
+
+
