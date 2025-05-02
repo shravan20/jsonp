@@ -1,20 +1,28 @@
 /* ========== Global Persistence Functions ========== */
 function getActiveMode() {
+  // Find the active feature item in the sidebar
+  const activeFeature = document.querySelector(".feature-item.active");
+  if (activeFeature) {
+    // Extract mode from the onclick attribute
+    const onclickAttr = activeFeature.getAttribute("onclick");
+    const match = onclickAttr.match(/switchMode\('(.+?)'\)/);
+    if (match) return match[1];
+  }
+
+  // Fallback to checking sections
   if (document.getElementById("formatter-section").style.display !== "none") return "formatter";
   if (document.getElementById("compare-section").style.display !== "none") return "compare";
   if (document.getElementById("codegen-section").style.display !== "none") return "codegen";
-  return "formatter";
+  if (document.getElementById("convert-section").style.display !== "none") return "convert";
+  if (document.getElementById("mockgen-section").style.display !== "none") return "mockgen";
+  if (document.getElementById("editor-section").style.display !== "none") return "editor";
+  return "formatter"; // Default fallback
 }
 
 function saveGlobalState() {
   const state = {
     darkMode: document.body.classList.contains("dark-mode"),
     activeMode: getActiveMode(),
-    activeFeatureMode:
-      document
-        .querySelector(".mode-selector button.active")
-        ?.id?.replace("mode-", "")
-        .replace("-btn", "") || "formatter",
     formatter: {
       activeTab:
         document.querySelector("#formatter-tab-contents .json-tab-content.active")?.id || "",
@@ -80,10 +88,10 @@ function loadGlobalState() {
   if (state.darkMode) document.body.classList.add("dark-mode");
   else document.body.classList.remove("dark-mode");
   // Active Feature Mode (Formatter/Compare/Codegen/etc.)
-  if (state.activeFeatureMode) {
-    switchMode(state.activeFeatureMode);
+  if (state.activeMode) {
+    switchMode(state.activeMode);
   } else {
-    switchMode(state.activeMode || "formatter"); // Fallback for older saved states
+    switchMode("formatter"); // Default fallback
   }
 
   // Load Formatter tabs
@@ -183,15 +191,11 @@ function switchMode(mode) {
     targetSection.style.display = "block";
   }
 
-  // Update mode selector buttons
-  document.querySelectorAll(".mode-selector button").forEach((btn) => {
-    btn.classList.remove("active");
+  // Update sidebar active state
+  document.querySelectorAll(".feature-item").forEach((item) => {
+    item.classList.remove("active");
   });
-
-  const modeBtn = document.getElementById(`mode-${mode}-btn`);
-  if (modeBtn) {
-    modeBtn.classList.add("active");
-  }
+  document.querySelector(`.feature-item[onclick*="${mode}"]`)?.classList.add("active");
 
   if (mode === "mockgen") {
     renderMockgenDocs();
@@ -1239,6 +1243,8 @@ function renderTableFromJson(data) {
   headers.forEach((h) => {
     const th = document.createElement("th");
     th.textContent = h;
+    // Add title for full text on hover
+    th.title = h;
     headerRow.appendChild(th);
   });
   thead.appendChild(headerRow);
@@ -1247,15 +1253,25 @@ function renderTableFromJson(data) {
   const tbody = document.createElement("tbody");
   data.forEach((row) => {
     const tr = document.createElement("tr");
+    if (row.error) {
+      tr.classList.add("error");
+    }
+
     headers.forEach((key) => {
       const td = document.createElement("td");
       const val = row[key];
+      let displayVal;
+
       if (val && typeof val === "object") {
-        td.textContent = JSON.stringify(val);
+        displayVal = JSON.stringify(val);
       } else {
-        td.textContent = val ?? "";
+        displayVal = val ?? "";
       }
-      if (row.error) td.style.backgroundColor = "#ffe6e6";
+
+      td.textContent = displayVal;
+      // Add title for full text on hover
+      td.title = displayVal;
+
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
@@ -1573,6 +1589,64 @@ function applyEditorTabDarkMode() {
     }
   });
 }
+
+/* ========== Mobile Sidebar Functions ========== */
+function toggleSidebar() {
+  const sidebar = document.querySelector(".sidebar");
+  sidebar.classList.toggle("active");
+
+  // Close sidebar when clicking outside
+  if (sidebar.classList.contains("active")) {
+    const closeOnClickOutside = (e) => {
+      if (!sidebar.contains(e.target) && !e.target.matches(".mobile-sidebar-toggle")) {
+        sidebar.classList.remove("active");
+        document.removeEventListener("click", closeOnClickOutside);
+      }
+    };
+    // Add event listener with a slight delay to prevent immediate closing
+    setTimeout(() => {
+      document.addEventListener("click", closeOnClickOutside);
+    }, 100);
+  }
+}
+
+// Add touch event handling for better mobile experience
+document.addEventListener("DOMContentLoaded", () => {
+  let touchStartX = 0;
+  let touchEndX = 0;
+  const sidebar = document.querySelector(".sidebar");
+
+  document.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    },
+    false
+  );
+
+  document.addEventListener(
+    "touchend",
+    (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    },
+    false
+  );
+
+  function handleSwipe() {
+    const swipeThreshold = 50;
+    const swipeLength = touchEndX - touchStartX;
+
+    // Swipe right to open sidebar
+    if (swipeLength > swipeThreshold && touchStartX < 30) {
+      sidebar.classList.add("active");
+    }
+    // Swipe left to close sidebar
+    else if (swipeLength < -swipeThreshold && sidebar.classList.contains("active")) {
+      sidebar.classList.remove("active");
+    }
+  }
+});
 
 /* ========== Shortcut Modal & Dark Mode ========== */
 function toggleShortcutModal() {
