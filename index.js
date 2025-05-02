@@ -10,9 +10,14 @@ function saveGlobalState() {
   const state = {
     darkMode: document.body.classList.contains("dark-mode"),
     activeMode: getActiveMode(),
-    activeFeatureMode: document.querySelector(".mode-selector button.active")?.id?.replace("mode-", "").replace("-btn", "") || "formatter",
+    activeFeatureMode:
+      document
+        .querySelector(".mode-selector button.active")
+        ?.id?.replace("mode-", "")
+        .replace("-btn", "") || "formatter",
     formatter: {
-      activeTab: document.querySelector("#formatter-tab-contents .json-tab-content.active")?.id || "",
+      activeTab:
+        document.querySelector("#formatter-tab-contents .json-tab-content.active")?.id || "",
       tabs: [],
       activeFeatureTab: {}, // Store active feature tab (Raw/Tree/Error) for each formatter tab
     },
