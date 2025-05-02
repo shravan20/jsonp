@@ -66,7 +66,7 @@
 
 ## 📝 Changelog
 
-For a detailed list of changes and version history, please see the [CHANGELOG](./CHANGELOG/README.md) directory.
+For a detailed list of changes and version history, please see the [CHANGELOG](./CHANGELOG.md).
 
 ## 🤝 Contributing
 
