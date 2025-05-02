@@ -749,3 +749,98 @@ body.dark-mode .tree-view::-webkit-scrollbar-thumb {
 body.dark-mode .tree-view::-webkit-scrollbar-thumb:hover {
   background: #888;
 }
+
+/* New App Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f0f0f0;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  background-color: #252526;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 15px;
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #cccccc;
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.feature-group {
+  padding: 10px 0;
+}
+
+.feature-item {
+  padding: 8px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  color: #cccccc;
+}
+
+.feature-item:hover {
+  background-color: #2a2d2e;
+}
+
+.feature-item.active {
+  background-color: #37373d;
+  color: #ffffff;
+}
+
+.feature-item i {
+  width: 16px;
+  text-align: center;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background-color: #f0f0f0;
+  overflow-y: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Dark Mode Adjustments */
+body.dark-mode .app-container {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode .main-content {
+  background-color: #1e1e1e;
+}
+
+body.dark-mode .sidebar {
+  background-color: #252526;
+  border-right: 1px solid #3c3c3c;
+}

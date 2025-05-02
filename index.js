@@ -1,20 +1,28 @@
 /* ========== Global Persistence Functions ========== */
 function getActiveMode() {
+  // Find the active feature item in the sidebar
+  const activeFeature = document.querySelector('.feature-item.active');
+  if (activeFeature) {
+    // Extract mode from the onclick attribute
+    const onclickAttr = activeFeature.getAttribute('onclick');
+    const match = onclickAttr.match(/switchMode\('(.+?)'\)/);
+    if (match) return match[1];
+  }
+  
+  // Fallback to checking sections
   if (document.getElementById("formatter-section").style.display !== "none") return "formatter";
   if (document.getElementById("compare-section").style.display !== "none") return "compare";
   if (document.getElementById("codegen-section").style.display !== "none") return "codegen";
-  return "formatter";
+  if (document.getElementById("convert-section").style.display !== "none") return "convert";
+  if (document.getElementById("mockgen-section").style.display !== "none") return "mockgen";
+  if (document.getElementById("editor-section").style.display !== "none") return "editor";
+  return "formatter"; // Default fallback
 }
 
 function saveGlobalState() {
   const state = {
     darkMode: document.body.classList.contains("dark-mode"),
     activeMode: getActiveMode(),
-    activeFeatureMode:
-      document
-        .querySelector(".mode-selector button.active")
-        ?.id?.replace("mode-", "")
-        .replace("-btn", "") || "formatter",
     formatter: {
       activeTab:
         document.querySelector("#formatter-tab-contents .json-tab-content.active")?.id || "",
@@ -80,10 +88,10 @@ function loadGlobalState() {
   if (state.darkMode) document.body.classList.add("dark-mode");
   else document.body.classList.remove("dark-mode");
   // Active Feature Mode (Formatter/Compare/Codegen/etc.)
-  if (state.activeFeatureMode) {
-    switchMode(state.activeFeatureMode);
+  if (state.activeMode) {
+    switchMode(state.activeMode);
   } else {
-    switchMode(state.activeMode || "formatter"); // Fallback for older saved states
+    switchMode("formatter"); // Default fallback
   }
 
   // Load Formatter tabs
@@ -183,15 +191,11 @@ function switchMode(mode) {
     targetSection.style.display = "block";
   }
 
-  // Update mode selector buttons
-  document.querySelectorAll(".mode-selector button").forEach((btn) => {
-    btn.classList.remove("active");
+  // Update sidebar active state
+  document.querySelectorAll('.feature-item').forEach(item => {
+    item.classList.remove('active');
   });
-
-  const modeBtn = document.getElementById(`mode-${mode}-btn`);
-  if (modeBtn) {
-    modeBtn.classList.add("active");
-  }
+  document.querySelector(`.feature-item[onclick*="${mode}"]`)?.classList.add('active');
 
   if (mode === "mockgen") {
     renderMockgenDocs();
