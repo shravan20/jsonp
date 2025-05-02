@@ -21,10 +21,18 @@
 
 <body>
   <div class="app-container">
+    <!-- Mobile Sidebar Toggle -->
+    <button class="mobile-sidebar-toggle" onclick="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+
     <!-- Sidebar -->
     <div class="sidebar">
       <div class="sidebar-header">
         <h3>Features</h3>
+        <button class="mobile-sidebar-close" onclick="toggleSidebar()">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
       <div class="sidebar-content">
         <div class="feature-group">
