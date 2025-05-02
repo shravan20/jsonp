@@ -135,10 +135,24 @@ function copyCodeOutput(tabId) {
 
 function copyToClipboard(text, successMessage) {
     navigator.clipboard.writeText(text).then(() => {
-        alert(successMessage);
+        Swal.fire({
+            icon: 'success',
+            title: successMessage,
+            toast: true,
+            timer: 2000,
+            position: 'top-end',
+            showConfirmButton: false
+        });
     }).catch(err => {
         console.error('Failed to copy:', err);
-        alert("Copy failed");
+        Swal.fire({
+            icon: 'error',
+            title: 'Copy failed',
+            toast: true,
+            timer: 2000,
+            position: 'top-end',
+            showConfirmButton: false
+        });
     });
 }
 
@@ -374,12 +388,23 @@ function downloadFormatterJSON(tabId) {
     URL.revokeObjectURL(url);
 }
 
-function closeFormatterTab(tabId, event) {
+async function closeFormatterTab(tabId, event) {
     if (event) {
         event.stopPropagation();
         event.preventDefault();
     }
-    if (!confirm("Are you sure you want to close this tab?")) return;
+
+    const result = await Swal.fire({
+        title: 'Close tab?',
+        text: "Are you sure you want to close this tab?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    });
+
+    if (!result.isConfirmed) return;
+
     const tabButton = document.querySelector(`#formatter-tabs-container .tab-button[data-tab="${tabId}"]`);
     const tabContent = document.getElementById(tabId);
     if (tabButton) tabButton.remove();
@@ -546,12 +571,23 @@ function diffJSONsPreview(leftText, rightText) {
     return html;
 }
 
-function closeCompareTab(tabId, event) {
+async function closeCompareTab(tabId, event) {
     if (event) {
         event.stopPropagation();
         event.preventDefault();
     }
-    if (!confirm("Are you sure you want to close this tab?")) return;
+
+    const result = await Swal.fire({
+        title: 'Close tab?',
+        text: "Are you sure you want to close this tab?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    });
+
+    if (!result.isConfirmed) return;
+
     const tabButton = document.querySelector(`#compare-tabs-container .tab-button[data-tab="${tabId}"]`);
     const tabContent = document.getElementById(tabId);
     if (tabButton) tabButton.remove();
@@ -687,12 +723,23 @@ function generateCode(tabId) {
     saveGlobalState();
 }
 
-function closeCodegenTab(tabId, event) {
+async function closeCodegenTab(tabId, event) {
     if (event) {
         event.stopPropagation();
         event.preventDefault();
     }
-    if (!confirm("Are you sure you want to close this tab?")) return;
+
+    const result = await Swal.fire({
+        title: 'Close tab?',
+        text: "Are you sure you want to close this tab?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    });
+
+    if (!result.isConfirmed) return;
+
     const tabButton = document.querySelector(`#codegen-tabs-container .tab-button[data-tab="${tabId}"]`);
     const tabContent = document.getElementById(tabId);
     if (tabButton) tabButton.remove();
@@ -1305,8 +1352,17 @@ let editorTabCount = 0;
 const editorInstances = {};
 
 function addEditorTab(tabData = null) {
-    editorTabCount++;
-    const tabId = `editor-tab-${editorTabCount}`;
+    let tabId;
+    if (tabData?.id) {
+        tabId = tabData.id;
+        const match = tabId.match(/editor-tab-(\d+)/);
+        if (match && parseInt(match[1], 10) > editorTabCount) {
+            editorTabCount = parseInt(match[1], 10);
+        }
+    } else {
+        editorTabCount++;
+        tabId = `editor-tab-${editorTabCount}`;
+    }
 
     const tabButton = document.createElement("button");
     tabButton.className = "tab-button";
@@ -1363,14 +1419,33 @@ function saveEditorContent(tabId) {
     const content = editorInstances[tabId].getMarkdown();
     localStorage.setItem(tabId, content);
     updateEditorGlobalState();
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Autosaved',
+        showConfirmButton: false,
+        timer: 1500
+    });
 }
 
-function deleteEditorTab(tabId, event) {
+async function deleteEditorTab(tabId, event) {
     if (event) {
         event.stopPropagation();
         event.preventDefault();
     }
-    if (!confirm("Are you sure you want to delete this tab?")) return;
+
+    const result = await Swal.fire({
+        title: 'Close tab?',
+        text: "Are you sure you want to close this tab?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    });
+
+    if (!result.isConfirmed) return;
+
     localStorage.removeItem(tabId);
     delete editorInstances[tabId];
     document.querySelector(`#editor-tabs-container .tab-button[data-tab="${tabId}"]`)?.remove();
@@ -1406,15 +1481,12 @@ function loadEditorGlobalState() {
     }
 
     const state = JSON.parse(stateStr);
-    const loadedTabs = [];
-    state.tabs.forEach(tabData => {
-        addEditorTab(tabData);
-        loadedTabs.push(`editor-tab-${++editorTabCount}`);
-    });
+    state.tabs.forEach(tabData => addEditorTab(tabData));
 
-    // Always default to first tab
-    if (loadedTabs.length > 0) {
-        switchEditorTab("editor-tab-1");
+    if (state.activeTab && document.getElementById(state.activeTab)) {
+        switchEditorTab(state.activeTab);
+    } else if (state.tabs.length > 0) {
+        switchEditorTab(state.tabs[0].id);
     }
 }
 
@@ -1586,7 +1658,7 @@ function enableTabReordering(containerId) {
 /* ========== Initialization ========== */
 window.addEventListener("load", () => {
     loadGlobalState();
-
+    loadEditorGlobalState();
     // If no saved state, create a default tabs.
     if (document.getElementById("formatter-tab-contents").children.length === 0) {
         addFormatterTab();
@@ -1606,10 +1678,7 @@ window.addEventListener("load", () => {
     }
 });
 
-window.addEventListener("keydown", (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "s") {
-        e.preventDefault();
-        const activeTab = document.querySelector("#editor-tab-contents .json-tab-content.active");
-        if (activeTab) saveEditorContent(activeTab.id);
-    }
-});
+setInterval(() => {
+    const activeTab = document.querySelector("#editor-tab-contents .json-tab-content.active");
+    if (activeTab) saveEditorContent(activeTab.id);
+}, 5000);
