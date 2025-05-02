@@ -1165,7 +1165,7 @@ body.dark-mode .mock-preview-table tr.error td {
 
   /* Add horizontal scroll indicator */
   .mock-preview-table::after {
-    content: '⟷';
+    content: "⟷";
     position: absolute;
     bottom: 10px;
     right: 10px;

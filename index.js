@@ -1254,24 +1254,24 @@ function renderTableFromJson(data) {
   data.forEach((row) => {
     const tr = document.createElement("tr");
     if (row.error) {
-      tr.classList.add('error');
+      tr.classList.add("error");
     }
-    
+
     headers.forEach((key) => {
       const td = document.createElement("td");
       const val = row[key];
       let displayVal;
-      
+
       if (val && typeof val === "object") {
         displayVal = JSON.stringify(val);
       } else {
         displayVal = val ?? "";
       }
-      
+
       td.textContent = displayVal;
       // Add title for full text on hover
       td.title = displayVal;
-      
+
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
