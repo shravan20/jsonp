@@ -1054,3 +1054,139 @@ body.dark-mode .mobile-sidebar-close {
     background: rgba(255, 255, 255, 0.2);
   }
 }
+
+/* Mock Data Table Styling */
+.mock-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mock-preview-table thead {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.mock-preview-table th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #dee2e6;
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 1;
+}
+
+.mock-preview-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 0.9rem;
+  color: #212529;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mock-preview-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.mock-preview-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Error row styling */
+.mock-preview-table tr.error td {
+  background-color: #fff3f3;
+  color: #dc3545;
+}
+
+/* Dark mode support */
+body.dark-mode .mock-preview-table {
+  background-color: #2d2d2d;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .mock-preview-table thead {
+  background-color: #333;
+  border-bottom-color: #444;
+}
+
+body.dark-mode .mock-preview-table th {
+  color: #e0e0e0;
+  background-color: #333;
+  border-bottom-color: #444;
+}
+
+body.dark-mode .mock-preview-table td {
+  color: #e0e0e0;
+  border-bottom-color: #444;
+}
+
+body.dark-mode .mock-preview-table tbody tr:hover {
+  background-color: #383838;
+}
+
+body.dark-mode .mock-preview-table tr.error td {
+  background-color: #442326;
+  color: #ff6b6b;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  #mockgen-section .mock-preview-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mock-preview-table thead {
+    display: block;
+  }
+
+  .mock-preview-table tbody {
+    display: block;
+  }
+
+  .mock-preview-table th,
+  .mock-preview-table td {
+    min-width: 120px; /* Ensure minimum column width */
+  }
+
+  /* Add horizontal scroll indicator */
+  .mock-preview-table::after {
+    content: '⟷';
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  body.dark-mode .mock-preview-table::after {
+    background: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Container for the table */
+#mock-output-container {
+  position: relative;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}

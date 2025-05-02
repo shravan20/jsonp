@@ -1243,6 +1243,8 @@ function renderTableFromJson(data) {
   headers.forEach((h) => {
     const th = document.createElement("th");
     th.textContent = h;
+    // Add title for full text on hover
+    th.title = h;
     headerRow.appendChild(th);
   });
   thead.appendChild(headerRow);
@@ -1251,15 +1253,25 @@ function renderTableFromJson(data) {
   const tbody = document.createElement("tbody");
   data.forEach((row) => {
     const tr = document.createElement("tr");
+    if (row.error) {
+      tr.classList.add('error');
+    }
+    
     headers.forEach((key) => {
       const td = document.createElement("td");
       const val = row[key];
+      let displayVal;
+      
       if (val && typeof val === "object") {
-        td.textContent = JSON.stringify(val);
+        displayVal = JSON.stringify(val);
       } else {
-        td.textContent = val ?? "";
+        displayVal = val ?? "";
       }
-      if (row.error) td.style.backgroundColor = "#ffe6e6";
+      
+      td.textContent = displayVal;
+      // Add title for full text on hover
+      td.title = displayVal;
+      
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
@@ -1580,50 +1592,58 @@ function applyEditorTabDarkMode() {
 
 /* ========== Mobile Sidebar Functions ========== */
 function toggleSidebar() {
-  const sidebar = document.querySelector('.sidebar');
-  sidebar.classList.toggle('active');
+  const sidebar = document.querySelector(".sidebar");
+  sidebar.classList.toggle("active");
 
   // Close sidebar when clicking outside
-  if (sidebar.classList.contains('active')) {
+  if (sidebar.classList.contains("active")) {
     const closeOnClickOutside = (e) => {
-      if (!sidebar.contains(e.target) && !e.target.matches('.mobile-sidebar-toggle')) {
-        sidebar.classList.remove('active');
-        document.removeEventListener('click', closeOnClickOutside);
+      if (!sidebar.contains(e.target) && !e.target.matches(".mobile-sidebar-toggle")) {
+        sidebar.classList.remove("active");
+        document.removeEventListener("click", closeOnClickOutside);
       }
     };
     // Add event listener with a slight delay to prevent immediate closing
     setTimeout(() => {
-      document.addEventListener('click', closeOnClickOutside);
+      document.addEventListener("click", closeOnClickOutside);
     }, 100);
   }
 }
 
 // Add touch event handling for better mobile experience
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   let touchStartX = 0;
   let touchEndX = 0;
-  const sidebar = document.querySelector('.sidebar');
-  
-  document.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-  }, false);
+  const sidebar = document.querySelector(".sidebar");
 
-  document.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-  }, false);
+  document.addEventListener(
+    "touchstart",
+    (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    },
+    false
+  );
+
+  document.addEventListener(
+    "touchend",
+    (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    },
+    false
+  );
 
   function handleSwipe() {
     const swipeThreshold = 50;
     const swipeLength = touchEndX - touchStartX;
-    
+
     // Swipe right to open sidebar
     if (swipeLength > swipeThreshold && touchStartX < 30) {
-      sidebar.classList.add('active');
+      sidebar.classList.add("active");
     }
     // Swipe left to close sidebar
-    else if (swipeLength < -swipeThreshold && sidebar.classList.contains('active')) {
-      sidebar.classList.remove('active');
+    else if (swipeLength < -swipeThreshold && sidebar.classList.contains("active")) {
+      sidebar.classList.remove("active");
     }
   }
 });
