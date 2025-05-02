@@ -1686,5 +1686,3 @@ setInterval(() => {
         saveEditorContent(activeTab.id);
     }
 }, 5000);
-
-
