@@ -144,13 +144,14 @@ function copyToClipboard(text, successMessage) {
 
 /* ========== Mode Selector ========== */
 function switchMode(mode) {
-    document.getElementById("formatter-section").style.display = "none";
-    document.getElementById("compare-section").style.display = "none";
-    document.getElementById("codegen-section").style.display = "none";
-    document.getElementById("convert-section").style.display = "none";
-    document.getElementById("mockgen-section").style.display = "none";
+    const sections = ["formatter", "compare", "codegen", "convert", "mockgen", "editor"];
+    sections.forEach(s => document.getElementById(`${s}-section`).style.display = "none");
 
-    document.querySelectorAll(".mode-selector button").forEach((btn) => btn.classList.remove("active"));
+    document.getElementById(`${mode}-section`).style.display = "block";
+
+    document.querySelectorAll(".mode-selector button")
+        .forEach(btn => btn.classList.remove("active"));
+    document.getElementById(`mode-${mode}-btn`).classList.add("active");
 
     if (mode === "formatter") {
         document.getElementById("formatter-section").style.display = "block";
@@ -168,10 +169,15 @@ function switchMode(mode) {
         document.getElementById("mockgen-section").style.display = "block";
         document.getElementById("mode-mockgen-btn").classList.add("active");
         renderMockgenDocs();
+    } else if (mode === "editor") {
+        document.getElementById("editor-section").style.display = "block";
+        document.getElementById("mode-editor-btn").classList.add("active");
+        loadEditorGlobalState();
     }
 
-    saveGlobalState();
+    applyEditorTabDarkMode();
 }
+
 
 /* ========== Formatter Functions ========== */
 let formatterTabCount = 0;
@@ -673,10 +679,10 @@ function generateCode(tabId) {
     else if (lang === "python") code = generatePython(obj, "Root");
     else if (lang === "go") code = generateGo(obj, "Root");
     outputPre.innerHTML = code
-        // .replace(/(interface|class|type)\b/g, '<span class="keyword">$1</span>')
-        // .replace(/"([^"]+)"/g, '<span class="string">"$1"</span>')
-        // .replace(/\b\d+\b/g, '<span class="number">$&</span>')
-        // .replace(/\bstring|number|boolean|any|void\b/g, '<span class="type">$&</span>');
+    // .replace(/(interface|class|type)\b/g, '<span class="keyword">$1</span>')
+    // .replace(/"([^"]+)"/g, '<span class="string">"$1"</span>')
+    // .replace(/\b\d+\b/g, '<span class="number">$&</span>')
+    // .replace(/\bstring|number|boolean|any|void\b/g, '<span class="type">$&</span>');
 
     saveGlobalState();
 }
@@ -1294,7 +1300,202 @@ function renderMockgenDocs() {
     document.getElementById("mockgen-docs-preview").innerHTML = marked.parse(mockgenDocs);
 }
 
+// Text Editor
+let editorTabCount = 0;
+const editorInstances = {};
 
+function addEditorTab(tabData = null) {
+    editorTabCount++;
+    const tabId = `editor-tab-${editorTabCount}`;
+
+    const tabButton = document.createElement("button");
+    tabButton.className = "tab-button";
+    tabButton.setAttribute("data-tab", tabId);
+    tabButton.innerHTML = `<span class="tab-name">${tabData?.title || `Note ${editorTabCount}`}</span><span class="close-tab" onclick="deleteEditorTab('${tabId}', event)">×</span>`;
+    tabButton.onclick = () => switchEditorTab(tabId);
+    tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId));
+
+    document.getElementById("editor-tabs-container").insertBefore(
+        tabButton,
+        document.querySelector("#editor-tabs-container .add-tab-button")
+    );
+
+    const tabContent = document.createElement("div");
+    tabContent.id = tabId;
+    tabContent.className = "json-tab-content";
+    tabContent.innerHTML = `
+    <div id="${tabId}-editor"></div>
+    <div style="margin-top:10px;">
+      <button onclick="saveEditorContent('${tabId}')">💾 Save</button>
+    </div>
+  `;
+
+    document.getElementById("editor-tab-contents").appendChild(tabContent);
+
+    const editor = new toastui.Editor({
+        el: document.getElementById(`${tabId}-editor`),
+        height: "400px",
+        initialEditType: "markdown",
+        previewStyle: "vertical"
+    });
+    editorInstances[tabId] = editor;
+
+    const saved = localStorage.getItem(tabId);
+    if (saved) editor.setMarkdown(saved);
+
+    enableEditorTabReordering();
+    applyEditorTabDarkMode();
+}
+
+function switchEditorTab(tabId) {
+    document.querySelectorAll("#editor-tab-contents .json-tab-content")
+        .forEach(el => el.classList.remove("active"));
+    document.getElementById(tabId)?.classList.add("active");
+
+    document.querySelectorAll("#editor-tabs-container .tab-button")
+        .forEach(btn => {
+            btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+        });
+    updateEditorGlobalState();
+}
+
+function saveEditorContent(tabId) {
+    const content = editorInstances[tabId].getMarkdown();
+    localStorage.setItem(tabId, content);
+    updateEditorGlobalState();
+}
+
+function deleteEditorTab(tabId, event) {
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    if (!confirm("Are you sure you want to delete this tab?")) return;
+    localStorage.removeItem(tabId);
+    delete editorInstances[tabId];
+    document.querySelector(`#editor-tabs-container .tab-button[data-tab="${tabId}"]`)?.remove();
+    document.getElementById(tabId)?.remove();
+    const remaining = document.querySelectorAll("#editor-tab-contents .json-tab-content");
+    if (remaining.length > 0) switchEditorTab(remaining[0].id);
+    updateEditorGlobalState();
+}
+
+function updateEditorGlobalState() {
+    const state = {
+        activeTab: document.querySelector("#editor-tab-contents .json-tab-content.active")?.id || "",
+        tabs: []
+    };
+    document.querySelectorAll("#editor-tabs-container .tab-button[data-tab]").forEach((btn) => {
+        const tabId = btn.getAttribute("data-tab");
+        const title = btn.querySelector(".tab-name").textContent;
+        state.tabs.push({ id: tabId, title });
+    });
+    localStorage.setItem("editorState", JSON.stringify(state));
+}
+
+function loadEditorGlobalState() {
+    const stateStr = localStorage.getItem("editorState");
+    const container = document.getElementById("editor-tabs-container");
+    container.querySelectorAll(".tab-button[data-tab]").forEach(btn => btn.remove());
+    document.getElementById("editor-tab-contents").innerHTML = "";
+    editorTabCount = 0;
+
+    if (!stateStr) {
+        addEditorTab();
+        return;
+    }
+
+    const state = JSON.parse(stateStr);
+    const loadedTabs = [];
+    state.tabs.forEach(tabData => {
+        addEditorTab(tabData);
+        loadedTabs.push(`editor-tab-${++editorTabCount}`);
+    });
+
+    // Always default to first tab
+    if (loadedTabs.length > 0) {
+        switchEditorTab("editor-tab-1");
+    }
+}
+
+function openTabRenameTooltip(tabId) {
+    const btn = document.querySelector(`#editor-tabs-container .tab-button[data-tab="${tabId}"]`);
+    const existing = document.querySelector(".tab-rename-tooltip");
+    if (existing) existing.remove();
+    const tooltip = document.createElement("div");
+    tooltip.className = "tab-rename-tooltip";
+    const rect = btn.getBoundingClientRect();
+    tooltip.style.left = rect.left + "px";
+    tooltip.style.top = rect.bottom + window.scrollY + 5 + "px";
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = btn.querySelector(".tab-name").textContent;
+    input.style.width = "150px";
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") finalizeRename();
+        else if (e.key === "Escape") tooltip.remove();
+    });
+    input.addEventListener("blur", finalizeRename);
+    tooltip.appendChild(input);
+    document.body.appendChild(tooltip);
+    input.focus();
+
+    function finalizeRename() {
+        const newName = input.value.trim();
+        if (newName) {
+            btn.querySelector(".tab-name").textContent = newName;
+        }
+        tooltip.remove();
+        updateEditorGlobalState();
+    }
+}
+
+function enableEditorTabReordering() {
+    const container = document.getElementById("editor-tabs-container");
+    const buttons = container.querySelectorAll(".tab-button[data-tab]");
+    buttons.forEach((btn) => {
+        btn.draggable = true;
+        btn.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", btn.getAttribute("data-tab"));
+            btn.classList.add("dragging");
+        });
+        btn.addEventListener("dragend", () => {
+            btn.classList.remove("dragging");
+        });
+        btn.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            btn.classList.add("drag-over");
+        });
+        btn.addEventListener("dragleave", () => {
+            btn.classList.remove("drag-over");
+        });
+        btn.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const draggedId = e.dataTransfer.getData("text/plain");
+            const draggedBtn = container.querySelector(`[data-tab="${draggedId}"]`);
+            btn.classList.remove("drag-over");
+            if (draggedBtn && draggedBtn !== btn) {
+                container.insertBefore(draggedBtn, btn);
+                updateEditorGlobalState();
+            }
+        });
+    });
+}
+
+function applyEditorTabDarkMode() {
+    const container = document.getElementById("editor-tabs-container");
+    container.querySelectorAll(".tab-button").forEach(btn => {
+        if (document.body.classList.contains("dark-mode")) {
+            btn.style.backgroundColor = "#2c2c2c";
+            btn.style.color = "#eee";
+            btn.style.borderColor = "#444";
+        } else {
+            btn.style.backgroundColor = "";
+            btn.style.color = "";
+            btn.style.borderColor = "";
+        }
+    });
+}
 
 /* ========== Shortcut Modal & Dark Mode ========== */
 function toggleShortcutModal() {
@@ -1330,6 +1531,11 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
         const modal = document.getElementById("shortcut-modal");
         if (modal.style.display === "block") toggleShortcutModal();
+    }
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        const activeTab = document.querySelector("#editor-tab-contents .json-tab-content.active");
+        if (activeTab) saveEditorContent(activeTab.id);
     }
 });
 
@@ -1392,5 +1598,18 @@ window.addEventListener("load", () => {
 
     if (document.getElementById("codegen-tab-contents").children.length === 0) {
         addCodegenTab();
+    }
+
+    if (document.getElementById("editor-tab-contents").children.length === 0) {
+        addEditorTab();
+        switchEditorTab("editor-tab-1");
+    }
+});
+
+window.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "s") {
+        e.preventDefault();
+        const activeTab = document.querySelector("#editor-tab-contents .json-tab-content.active");
+        if (activeTab) saveEditorContent(activeTab.id);
     }
 });
