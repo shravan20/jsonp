@@ -1,46 +1,54 @@
+/* Complete index.css with improved alignment, spacing, theme handling, and UI components */
+
 /* Base Styles */
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0;
+    padding: 20px;
     background-color: #f0f0f0;
     color: #333;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
 }
 
 h1 {
-    display: inline-block;
-    margin-right: 20px;
+    margin: 0 20px 0 0;
+    font-size: 1.8rem;
 }
 
 .dark-mode-toggle,
 .shortcut-preview-button {
-    padding: 10px 20px;
+    padding: 8px 16px;
     background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 4px;
     margin-right: 10px;
+    font-size: 0.9rem;
 }
 
 /* Mode Selector */
 .mode-selector {
     margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .mode-selector button {
-    padding: 10px 20px;
-    margin-right: 10px;
+    padding: 10px 16px;
     background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
+    font-size: 0.9rem;
 }
 
 .mode-selector button.active {
@@ -48,76 +56,57 @@ h1 {
     font-weight: bold;
 }
 
-/* Tabs & Tab Buttons */
+/* Tabs */
 .tabs {
     display: flex;
-    margin-bottom: 10px;
     flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
 }
 
 .tab-button {
-    padding: 10px 20px;
+    padding: 8px 12px;
     background-color: #e0e0e0;
     border: none;
     cursor: pointer;
-    margin-right: 5px;
-    position: relative;
-    border-radius: 3px;
-    transition: background-color 0.3s;
+    border-radius: 4px;
     display: flex;
     align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
 }
 
 .tab-button.active {
-    font-weight: bold;
     background-color: #ffffff;
-}
-
-/* Dark Mode Tab Button Overrides */
-body.dark-mode .tab-button {
-    background-color: #333333;
-    color: #e0e0e0;
-}
-
-body.dark-mode .tab-button.active {
-    background-color: #555555;
-}
-
-.tab-button .tab-name {
-    margin-right: 5px;
-}
-
-.tab-button .tab-color-picker {
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
+    font-weight: bold;
 }
 
 .tab-button .close-tab {
-    margin-left: 5px;
     color: red;
     font-weight: bold;
     cursor: pointer;
 }
 
-.add-tab-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
+.tab-button .tab-color-picker {
+    width: 16px;
+    height: 16px;
+    padding: 0;
     border: none;
     cursor: pointer;
-    margin-left: 10px;
-    border-radius: 3px;
 }
 
-.add-tab-button:hover {
-    background-color: #0056b3;
+.add-tab-button {
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-size: 0.9rem;
 }
 
-/* Common Content Styles */
+/* Content Panels */
 .json-tab-content {
     display: none;
 }
@@ -130,307 +119,68 @@ textarea {
     width: 100%;
     height: 200px;
     padding: 10px;
-    margin-bottom: 20px;
     font-family: monospace;
+    font-size: 0.95rem;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
 }
 
-.search-container {
-    margin-bottom: 20px;
-}
-
-.search-container input {
-    padding: 10px;
-    width: 300px;
-    font-family: monospace;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-}
-
-.search-container button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
-    margin-left: 5px;
-}
-
-.search-container button:hover {
-    background-color: #0056b3;
-}
-
-.upload-download-container button {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
-    margin-right: 5px;
-}
-
-.upload-download-container button:hover {
-    background-color: #1e7e34;
+/* Utility Containers */
+.search-container,
+.upload-download-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .preview-section {
-    display: none;
     background-color: white;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 100%;
     overflow: auto;
     word-wrap: normal;
+    display: none;
 }
 
 .preview-section.active {
     display: block;
 }
 
-.tree-node {
-    margin-left: 20px;
-}
-
-.tree-key {
-    transition: all 0.2s ease;
-    padding: 2px 5px;
-    border-radius: 3px;
-}
-
-.tree-key:hover {
-    text-decoration: underline;
-}
-
-.collapsed::after {
-    content: "▶";
-    font-size: 10px;
-    margin-left: 5px;
-}
-
-.expanded::after {
-    content: "▼";
-    font-size: 10px;
-    margin-left: 5px;
-}
-
-.tree-children {
-    margin-left: 20px;
-}
-
-.hidden {
-    display: none;
-}
-
-.error {
-    color: red;
-    font-weight: bold;
-}
-
-.highlight {
-    background-color: yellow;
-    font-weight: bold;
-    padding: 2px;
-    border-radius: 3px;
-}
-
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-    background-color: #fff;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 5px;
-    width: 400px;
-    position: relative;
-}
-
-.close-modal {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 24px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-/* Dark Mode Overrides */
-body.dark-mode {
-    background-color: #121212;
-    color: #e0e0e0;
-}
-
-body.dark-mode textarea {
-    background-color: #2e2e2e;
-    color: #e0e0e0;
-    border: 1px solid #555;
-}
-
-body.dark-mode .preview-section {
-    background-color: #2e2e2e;
-    color: #e0e0e0;
-}
-
-body.dark-mode .search-container input {
-    background-color: #2e2e2e;
-    color: #e0e0e0;
-    border: 1px solid #555;
-}
-
-body.dark-mode .upload-download-container button {
-    background-color: #218838;
-}
-
-body.dark-mode .upload-download-container button:hover {
-    background-color: #1c7430;
-}
-
-body.dark-mode .modal-content {
-    background-color: #2e2e2e;
-    color: #e0e0e0;
-}
-
-/* Tooltip for Tab Renaming */
-.tab-rename-tooltip {
-    position: absolute;
-    z-index: 1000;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-body.dark-mode .tab-rename-tooltip {
-    background-color: #2e2e2e;
-    color: #e0e0e0;
-    border: 1px solid #555;
-}
-
-.github-links {
-    text-align: center;
-    margin: 20px 0;
-}
-
-.github-button,
-.contribute-button {
-    display: inline-flex;
-    align-items: center;
-    padding: 10px 15px;
-    margin: 0 10px;
-    border-radius: 5px;
-    text-decoration: none;
-    color: white;
-    background-color: #333;
-    transition: background-color 0.3s;
-}
-
-.github-button:hover {
-    background-color: #444;
-}
-
-.contribute-button {
-    background-color: #2ea44f;
-}
-
-.contribute-button:hover {
-    background-color: #22863a;
-}
-
-.github-button i,
-.contribute-button i {
-    margin-right: 8px;
-}
-
-/* Dark mode adjustments */
-body.dark-mode .github-button,
-body.dark-mode .contribute-button {
-    color: #fff;
-}
-
-body:not(.dark-mode) .github-button {
-    background-color: #24292e;
-}
-
-body:not(.dark-mode) .contribute-button {
-    background-color: #28a745;
-}
-
-/* Add copy button styling */
-.copy-button {
-    padding: 5px 10px;
+.copy-button,
+button.copy-button {
+    padding: 6px 12px;
     background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 10px;
+    font-size: 0.85rem;
 }
 
 .copy-button:hover {
     background-color: #218838;
 }
 
-/*  */
-.tree-view {
-    font-family: 'Courier New', monospace;
-    line-height: 1.5;
-}
-
+/* Tree View */
 .tree-node {
+    margin-left: 20px;
     position: relative;
-    margin-left: 16px;
-}
-
-.tree-node::before {
-    content: '';
-    position: absolute;
-    left: -8px;
-    top: 0;
-    height: 100%;
-    border-left: 1px solid #666;
 }
 
 .tree-key {
     cursor: pointer;
-    position: relative;
     padding: 2px 5px;
     border-radius: 3px;
-    transition: background-color 0.2s;
+    display: inline-block;
 }
 
 .tree-key:hover {
     background-color: rgba(0, 123, 255, 0.1);
-}
-
-.tree-key::before {
-    content: '▶';
-    font-size: 0.8em;
-    margin-right: 5px;
-    transition: transform 0.2s;
-}
-
-.tree-key:focus {
-    outline: 2px solid #007bff;
-    outline-offset: 2px;
-}
-
-.tree-key.expanded::before {
-    transform: rotate(90deg);
 }
 
 .type-string {
@@ -457,51 +207,42 @@ body:not(.dark-mode) .contribute-button {
     color: #E91E63;
 }
 
-.node-info {
-    font-size: 0.8em;
-    color: #888;
-    margin-left: 5px;
+/* Dark Mode */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
 }
 
-.tree-context-menu {
-    position: fixed;
-    background: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-}
-
-.tree-context-menu-item {
-    padding: 5px 15px;
-    cursor: pointer;
-}
-
-.tree-context-menu-item:hover {
-    background: #f0f0f0;
-}
-
-body.dark-mode .tree-context-menu {
-    background: #333;
+body.dark-mode textarea,
+body.dark-mode .preview-section,
+body.dark-mode .modal-content {
+    background-color: #2e2e2e;
+    color: #e0e0e0;
     border-color: #555;
 }
 
-body.dark-mode .tree-context-menu-item:hover {
-    background: #444;
+body.dark-mode .tab-button {
+    background-color: #333;
+    color: #e0e0e0;
 }
 
-.toggle-all-btn {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
+body.dark-mode .tab-button.active {
+    background-color: #555;
 }
 
-/* Mock date preview */
+/* Reordering Drag Styles */
+.tab-button.dragging {
+    opacity: 0.6;
+    border: 2px dashed #007bff;
+}
+
+.tab-button.drag-over {
+    transform: translateY(2px) scale(1.02);
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+}
+
+/* Markdown & Modal */
 .markdown-preview {
-    font-family: Arial, sans-serif;
     background: #fff;
     padding: 1rem;
     border-radius: 5px;
@@ -511,91 +252,330 @@ body.dark-mode .tree-context-menu-item:hover {
     line-height: 1.6;
 }
 
-.markdown-preview pre {
-    background: #f6f8fa;
-    padding: 10px;
-    border-radius: 4px;
-    overflow-x: auto;
-}
-
 .markdown-preview code {
     background: #f0f0f0;
     padding: 2px 4px;
     border-radius: 3px;
-    font-family: monospace;
 }
 
-#mock-tab-schema.active,
-#mock-tab-docs.active {
-    font-weight: bold;
-    background-color: #e0e0e0;
-}
-
-
-.mock-preview-table {
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
     width: 100%;
-    border-collapse: collapse;
-    font-family: monospace;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
-.mock-preview-table th,
-.mock-preview-table td {
+.modal-content {
+    background: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 400px;
+    border-radius: 5px;
+    position: relative;
+}
+
+.close-modal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.4rem;
+    cursor: pointer;
+}
+
+/* Tab Rename Tooltip */
+.tab-rename-tooltip {
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
     border: 1px solid #ccc;
-    padding: 5px 10px;
-    text-align: left;
+    border-radius: 3px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.mock-preview-table th {
-    background-color: #f5f5f5;
+body.dark-mode .tab-rename-tooltip {
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+    border-color: #555;
 }
 
-body.dark-mode .mock-preview-table th {
-    background-color: #333;
+/* GitHub buttons */
+.github-links {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.github-button,
+.contribute-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 0 10px;
+    border-radius: 5px;
+    text-decoration: none;
     color: white;
+    font-size: 0.9rem;
 }
 
-body.dark-mode .markdown-preview {
-    background: #1e1e1e;
-    color: #e0e0e0;
-    border-color: #444;
+.github-button {
+    background-color: #24292e;
 }
 
-body.dark-mode .markdown-preview h1,
-body.dark-mode .markdown-preview h2,
-body.dark-mode .markdown-preview h3 {
-    color: #ffffff;
+.github-button:hover {
+    background-color: #444;
 }
 
-body.dark-mode .markdown-preview pre {
-    background: #2d2d2d;
-    color: #e0e0e0;
+.contribute-button {
+    background-color: #2ea44f;
 }
 
-body.dark-mode .markdown-preview code {
-    background: #3a3a3a;
-    color: #e0e0e0;
+.contribute-button:hover {
+    background-color: #22863a;
 }
 
-body.dark-mode .markdown-preview pre::-webkit-scrollbar {
-    height: 6px;
+.github-button i,
+.contribute-button i {
+    margin-right: 8px;
 }
 
-body.dark-mode .markdown-preview pre::-webkit-scrollbar-thumb {
-    background-color: #555;
+.tree-children {
+    margin-left: 20px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 1000px;
+    opacity: 1;
+}
+
+.tree-children.collapsed {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tree-key {
+    position: relative;
+    cursor: pointer;
+    padding: 4px 6px;
+    display: inline-block;
+    border-radius: 3px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+}
+
+.tree-key:hover,
+.tree-key:focus {
+    background-color: rgba(0, 123, 255, 0.12);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.tree-key:active {
+    background-color: rgba(0, 123, 255, 0.25);
+}
+
+.tree-key::before {
+    content: '\25B6';
+    display: inline-block;
+    transition: transform 0.2s ease;
+    margin-right: 6px;
+    font-size: 0.8em;
+    color: #555;
+}
+
+.tree-key.expanded::before {
+    transform: rotate(90deg);
+    color: #007bff;
+}
+
+.tree-key .node-info {
+    font-size: 0.8em;
+    color: #999;
+    margin-left: 6px;
+}
+
+.tree-key[title] {
+    position: relative;
+}
+
+.tree-key[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 6px;
     border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 4px;
+    z-index: 10;
+    pointer-events: none;
 }
 
-/* Tab reordering css  */
-.tab-button.dragging {
-    opacity: 0.5;
-    border: 2px dashed #007bff;
+body.dark-mode .tree-key[title]:hover::after {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid #666;
 }
 
-.tab-button {
-    transition: transform 0.2s ease, opacity 0.2s ease;
+/* Accessibility: keyboard focus outline */
+.tree-key:focus-visible {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
 }
 
-.tab-button.drag-over {
-    transform: translateY(2px) scale(1.02);
-    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+/* Shift-click recursive expand/collapse (JS logic must add 'recursive' class to target for styling if needed) */
+.tree-key.shift-toggle {
+    background-color: rgba(0, 123, 255, 0.08);
 }
+
+/* Enhanced index.css with animation for tree expand/collapse, dropdown arrow, tooltip support, hover/click effects, keyboard accessibility, child count, and shift-click support */
+
+/* JSON to Code preview themes */
+.code-output {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-family: 'Fira Code', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: pre;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-top: 10px;
+  }
+  
+  .code-output.python {
+    background-color: #0b2239;
+    color: #dcdcdc;
+  }
+  
+  .code-output.go {
+    background-color: #263238;
+    color: #c3e88d;
+  }
+  
+  .code-output.typescript {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+  }
+  
+  .code-output .keyword {
+    color: #569CD6;
+    font-weight: bold;
+  }
+  
+  .code-output .string {
+    color: #CE9178;
+  }
+  
+  .code-output .number {
+    color: #B5CEA8;
+  }
+  
+  .code-output .type {
+    color: #4EC9B0;
+    font-style: italic;
+  }
+  
+  .code-output .comment {
+    color: #6A9955;
+    font-style: italic;
+  }
+  
+  .tree-children {
+    margin-left: 20px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 1000px;
+    opacity: 1;
+  }
+  
+  .tree-children.collapsed {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  .tree-key {
+    position: relative;
+    cursor: pointer;
+    padding: 4px 6px;
+    display: inline-block;
+    border-radius: 3px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
+  }
+  
+  .tree-key:hover,
+  .tree-key:focus {
+    background-color: rgba(0, 123, 255, 0.12);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+  
+  .tree-key:active {
+    background-color: rgba(0, 123, 255, 0.25);
+  }
+  
+  .tree-key::before {
+    content: '\25B6';
+    display: inline-block;
+    transition: transform 0.2s ease;
+    margin-right: 6px;
+    font-size: 0.8em;
+    color: #555;
+  }
+  
+  .tree-key.expanded::before {
+    transform: rotate(90deg);
+    color: #007bff;
+  }
+  
+  .tree-key .node-info {
+    font-size: 0.8em;
+    color: #999;
+    margin-left: 6px;
+  }
+  
+  .tree-key[title] {
+    position: relative;
+  }
+  
+  .tree-key[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 4px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  body.dark-mode .tree-key[title]:hover::after {
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid #666;
+  }
+  
+  /* Accessibility: keyboard focus outline */
+  .tree-key:focus-visible {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+  }
+  
+  /* Shift-click recursive expand/collapse (JS logic must add 'recursive' class to target for styling if needed) */
+  .tree-key.shift-toggle {
+    background-color: rgba(0, 123, 255, 0.08);
+  }
+  
