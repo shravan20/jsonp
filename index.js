@@ -10,10 +10,11 @@ function saveGlobalState() {
   const state = {
     darkMode: document.body.classList.contains("dark-mode"),
     activeMode: getActiveMode(),
+    activeFeatureMode: document.querySelector(".mode-selector button.active")?.id?.replace("mode-", "").replace("-btn", "") || "formatter",
     formatter: {
-      activeTab:
-        document.querySelector("#formatter-tab-contents .json-tab-content.active")?.id || "",
+      activeTab: document.querySelector("#formatter-tab-contents .json-tab-content.active")?.id || "",
       tabs: [],
+      activeFeatureTab: {}, // Store active feature tab (Raw/Tree/Error) for each formatter tab
     },
     compare: {
       activeTab: document.querySelector("#compare-tab-contents .json-tab-content.active")?.id || "",
@@ -73,8 +74,12 @@ function loadGlobalState() {
   // Dark Mode
   if (state.darkMode) document.body.classList.add("dark-mode");
   else document.body.classList.remove("dark-mode");
-  // Active Mode
-  switchMode(state.activeMode || "formatter");
+  // Active Feature Mode (Formatter/Compare/Codegen/etc.)
+  if (state.activeFeatureMode) {
+    switchMode(state.activeFeatureMode);
+  } else {
+    switchMode(state.activeMode || "formatter"); // Fallback for older saved states
+  }
 
   // Load Formatter tabs
   const ftc = document.getElementById("formatter-tabs-container");
@@ -173,9 +178,10 @@ function switchMode(mode) {
     targetSection.style.display = "block";
   }
 
-  document
-    .querySelectorAll(".mode-selector button")
-    .forEach((btn) => btn.classList.remove("active"));
+  // Update mode selector buttons
+  document.querySelectorAll(".mode-selector button").forEach((btn) => {
+    btn.classList.remove("active");
+  });
 
   const modeBtn = document.getElementById(`mode-${mode}-btn`);
   if (modeBtn) {
@@ -189,6 +195,7 @@ function switchMode(mode) {
   }
 
   applyEditorTabDarkMode();
+  saveGlobalState(); // Save state when mode changes
 }
 
 /* ========== Formatter Functions ========== */
