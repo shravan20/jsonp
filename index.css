@@ -2,672 +2,672 @@
 
 /* Base Styles */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 20px;
-  background-color: #f0f0f0;
-  color: #333;
-  transition: background-color 0.3s, color 0.3s;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f0f0f0;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 h1 {
-  margin: 0 20px 0 0;
-  font-size: 1.8rem;
+    margin: 0 20px 0 0;
+    font-size: 1.8rem;
 }
 
 .dark-mode-toggle,
 .shortcut-preview-button {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-right: 10px;
-  font-size: 0.9rem;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 0.9rem;
 }
 
 /* Mode Selector */
 .mode-selector {
-  margin: 20px 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .mode-selector button {
-  padding: 10px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
+    padding: 10px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
 .mode-selector button.active {
-  background-color: #0056b3;
-  font-weight: bold;
+    background-color: #0056b3;
+    font-weight: bold;
 }
 
 /* Tabs */
 .tabs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 15px;
 }
 
 .tab-button {
-  padding: 8px 12px;
-  background-color: #e0e0e0;
-  border: none;
-  cursor: pointer;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  transition: background-color 0.3s;
-  font-size: 0.9rem;
+    padding: 8px 12px;
+    background-color: #e0e0e0;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s;
+    font-size: 0.9rem;
 }
 
 .tab-button.active {
-  background-color: #ffffff;
-  font-weight: bold;
+    background-color: #ffffff;
+    font-weight: bold;
 }
 
 .tab-button .close-tab {
-  color: red;
-  font-weight: bold;
-  cursor: pointer;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .tab-button .tab-color-picker {
-  width: 16px;
-  height: 16px;
-  padding: 0;
-  border: none;
-  cursor: pointer;
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    border: none;
+    cursor: pointer;
 }
 
 .add-tab-button {
-  background-color: #007bff;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  border: none;
-  font-size: 0.9rem;
+    background-color: #007bff;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    font-size: 0.9rem;
 }
 
 /* Content Panels */
 .json-tab-content {
-  display: none;
+    display: none;
 }
 
 .json-tab-content.active {
-  display: block;
+    display: block;
 }
 
 textarea {
-  width: 100%;
-  height: 200px;
-  padding: 10px;
-  font-family: monospace;
-  font-size: 0.95rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-bottom: 15px;
-  box-sizing: border-box;
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    font-family: monospace;
+    font-size: 0.95rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
 }
 
 /* Utility Containers */
 .search-container,
 .upload-download-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 15px;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
 }
 
 .preview-section {
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  overflow: auto;
-  word-wrap: normal;
-  display: none;
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+    word-wrap: normal;
+    display: none;
 }
 
 .preview-section.active {
-  display: block;
+    display: block;
 }
 
 .copy-button,
 button.copy-button {
-  padding: 6px 12px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.85rem;
+    padding: 6px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.85rem;
 }
 
 .copy-button:hover {
-  background-color: #218838;
+    background-color: #218838;
 }
 
 /* Tree View */
 .tree-node {
-  margin-left: 20px;
-  position: relative;
+    margin-left: 20px;
+    position: relative;
 }
 
 .tree-key {
-  cursor: pointer;
-  padding: 2px 5px;
-  border-radius: 3px;
-  display: inline-block;
+    cursor: pointer;
+    padding: 2px 5px;
+    border-radius: 3px;
+    display: inline-block;
 }
 
 .tree-key:hover {
-  background-color: rgba(0, 123, 255, 0.1);
+    background-color: rgba(0, 123, 255, 0.1);
 }
 
 .type-string {
-  color: #4caf50;
+    color: #4caf50;
 }
 
 .type-number {
-  color: #2196f3;
+    color: #2196f3;
 }
 
 .type-boolean {
-  color: #9c27b0;
+    color: #9c27b0;
 }
 
 .type-null {
-  color: #666;
+    color: #666;
 }
 
 .type-object {
-  color: #ff9800;
+    color: #ff9800;
 }
 
 .type-array {
-  color: #e91e63;
+    color: #e91e63;
 }
 
 /* Dark Mode */
 body.dark-mode {
-  background-color: #121212;
-  color: #e0e0e0;
+    background-color: #121212;
+    color: #e0e0e0;
 }
 
 body.dark-mode textarea,
 body.dark-mode .preview-section,
 body.dark-mode .modal-content {
-  background-color: #2e2e2e;
-  color: #e0e0e0;
-  border-color: #555;
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+    border-color: #555;
 }
 
 body.dark-mode .tab-button {
-  background-color: #333;
-  color: #e0e0e0;
+    background-color: #333;
+    color: #e0e0e0;
 }
 
 body.dark-mode .tab-button.active {
-  background-color: #555;
+    background-color: #555;
 }
 
 /* Reordering Drag Styles */
 .tab-button.dragging {
-  opacity: 0.6;
-  border: 2px dashed #007bff;
+    opacity: 0.6;
+    border: 2px dashed #007bff;
 }
 
 .tab-button.drag-over {
-  transform: translateY(2px) scale(1.02);
-  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+    transform: translateY(2px) scale(1.02);
+    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
 }
 
 /* Markdown & Modal */
 .markdown-preview {
-  background: #fff;
-  padding: 1rem;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  max-height: 500px;
-  overflow-y: auto;
-  line-height: 1.6;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    max-height: 500px;
+    overflow-y: auto;
+    line-height: 1.6;
 }
 
 .markdown-preview code {
-  background: #f0f0f0;
-  padding: 2px 4px;
-  border-radius: 3px;
+    background: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
 }
 
 .modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-  background: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  width: 400px;
-  border-radius: 5px;
-  position: relative;
+    background: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    width: 400px;
+    border-radius: 5px;
+    position: relative;
 }
 
 .close-modal {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 1.4rem;
-  cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.4rem;
+    cursor: pointer;
 }
 
 /* Tab Rename Tooltip */
 .tab-rename-tooltip {
-  position: absolute;
-  z-index: 1000;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  padding: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    z-index: 1000;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 body.dark-mode .tab-rename-tooltip {
-  background-color: #2e2e2e;
-  color: #e0e0e0;
-  border-color: #555;
+    background-color: #2e2e2e;
+    color: #e0e0e0;
+    border-color: #555;
 }
 
 /* GitHub buttons */
 .github-links {
-  text-align: center;
-  margin: 20px 0;
+    text-align: center;
+    margin: 20px 0;
 }
 
 .github-button,
 .contribute-button {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 15px;
-  margin: 0 10px;
-  border-radius: 5px;
-  text-decoration: none;
-  color: white;
-  font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 0 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-size: 0.9rem;
 }
 
 .github-button {
-  background-color: #24292e;
+    background-color: #24292e;
 }
 
 .github-button:hover {
-  background-color: #444;
+    background-color: #444;
 }
 
 .contribute-button {
-  background-color: #2ea44f;
+    background-color: #2ea44f;
 }
 
 .contribute-button:hover {
-  background-color: #22863a;
+    background-color: #22863a;
 }
 
 .github-button i,
 .contribute-button i {
-  margin-right: 8px;
+    margin-right: 8px;
 }
 
 .tree-children {
-  margin-left: 20px;
-  overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
-  max-height: 1000px;
-  opacity: 1;
+    margin-left: 20px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 1000px;
+    opacity: 1;
 }
 
 .tree-children.collapsed {
-  max-height: 0;
-  opacity: 0;
-  pointer-events: none;
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .tree-key {
-  position: relative;
-  cursor: pointer;
-  padding: 4px 6px;
-  display: inline-block;
-  border-radius: 3px;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  outline: none;
+    position: relative;
+    cursor: pointer;
+    padding: 4px 6px;
+    display: inline-block;
+    border-radius: 3px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
 }
 
 .tree-key:hover,
 .tree-key:focus {
-  background-color: rgba(0, 123, 255, 0.12);
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    background-color: rgba(0, 123, 255, 0.12);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .tree-key:active {
-  background-color: rgba(0, 123, 255, 0.25);
+    background-color: rgba(0, 123, 255, 0.25);
 }
 
 .tree-key::before {
-  content: "\25B6";
-  display: inline-block;
-  transition: transform 0.2s ease;
-  margin-right: 6px;
-  font-size: 0.8em;
-  color: #555;
+    content: "\25B6";
+    display: inline-block;
+    transition: transform 0.2s ease;
+    margin-right: 6px;
+    font-size: 0.8em;
+    color: #555;
 }
 
 .tree-key.expanded::before {
-  transform: rotate(90deg);
-  color: #007bff;
+    transform: rotate(90deg);
+    color: #007bff;
 }
 
 .tree-key .node-info {
-  font-size: 0.8em;
-  color: #999;
-  margin-left: 6px;
+    font-size: 0.8em;
+    color: #999;
+    margin-left: 6px;
 }
 
 .tree-key[title] {
-  position: relative;
+    position: relative;
 }
 
 .tree-key[title]:hover::after {
-  content: attr(title);
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  font-size: 12px;
-  padding: 4px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-  margin-top: 4px;
-  z-index: 10;
-  pointer-events: none;
+    content: attr(title);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 4px;
+    z-index: 10;
+    pointer-events: none;
 }
 
 body.dark-mode .tree-key[title]:hover::after {
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0e0e0;
-  border: 1px solid #666;
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid #666;
 }
 
 /* Accessibility: keyboard focus outline */
 .tree-key:focus-visible {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
 }
 
 /* Shift-click recursive expand/collapse (JS logic must add 'recursive' class to target for styling if needed) */
 .tree-key.shift-toggle {
-  background-color: rgba(0, 123, 255, 0.08);
+    background-color: rgba(0, 123, 255, 0.08);
 }
 
 /* Enhanced index.css with animation for tree expand/collapse, dropdown arrow, tooltip support, hover/click effects, keyboard accessibility, child count, and shift-click support */
 
 /* JSON to Code preview themes */
 .code-output {
-  background-color: #1e1e1e;
-  color: #d4d4d4;
-  font-family: "Fira Code", monospace;
-  font-size: 14px;
-  line-height: 1.6;
-  padding: 16px;
-  border-radius: 6px;
-  overflow-x: auto;
-  white-space: pre;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  margin-top: 10px;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    font-family: "Fira Code", monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 16px;
+    border-radius: 6px;
+    overflow-x: auto;
+    white-space: pre;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    margin-top: 10px;
 }
 
 .code-output.python {
-  background-color: #0b2239;
-  color: #dcdcdc;
+    background-color: #0b2239;
+    color: #dcdcdc;
 }
 
 .code-output.go {
-  background-color: #263238;
-  color: #c3e88d;
+    background-color: #263238;
+    color: #c3e88d;
 }
 
 .code-output.typescript {
-  background-color: #1e1e1e;
-  color: #d4d4d4;
+    background-color: #1e1e1e;
+    color: #d4d4d4;
 }
 
 .code-output .keyword {
-  color: #569cd6;
-  font-weight: bold;
+    color: #569cd6;
+    font-weight: bold;
 }
 
 .code-output .string {
-  color: #ce9178;
+    color: #ce9178;
 }
 
 .code-output .number {
-  color: #b5cea8;
+    color: #b5cea8;
 }
 
 .code-output .type {
-  color: #4ec9b0;
-  font-style: italic;
+    color: #4ec9b0;
+    font-style: italic;
 }
 
 .code-output .comment {
-  color: #6a9955;
-  font-style: italic;
+    color: #6a9955;
+    font-style: italic;
 }
 
 .tree-children {
-  margin-left: 20px;
-  overflow: hidden;
-  transition: max-height 0.3s ease, opacity 0.3s ease;
-  max-height: 1000px;
-  opacity: 1;
+    margin-left: 20px;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+    max-height: 1000px;
+    opacity: 1;
 }
 
 .tree-children.collapsed {
-  max-height: 0;
-  opacity: 0;
-  pointer-events: none;
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .tree-key {
-  position: relative;
-  cursor: pointer;
-  padding: 4px 6px;
-  display: inline-block;
-  border-radius: 3px;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  outline: none;
+    position: relative;
+    cursor: pointer;
+    padding: 4px 6px;
+    display: inline-block;
+    border-radius: 3px;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    outline: none;
 }
 
 .tree-key:hover,
 .tree-key:focus {
-  background-color: rgba(0, 123, 255, 0.12);
-  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+    background-color: rgba(0, 123, 255, 0.12);
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
 .tree-key:active {
-  background-color: rgba(0, 123, 255, 0.25);
+    background-color: rgba(0, 123, 255, 0.25);
 }
 
 .tree-key::before {
-  content: "\25B6";
-  display: inline-block;
-  transition: transform 0.2s ease;
-  margin-right: 6px;
-  font-size: 0.8em;
-  color: #555;
+    content: "\25B6";
+    display: inline-block;
+    transition: transform 0.2s ease;
+    margin-right: 6px;
+    font-size: 0.8em;
+    color: #555;
 }
 
 .tree-key.expanded::before {
-  transform: rotate(90deg);
-  color: #007bff;
+    transform: rotate(90deg);
+    color: #007bff;
 }
 
 .tree-key .node-info {
-  font-size: 0.8em;
-  color: #999;
-  margin-left: 6px;
+    font-size: 0.8em;
+    color: #999;
+    margin-left: 6px;
 }
 
 .tree-key[title] {
-  position: relative;
+    position: relative;
 }
 
 .tree-key[title]:hover::after {
-  content: attr(title);
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background: rgba(0, 0, 0, 0.75);
-  color: #fff;
-  font-size: 12px;
-  padding: 4px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-  margin-top: 4px;
-  z-index: 10;
-  pointer-events: none;
+    content: attr(title);
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 12px;
+    padding: 4px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    margin-top: 4px;
+    z-index: 10;
+    pointer-events: none;
 }
 
 body.dark-mode .tree-key[title]:hover::after {
-  background: rgba(255, 255, 255, 0.1);
-  color: #e0e0e0;
-  border: 1px solid #666;
+    background: rgba(255, 255, 255, 0.1);
+    color: #e0e0e0;
+    border: 1px solid #666;
 }
 
 /* Accessibility: keyboard focus outline */
 .tree-key:focus-visible {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
 }
 
 /* Shift-click recursive expand/collapse (JS logic must add 'recursive' class to target for styling if needed) */
 .tree-key.shift-toggle {
-  background-color: rgba(0, 123, 255, 0.08);
+    background-color: rgba(0, 123, 255, 0.08);
 }
 
 /* Editor Specific */
 #editor-section .tab-button {
-  padding: 8px 12px;
-  background-color: #f5f5f5;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-right: 5px;
-  font-size: 0.9rem;
+    padding: 8px 12px;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+    font-size: 0.9rem;
 }
 
 #editor-section .tab-button.active {
-  background-color: #ffffff;
-  font-weight: bold;
+    background-color: #ffffff;
+    font-weight: bold;
 }
 
 #editor-section .add-tab-button {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
 }
 
 #editor-tab-contents .json-tab-content {
-  display: none;
-  margin-top: 10px;
+    display: none;
+    margin-top: 10px;
 }
 
 #editor-tab-contents .json-tab-content.active {
-  display: block;
+    display: block;
 }
 
 .toastui-editor-defaultUI {
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* Dark Mode */
 /* Dark mode enhancements for toastui Editor */
 body.dark-mode .toastui-editor-defaultUI {
-  background-color: #1e1e1e !important;
-  color: #eee !important;
-  border-color: #333 !important;
+    background-color: #1e1e1e !important;
+    color: #eee !important;
+    border-color: #333 !important;
 }
 
 body.dark-mode .toastui-editor-defaultUI .ProseMirror {
-  background-color: #1e1e1e !important;
-  color: #eee !important;
+    background-color: #1e1e1e !important;
+    color: #eee !important;
 }
 
 body.dark-mode .toastui-editor-defaultUI .toastui-editor-toolbar {
-  background-color: #2a2a2a !important;
-  border-bottom: 1px solid #444 !important;
+    background-color: #2a2a2a !important;
+    border-bottom: 1px solid #444 !important;
 }
 
 body.dark-mode .toastui-editor-defaultUI .toastui-editor-contents pre,
 body.dark-mode .toastui-editor-defaultUI .toastui-editor-contents code {
-  background-color: #2b2b2b !important;
-  color: #c5c5c5 !important;
+    background-color: #2b2b2b !important;
+    color: #c5c5c5 !important;
 }
 
 body.dark-mode .toastui-editor-defaultUI .toastui-editor-md-container,
 body.dark-mode .toastui-editor-defaultUI .toastui-editor-ww-container {
-  background-color: #1e1e1e !important;
-  color: #eee !important;
+    background-color: #1e1e1e !important;
+    color: #eee !important;
 }
 
 /* Tooltip/input styling */
 body.dark-mode .tab-rename-tooltip {
-  background-color: #2c2c2c;
-  border: 1px solid #555;
-  color: #fff;
-  padding: 4px;
-  z-index: 1000;
-  position: absolute;
-  border-radius: 4px;
+    background-color: #2c2c2c;
+    border: 1px solid #555;
+    color: #fff;
+    padding: 4px;
+    z-index: 1000;
+    position: absolute;
+    border-radius: 4px;
 }
 
 body.dark-mode .tab-rename-tooltip input {
-  background-color: #1f1f1f;
-  color: #eee;
-  border: 1px solid #555;
+    background-color: #1f1f1f;
+    color: #eee;
+    border: 1px solid #555;
 }
 
 /* Active tab indicator */
 body.dark-mode .tab-button.active {
-  background-color: #333;
-  color: #fff;
+    background-color: #333;
+    color: #fff;
 }
