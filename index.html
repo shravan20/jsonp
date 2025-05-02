@@ -107,11 +107,7 @@
         <button class="copy-button" onclick="copyConvertOutput()">
           Copy Output
         </button>
-        <pre
-          id="convert-output"
-          class="code-output"
-          style="margin-top: 10px"
-        ></pre>
+        <pre class="code-output" style="margin-top: 10px; overflow: auto"></pre>
       </div>
       <!-- Mock Data Generator -->
       <div id="mockgen-section" style="display: none">
@@ -163,7 +159,11 @@
             <button onclick="copyMockOutput('csv')">Copy CSV</button>
             <button onclick="exportMockOutput('json')">Export as JSON</button>
             <button onclick="exportMockOutput('csv')">Export as CSV</button>
-            <input type="text" id="userInput" placeholder="File Download Name(optional)" />
+            <input
+              type="text"
+              id="userInput"
+              placeholder="File Download Name(optional)"
+            />
 
             <label style="margin-left: 20px">
               <input

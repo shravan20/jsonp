@@ -235,6 +235,7 @@ function createFormatterTab(tabData = null) {
                     <button class="copy-button" onclick="copyRawJSON('${tabId}')">Copy JSON</button>
                     <div class="tree-view"></div>
                 </div>
+                <pre class="code-output" style="margin-top:10px; overflow:auto;"></pre>
            `;
     document.getElementById("formatter-tab-contents").appendChild(tabContent);
     // Set content if provided
@@ -671,7 +672,12 @@ function generateCode(tabId) {
     if (lang === "typescript") code = generateTypeScript(obj, "Root");
     else if (lang === "python") code = generatePython(obj, "Root");
     else if (lang === "go") code = generateGo(obj, "Root");
-    outputPre.textContent = code;
+    outputPre.innerHTML = code
+        // .replace(/(interface|class|type)\b/g, '<span class="keyword">$1</span>')
+        // .replace(/"([^"]+)"/g, '<span class="string">"$1"</span>')
+        // .replace(/\b\d+\b/g, '<span class="number">$&</span>')
+        // .replace(/\bstring|number|boolean|any|void\b/g, '<span class="type">$&</span>');
+
     saveGlobalState();
 }
 
