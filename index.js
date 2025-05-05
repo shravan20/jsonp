@@ -37,11 +37,7 @@ function saveGlobalState() {
       activeTab: document.querySelector("#codegen-tab-contents .json-tab-content.active")?.id || "",
       tabs: [],
     },
-    convert: {
-      activeDirection: currentConvertMode
-    }
   };
-  
   // Formatter tabs
   document.querySelectorAll("#formatter-tabs-container .tab-button[data-tab]").forEach((btn) => {
     const tabId = btn.getAttribute("data-tab");
@@ -96,10 +92,6 @@ function loadGlobalState() {
     switchMode(state.activeMode);
   } else {
     switchMode("formatter"); // Default fallback
-  }
-
-  if (state.convert && state.convert.activeDirection) {
-    switchConvertDirection(state.convert.activeDirection);
   }
 
   // Load Formatter tabs
@@ -1102,14 +1094,11 @@ let currentConvertMode = "dict-to-json";
 
 function switchConvertDirection(mode) {
   currentConvertMode = mode;
-  document
-    .querySelectorAll("#convert-section .tab-button[data-mode]")
-    .forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.mode === mode);
-    });
+  document.querySelectorAll("#convert-section .tab-button").forEach((btn) => {
+    btn.classList.toggle("active", btn.textContent.includes("Dict") === (mode === "dict-to-json"));
+  });
   document.getElementById("convert-input").value = "";
   document.getElementById("convert-output").textContent = "";
-  saveGlobalState();
 }
 
 function convert() {
