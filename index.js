@@ -1107,22 +1107,30 @@ function convert() {
 
   try {
     if (currentConvertMode === "dict-to-json") {
-      // Convert Python dict string → JSON
-      const jsonCompatible = input
-        .replace(/'/g, '"')
+      // 1) None/True/False → null/true/false
+      let json = input
+        .replace(/\bNone\b/g, "null")
         .replace(/\bTrue\b/g, "true")
-        .replace(/\bFalse\b/g, "false")
-        .replace(/\bNone\b/g, "null");
-      const parsed = JSON.parse(jsonCompatible);
+        .replace(/\bFalse\b/g, "false");
+      // 2) remove trailing commas before } or ]
+      json = json.replace(/,\s*(?=[}\]])/g, "");
+      // 3) convert only quoted 'strings' → "strings"
+      json = json.replace(/'([^']*?)'/g, '"$1"');
+
+      const parsed = JSON.parse(json);
       output.textContent = JSON.stringify(parsed, null, 2);
     } else {
-      // Convert JSON → Python dict string
-      const parsed = JSON.parse(input);
-      const dictStr = JSON.stringify(parsed, null, 2)
-        .replace(/"/g, "'")
+      // JSON → Python dict
+      const obj = JSON.parse(input);
+      let dictStr = JSON.stringify(obj, null, 2);
+      // 1) only replace "quoted" strings → 'strings'
+      dictStr = dictStr.replace(/"([^"]*?)"/g, "'$1'");
+      // 2) true/false/null → True/False/None
+      dictStr = dictStr
         .replace(/\btrue\b/g, "True")
         .replace(/\bfalse\b/g, "False")
         .replace(/\bnull\b/g, "None");
+
       output.textContent = dictStr;
     }
   } catch (e) {
