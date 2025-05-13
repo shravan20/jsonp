@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JSONP - Multi tab JSON toolkit</title>
-    <link rel="icon" type="image/svg+xml" href="assets/json.svg" /> <!-- Adjusted path for json.svg -->
+    <link rel="icon" type="image/svg+xml" href="assets/json.svg" />
+    <!-- Adjusted path for json.svg -->
     <link rel="stylesheet" href="assets/css/base.css" />
     <link rel="stylesheet" href="assets/css/main.css" />
     <link rel="stylesheet" href="assets/css/themes/themes.css" />
@@ -21,6 +22,18 @@
       window.faker = faker;
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Core utilities -->
+    <script src="assets/js/core/storage.js"></script>
+    <script src="assets/js/core/dom.js"></script>
+    <script src="assets/js/core/json-utils.js"></script>
+    <!-- Feature modules -->
+    <script src="assets/js/features/formatter/formatter.js"></script>
+    <script src="assets/js/features/compare/compare.js"></script>
+    <script src="assets/js/features/codegen/codegen.js"></script>
+    <script src="assets/js/features/convert/convert.js"></script>
+    <script src="assets/js/features/mockgen/mockgen.js"></script>
+    <!-- Main application -->
+    <script src="assets/js/app.js"></script>
   </head>
   <body>
     <div class="container">
@@ -165,7 +178,11 @@
             <button onclick="copyMockOutput('csv')">Copy CSV</button>
             <button onclick="exportMockOutput('json')">Export as JSON</button>
             <button onclick="exportMockOutput('csv')">Export as CSV</button>
-            <input type="text" id="userInput" placeholder="File Download Name(optional)" />
+            <input
+              type="text"
+              id="userInput"
+              placeholder="File Download Name(optional)"
+            />
 
             <label style="margin-left: 20px">
               <input
@@ -244,10 +261,5 @@
         alt="Made with love with Open Source"
       />
     </p>
-    <script src="assets/js/core/storage.js"></script>
-    <script src="assets/js/core/dom.js"></script>
-    <script src="assets/js/core/json-utils.js"></script>
-    <script src="assets/js/features/formatter/formatter.js"></script>
-    <script src="assets/js/app.js"></script>
   </body>
 </html>
