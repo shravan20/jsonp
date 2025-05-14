@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="https://madewithlove.now.sh/in?heart=true&colorA=%23ff671f&colorB=%23046a38&text=India" alt="Made with Love in India">
+  <img src="json.svg" alt="JSONP Logo" width="150">
 </p>
 
 ## 📁 Project Structure
@@ -81,12 +81,10 @@ json-tool/
   - 💾 Automatic local saving
   - 🔄 Real-time previews
 
-- **Convenience**
-  - 📤📥 Import/Export JSON files
-  - 🌐 Browser-based (no install needed)
-  - 🔄 Real-time validation
-  - 🚦 Error highlighting
-  - 📋 Copy/paste support
+### 🔍 JSON Comparison (Diff Checker)
+- Side-by-side diff view
+- Multi-tab support
+- Visual difference highlighting
 
 ## 🏗 Architecture
 
@@ -120,26 +118,82 @@ json-tool/
 - ⭐ Enhanced error handling and validation
 - 🔍 Advanced search capabilities
 
-## 🚀 Usage
+### 🧪 Mock Data Generator
+- Faker.js integration
+- JSON/CSV export
+- Table/JSON view modes
+- Customizable schemas
+- Built-in presets
 
-1. Open `index.html` in any modern browser
-2. Drag & drop JSON files directly
-3. Use tabs to organize multiple documents
-4. Toggle modes using the top buttons
+### 📝 Markdown Editor
+- Real-time preview
+- Syntax highlighting
+- Multi-tab support
 
-> **Note**: All data stays local - nothing is uploaded to servers
+## 🚀 Getting Started
 
-## 📝 Changelog
+1. **Quick Start**
+   ```bash
+   git clone https://github.com/shravan20/jsonp.git
+   cd jsonp
+   # Open index.html in your browser
+   ```
 
-For a detailed list of changes and version history, please see the [CHANGELOG](./CHANGELOG/README.md) directory.
+2. **Usage**
+   - Open `index.html` in any modern browser
+   - Drag & drop JSON files directly
+   - Use tabs to organize multiple documents
+   - Toggle between different tools using the sidebar
+
+## 💡 Key Features
+
+- **Offline Support**: Works completely offline - no server needed
+- **Multi-tab Interface**: Work with multiple JSON documents simultaneously
+- **Dark/Light Mode**: Comfortable viewing in any environment
+- **Keyboard Shortcuts**: Efficient workflow with keyboard navigation
+- **Local Storage**: Auto-saves your work
+- **Mobile Responsive**: Works on all devices
+
+## 🛠️ Development
+
+```bash
+# Install dependencies
+npm install
+
+# Format code
+npm run format
+
+# Lint code
+npm run lint
+
+# Run checks
+npm run check
+```
 
 ## 🤝 Contributing
 
 We welcome contributions! Please see:
 
-- [Contribution Guidelines](https://github.com/shravan20/jsonp/blob/main/CONTRIBUTING.md)
-- [GitHub Repository](https://github.com/shravan20/jsonp)
+1. [Code of Conduct](./CODE_OF_CONDUCT.md)
+2. [Contributing Guidelines](./CONTRIBUTING.md)
+3. [Issue Templates](./.github/ISSUE_TEMPLATE)
+
+## 📝 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for a detailed history of changes.
 
 ## 📄 License
 
-MIT Licensed - Free for personal and commercial use
+MIT Licensed - Free for personal and commercial use. See [LICENSE](./LICENSE) for details.
+
+## 🌐 Links
+
+- [GitHub Repository](https://github.com/shravan20/jsonp)
+- [Report Issues](https://github.com/shravan20/jsonp/issues)
+- [Feature Requests](https://github.com/shravan20/jsonp/issues/new?template=feature_request.md)
+
+---
+
+<p align="center">
+  Made with ❤️ in India
+</p>
