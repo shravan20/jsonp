@@ -1,5 +1,6 @@
 # JSON Tool
 
+<<<<<<< HEAD
 <p align="center">
   A versatile web-based toolkit for working with JSON data. Open-source and works offline!
 </p>
@@ -197,4 +198,6 @@ MIT Licensed - Free for personal and commercial use. See [LICENSE](./LICENSE) fo
 <p align="center">
   Made with ❤️ in India
 </p>
+=======
+>>>>>>> parent of 9a178bf (refactor: Update readme file for new features)
 This tool is a refactored version of the original JSONP toolkit, with a component-based structure.
