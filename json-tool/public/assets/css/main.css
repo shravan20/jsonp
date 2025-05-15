@@ -1,5 +1,3 @@
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
-=======
 /* Complete index.css with improved alignment, spacing, theme handling, and UI components */
 
 /* Base Styles */
@@ -12,21 +10,17 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
-=======
 h1 {
   margin: 0 20px 0 0;
   font-size: 1.8rem;
 }
 
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 .dark-mode-toggle,
 .shortcut-preview-button {
   padding: 8px 16px;
@@ -71,7 +65,6 @@ h1 {
 }
 
 .tab-button {
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
     padding: 10px 20px;
     background-color: #e0e0e0;
     border: none;
@@ -100,7 +93,6 @@ h1 {
     border: none;
     cursor: pointer;
     margin-right: 5px;
-=======
   padding: 8px 12px;
   background-color: #e0e0e0;
   border: none;
@@ -116,7 +108,6 @@ h1 {
 .tab-button.active {
   background-color: #ffffff;
   font-weight: bold;
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 }
 
 .tab-button .close-tab {
@@ -206,7 +197,6 @@ button.copy-button {
 
 /* Tree View */
 .tree-node {
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
     margin-left: 20px; /* Original margin-left */
     position: relative; /* Added for ::before pseudo-element */
 }
@@ -259,7 +249,6 @@ button.copy-button {
     /* content: "▼"; */
     /* font-size: 10px; */
     /* margin-left: 5px; */
-=======
   margin: 4px 0;
   padding-left: 20px;
   position: relative;
@@ -282,7 +271,6 @@ button.copy-button {
 
 .type-number {
   color: #2196f3;
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 }
 
 .type-boolean {
@@ -380,11 +368,8 @@ body.dark-mode .tab-button.active {
   cursor: pointer;
 }
 
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
 /* Tooltip for Tab Renaming */
-=======
 /* Tab Rename Tooltip */
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 .tab-rename-tooltip {
   position: absolute;
   z-index: 1000;
@@ -395,8 +380,6 @@ body.dark-mode .tab-button.active {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
-=======
 body.dark-mode .tab-rename-tooltip {
   background-color: #2e2e2e;
   color: #e0e0e0;
@@ -404,7 +387,6 @@ body.dark-mode .tab-rename-tooltip {
 }
 
 /* GitHub buttons */
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 .github-links {
   text-align: center;
   margin: 20px 0;
@@ -443,7 +425,6 @@ body.dark-mode .tab-rename-tooltip {
   margin-right: 8px;
 }
 
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
 /* Add copy button styling */
 .copy-button {
     padding: 5px 10px;
@@ -471,7 +452,6 @@ body.dark-mode .tab-rename-tooltip {
 .type-null { color: #666; }
 .type-object { color: #FF9800; }
 .type-array { color: #E91E63; }
-=======
 .tree-children {
   margin-left: 20px;
   overflow: hidden;
@@ -562,7 +542,6 @@ body.dark-mode .tree-key[title]:hover::after {
 .tree-key.shift-toggle {
   background-color: rgba(0, 123, 255, 0.08);
 }
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 
 /* Enhanced index.css with animation for tree expand/collapse, dropdown arrow, tooltip support, hover/click effects, keyboard accessibility, child count, and shift-click support */
 
@@ -581,18 +560,15 @@ body.dark-mode .tree-key[title]:hover::after {
   margin-top: 10px;
 }
 
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
 .tree-context-menu {
     position: fixed;
     background: #fff;
     border: 1px solid #ccc;
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     z-index: 1000;
-=======
 .code-output.python {
   background-color: #0b2239;
   color: #dcdcdc;
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 }
 
 .code-output.go {
@@ -605,7 +581,6 @@ body.dark-mode .tree-key[title]:hover::after {
   color: #d4d4d4;
 }
 
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
 .toggle-all-btn {
     margin-left: 10px;
     padding: 5px 10px;
@@ -626,7 +601,6 @@ body.dark-mode .tree-key[title]:hover::after {
     max-height: 500px;
     overflow-y: auto;
     line-height: 1.6;
-=======
 .code-output .keyword {
   color: #569cd6;
   font-weight: bold;
@@ -643,7 +617,6 @@ body.dark-mode .tree-key[title]:hover::after {
 .code-output .type {
   color: #4ec9b0;
   font-style: italic;
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 }
 
 .code-output .comment {
@@ -1101,13 +1074,10 @@ body.dark-mode .sidebar {
     align-items: stretch;
   }
 
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
 .mock-preview-table {
-=======
   .search-container input,
   .search-container button,
   .upload-download-container button {
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
     width: 100%;
     margin-bottom: 10px;
   }
@@ -1287,7 +1257,6 @@ body.dark-mode .mock-preview-table thead {
   border-bottom-color: #444;
 }
 
-<<<<<<< HEAD:json-tool/public/assets/css/main.css
 /* Tab reordering css */
 .tab-button.dragging {
     opacity: 0.5;
@@ -1297,7 +1266,6 @@ body.dark-mode .mock-preview-table thead {
 .tab-button.drag-over {
     transform: translateY(2px) scale(1.02);
     box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
-=======
 body.dark-mode .mock-preview-table th {
   color: #e0e0e0;
   background-color: #333;
@@ -1365,5 +1333,4 @@ body.dark-mode .mock-preview-table tr.error td {
   margin-top: 20px;
   border-radius: 8px;
   overflow: hidden;
->>>>>>> 51e9c192aab0e53747b1e1a05f675f00ad1a86ba:index.css
 }

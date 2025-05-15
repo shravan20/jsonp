@@ -1,4 +1,4 @@
-# JSONP - Multi tab JSON toolkit
+# JSON Tool
 
 <p align="center">
   A versatile web-based toolkit for working with JSON data. Open-source and works offline!
@@ -197,3 +197,4 @@ MIT Licensed - Free for personal and commercial use. See [LICENSE](./LICENSE) fo
 <p align="center">
   Made with ❤️ in India
 </p>
+This tool is a refactored version of the original JSONP toolkit, with a component-based structure.
