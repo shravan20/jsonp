@@ -1187,7 +1187,7 @@ function generateMockData() {
     outputContainer.innerHTML = `<pre class="code-output">❌ Error: ${e.message}</pre>`;
   }
 }
-
+/* global faker */
 function resoloveFakerPath(path) {
   if (!path) throw new Error("Empty faker path");
   const parts = path.split(".");
@@ -1218,19 +1218,10 @@ function mockFromSchema(schema) {
       return faker.number.int({ min, max });
     }
 
-      return resoloveFakerPath(schema);
-    
+    return resoloveFakerPath(schema);
   }
   return schema;
 }
-//   const fakerFn = schema.split(".");
-//   let val = faker;
-//   for (const part of fakerFn) {
-//     val = val?.[part];
-//   }
-//   if (typeof val === "function") return val();
-//   throw new Error(`Invalid faker path: "${schema}"`);
-// }
 
 function updateMockView() {
   const mode = document.querySelector('input[name="mock-view-mode"]:checked').value;
