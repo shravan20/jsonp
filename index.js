@@ -1188,6 +1188,18 @@ function generateMockData() {
   }
 }
 
+function resoloveFakerPath(path) {
+  if (!path) throw new Error("Empty faker path");
+  const parts = path.split(".");
+  let current = faker;
+  for (const part of parts) {
+    if (!current[part]) throw new Error(`Invalid faker path: "${path}"`);
+    current = current[part];
+  }
+  if (typeof current === "function") return current();
+  throw new Error(`Faker path "${path}" does not resolve to a function`);
+}
+
 function mockFromSchema(schema) {
   if (Array.isArray(schema)) {
     return schema.map((item) => mockFromSchema(item));
@@ -1206,16 +1218,19 @@ function mockFromSchema(schema) {
       return faker.number.int({ min, max });
     }
 
-    const fakerFn = schema.split(".");
-    let val = faker;
-    for (const part of fakerFn) {
-      val = val?.[part];
-    }
-    if (typeof val === "function") return val();
-    throw new Error(`Invalid faker path: "${schema}"`);
+      return resoloveFakerPath(schema);
+    
   }
   return schema;
 }
+//   const fakerFn = schema.split(".");
+//   let val = faker;
+//   for (const part of fakerFn) {
+//     val = val?.[part];
+//   }
+//   if (typeof val === "function") return val();
+//   throw new Error(`Invalid faker path: "${schema}"`);
+// }
 
 function updateMockView() {
   const mode = document.querySelector('input[name="mock-view-mode"]:checked').value;
