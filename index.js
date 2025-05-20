@@ -1187,6 +1187,18 @@ function generateMockData() {
     outputContainer.innerHTML = `<pre class="code-output">❌ Error: ${e.message}</pre>`;
   }
 }
+/* global faker */
+function resoloveFakerPath(path) {
+  if (!path) throw new Error("Empty faker path");
+  const parts = path.split(".");
+  let current = faker;
+  for (const part of parts) {
+    if (!current[part]) throw new Error(`Invalid faker path: "${path}"`);
+    current = current[part];
+  }
+  if (typeof current === "function") return current();
+  throw new Error(`Faker path "${path}" does not resolve to a function`);
+}
 
 function mockFromSchema(schema) {
   if (Array.isArray(schema)) {
@@ -1206,13 +1218,7 @@ function mockFromSchema(schema) {
       return faker.number.int({ min, max });
     }
 
-    const fakerFn = schema.split(".");
-    let val = faker;
-    for (const part of fakerFn) {
-      val = val?.[part];
-    }
-    if (typeof val === "function") return val();
-    throw new Error(`Invalid faker path: "${schema}"`);
+    return resoloveFakerPath(schema);
   }
   return schema;
 }
