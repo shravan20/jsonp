@@ -65,34 +65,6 @@ h1 {
 }
 
 .tab-button {
-    padding: 10px 20px;
-    background-color: #e0e0e0;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
-    position: relative;
-    border-radius: 3px;
-    transition: background-color 0.3s, transform 0.2s ease, opacity 0.2s ease; /* Combined transitions */
-    display: flex;
-    align-items: center;
-}
-
-.tab-button.active {
-    font-weight: bold;
-    background-color: #ffffff;
-}
-
-.tab-button .tab-name {
-    margin-right: 5px;
-}
-
-.tab-button .tab-color-picker {
-    width: 20px;
-    height: 20px;
-    padding: 0;
-    border: none;
-    cursor: pointer;
-    margin-right: 5px;
   padding: 8px 12px;
   background-color: #e0e0e0;
   border: none;
@@ -197,58 +169,6 @@ button.copy-button {
 
 /* Tree View */
 .tree-node {
-    margin-left: 20px; /* Original margin-left */
-    position: relative; /* Added for ::before pseudo-element */
-}
-
-.tree-node::before {
-    content: '';
-    position: absolute;
-    left: -8px; /* Adjust as needed for line position */
-    top: 0;
-    height: 100%;
-    border-left: 1px solid #666;
-}
-
-.tree-key {
-    transition: all 0.2s ease; /* Original transition */
-    padding: 2px 5px;
-    border-radius: 3px;
-    cursor: pointer; /* Added for clarity */
-    position: relative; /* Added for ::before pseudo-element (toggler) */
-}
-
-.tree-key:hover {
-    text-decoration: underline;
-    background-color: rgba(0, 123, 255, 0.1); /* Added from specific tree-key:hover */
-}
-
-.tree-key::before { /* Toggler arrow */
-    content: '▶';
-    font-size: 0.8em;
-    margin-right: 5px;
-    transition: transform 0.2s;
-}
-
-.tree-key.expanded::before {
-    transform: rotate(90deg);
-}
-
-.tree-key:focus {
-    outline: 2px solid #007bff;
-    outline-offset: 2px;
-}
-
-.collapsed::after { /* This was the original expand/collapse indicator, replaced by .tree-key::before */
-    /* content: "▶"; */
-    /* font-size: 10px; */
-    /* margin-left: 5px; */
-}
-
-.expanded::after { /* This was the original expand/collapse indicator, replaced by .tree-key::before */
-    /* content: "▼"; */
-    /* font-size: 10px; */
-    /* margin-left: 5px; */
   margin: 4px 0;
   padding-left: 20px;
   position: relative;
@@ -368,7 +288,6 @@ body.dark-mode .tab-button.active {
   cursor: pointer;
 }
 
-/* Tooltip for Tab Renaming */
 /* Tab Rename Tooltip */
 .tab-rename-tooltip {
   position: absolute;
@@ -425,33 +344,6 @@ body.dark-mode .tab-rename-tooltip {
   margin-right: 8px;
 }
 
-/* Add copy button styling */
-.copy-button {
-    padding: 5px 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-    margin-bottom: 10px;
-}
-
-.copy-button:hover {
-    background-color: #218838;
-}
-
-/* Tree View Specific (merged and refined) */
-.tree-view {
-    font-family: 'Courier New', monospace;
-    line-height: 1.5;
-}
-
-.type-string { color: #4CAF50; }
-.type-number { color: #2196F3; }
-.type-boolean { color: #9C27B0; }
-.type-null { color: #666; }
-.type-object { color: #FF9800; }
-.type-array { color: #E91E63; }
 .tree-children {
   margin-left: 20px;
   overflow: hidden;
@@ -560,12 +452,6 @@ body.dark-mode .tree-key[title]:hover::after {
   margin-top: 10px;
 }
 
-.tree-context-menu {
-    position: fixed;
-    background: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-    z-index: 1000;
 .code-output.python {
   background-color: #0b2239;
   color: #dcdcdc;
@@ -581,26 +467,6 @@ body.dark-mode .tree-key[title]:hover::after {
   color: #d4d4d4;
 }
 
-.toggle-all-btn {
-    margin-left: 10px;
-    padding: 5px 10px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-/* Mock data preview */
-.markdown-preview {
-    font-family: Arial, sans-serif;
-    background: #fff;
-    padding: 1rem;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    max-height: 500px;
-    overflow-y: auto;
-    line-height: 1.6;
 .code-output .keyword {
   color: #569cd6;
   font-weight: bold;
@@ -1074,7 +940,6 @@ body.dark-mode .sidebar {
     align-items: stretch;
   }
 
-.mock-preview-table {
   .search-container input,
   .search-container button,
   .upload-download-container button {
@@ -1257,15 +1122,6 @@ body.dark-mode .mock-preview-table thead {
   border-bottom-color: #444;
 }
 
-/* Tab reordering css */
-.tab-button.dragging {
-    opacity: 0.5;
-    border: 2px dashed #007bff;
-}
-
-.tab-button.drag-over {
-    transform: translateY(2px) scale(1.02);
-    box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
 body.dark-mode .mock-preview-table th {
   color: #e0e0e0;
   background-color: #333;
