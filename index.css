@@ -137,7 +137,6 @@ textarea {
   flex-wrap: wrap;
 }
 /*Change made to make markdown preview text visible in dark mode*/
-/*Change made to make markdown preview text visible in dark mode*/
 body.dark-mode .toastui-editor-contents {
   color: #ffffff;
 }
