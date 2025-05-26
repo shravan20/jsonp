@@ -137,10 +137,14 @@ textarea {
   flex-wrap: wrap;
 }
 /*Change made to make markdown preview text visible in dark mode*/
-body.dark-mode .toastui-editor-contents p{
-  background-color: #121212; /* or any dark shade */
-  color: #ffffff; 
+/*Change made to make markdown preview text visible in dark mode*/
+body.dark-mode .toastui-editor-contents {
+  color: #ffffff;
 }
+body.dark-mode .toastui-editor-contents * {
+  color: #ffffff;
+}
+
 .preview-section {
   background-color: white;
   padding: 20px;
