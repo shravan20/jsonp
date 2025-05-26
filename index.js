@@ -1,4 +1,10 @@
-/* ========== Global Persistence Functions ========== */
+/**
+ * Determines the currently active feature mode in the UI.
+ *
+ * Checks the sidebar for an active feature item or, if none is found, inspects visible sections to identify the active mode. Returns one of: "formatter", "compare", "codegen", "convert", "mockgen", "editor", or defaults to "formatter" if no active mode is detected.
+ *
+ * @returns {string} The identifier of the currently active mode.
+ */
 function getActiveMode() {
   // Find the active feature item in the sidebar
   const activeFeature = document.querySelector(".feature-item.active");
@@ -25,6 +31,11 @@ function getActiveMode() {
   return "formatter"; // Default fallback
 }
 
+/**
+ * Saves the current UI state of the JSON tool to localStorage.
+ *
+ * Persists dark mode, active feature mode, and the state of formatter, compare, and codegen tabs, including their active tabs and content. This enables restoration of the user's session on reload.
+ */
 function saveGlobalState() {
   const state = {
     darkMode: document.body.classList.contains("dark-mode"),
@@ -199,7 +210,14 @@ function copyToClipboard(text, successMessage) {
     });
 }
 
-/* ========== Mode Selector ========== */
+/**
+ * Switches the application to the specified feature mode, updating visible sections, sidebar state, and relevant UI components.
+ *
+ * @param {string} mode - The feature mode to activate (e.g., "formatter", "compare", "codegen", "convert", "mockgen", "editor").
+ *
+ * @remark
+ * When switching to "mockgen", documentation is rendered; when switching to "editor", editor state is loaded.
+ */
 function switchMode(mode) {
   const sections = [
     "formatter",
@@ -248,6 +266,13 @@ function addFormatterTab() {
   saveGlobalState();
 }
 
+/**
+ * Creates a new JSON formatter tab in the UI, optionally restoring its state from provided data.
+ *
+ * If {@link tabData} is supplied, the tab's name, color, and content are initialized accordingly. The tab includes features for JSON input, searching, uploading, downloading, previewing in raw or tree view, error display, and copying content. Event listeners are set up for formatting, preview updates, and tab renaming. Tab reordering is enabled after creation.
+ *
+ * @param {Object} [tabData=null] - Optional data to restore the tab's name, color, and content.
+ */
 function createFormatterTab(tabData = null) {
   formatterTabCount++;
   const tabId = "formatterTab" + formatterTabCount;
@@ -329,6 +354,11 @@ function createFormatterTab(tabData = null) {
   enableTabReordering("formatter-tabs-container");
 }
 
+/**
+ * Activates the specified formatter tab and updates the UI to reflect the active tab.
+ *
+ * @param {string} tabId - The ID of the formatter tab to activate.
+ */
 function switchFormatterTab(tabId) {
   document
     .querySelectorAll("#formatter-tab-contents .json-tab-content")
@@ -368,6 +398,12 @@ function updateFormatterPreview(tabId) {
   saveGlobalState();
 }
 
+/**
+ * Displays the selected preview type (raw, tree, or error) for a formatter tab and updates the active state of preview buttons.
+ *
+ * @param {string} tabId - The ID of the formatter tab.
+ * @param {string} previewType - The type of preview to show ("raw", "tree", or "error").
+ */
 function showFormatterPreviewTab(tabId, previewType) {
   const tabContent = document.getElementById(tabId);
   const previews = tabContent.querySelectorAll(".preview-section");
@@ -386,6 +422,13 @@ function showFormatterPreviewTab(tabId, previewType) {
   });
 }
 
+/**
+ * Highlights search matches in the raw JSON and tree view previews for a formatter tab.
+ *
+ * Removes previous highlights, then highlights all occurrences of the search input in the active preview (raw or tree view) for the specified tab. Updates the global state after highlighting.
+ *
+ * @param {string} tabId - The ID of the formatter tab to search within.
+ */
 function searchFormatterJSON(tabId) {
   const tabContent = document.getElementById(tabId);
   const searchInput = tabContent
@@ -468,6 +511,14 @@ function downloadFormatterJSON(tabId) {
   URL.revokeObjectURL(url);
 }
 
+/**
+ * Closes a formatter tab after user confirmation.
+ *
+ * Prompts the user to confirm tab closure, removes the tab and its content if confirmed, switches to the last remaining tab if any, and updates the saved global state.
+ *
+ * @param {string} tabId - The ID of the formatter tab to close.
+ * @param {Event} [event] - Optional event object to prevent default tab closing behavior.
+ */
 async function closeFormatterTab(tabId, event) {
   if (event) {
     event.stopPropagation();
@@ -508,6 +559,11 @@ function addCompareTab() {
   saveGlobalState();
 }
 
+/**
+ * Creates a new compare tab for side-by-side JSON comparison.
+ *
+ * Adds a tab button and content area with two JSON input fields, a compare button, and a result display. Sets up event listeners for auto-formatting pasted or blurred input, enables tab renaming, and allows tab reordering. Saves the updated global state after creation.
+ */
 function createCompareTab() {
   compareTabCount++;
   const tabId = "compareTab" + compareTabCount;
@@ -550,7 +606,11 @@ function createCompareTab() {
   saveGlobalState();
   enableTabReordering("compare-tabs-container");
 }
-// Create Compare tab using saved data
+/**
+ * Creates a compare tab using saved tab data, restoring its name and JSON input contents.
+ *
+ * @param {Object} tabData - The saved tab data containing the tab's ID, name, and left/right JSON contents.
+ */
 function createCompareTabWithData(tabData) {
   compareTabCount++;
   const tabId = tabData.id;
@@ -594,6 +654,13 @@ function createCompareTabWithData(tabData) {
   enableTabReordering("compare-tabs-container");
 }
 
+/**
+ * Activates the specified compare tab and updates the UI to reflect the selection.
+ *
+ * Updates the active state of both the tab content and its corresponding tab button, then saves the current global state.
+ *
+ * @param {string} tabId - The ID of the compare tab to activate.
+ */
 function switchCompareTab(tabId) {
   document
     .querySelectorAll("#compare-tab-contents .json-tab-content")
@@ -643,6 +710,15 @@ function compareJSONs(tabId) {
   saveGlobalState();
 }
 
+/**
+ * Generates an HTML table displaying a side-by-side line-by-line diff of two JSON strings.
+ *
+ * Lines that differ are highlighted with a background color based on the current theme (dark or light mode).
+ *
+ * @param {string} leftText - The first JSON string to compare.
+ * @param {string} rightText - The second JSON string to compare.
+ * @returns {string} HTML markup representing the diff table.
+ */
 function diffJSONsPreview(leftText, rightText) {
   const isDarkMode = document.body.classList.contains("dark-mode");
   // Choose a diff color based on the theme:
@@ -673,6 +749,14 @@ function diffJSONsPreview(leftText, rightText) {
   return html;
 }
 
+/**
+ * Closes a compare tab after user confirmation and updates the UI and saved state.
+ *
+ * Prompts the user to confirm tab closure. If confirmed, removes the tab and its content, switches to the last remaining compare tab if any, and saves the updated global state.
+ *
+ * @param {string} tabId - The ID of the compare tab to close.
+ * @param {Event} [event] - Optional event object to prevent default tab closing behavior.
+ */
 async function closeCompareTab(tabId, event) {
   if (event) {
     event.stopPropagation();
@@ -713,6 +797,11 @@ function addCodegenTab() {
   saveGlobalState();
 }
 
+/**
+ * Creates a new code generation tab for converting JSON input into code in various languages.
+ *
+ * Adds a tab button and content area for JSON input, language selection, code generation, and output display. Sets up event listeners for formatting and tab management, and updates the global state.
+ */
 function createCodegenTab() {
   codegenTabCount++;
   const tabId = "codegenTab" + codegenTabCount;
@@ -756,6 +845,13 @@ function createCodegenTab() {
   saveGlobalState();
 }
 
+/**
+ * Creates a code generation tab initialized with provided data.
+ *
+ * Restores a codegen tab's state, including its name, JSON input, and selected language, and inserts it into the UI. Enables tab renaming, reordering, and auto-formatting of JSON input.
+ *
+ * @param {Object} tabData - The saved tab data containing `id`, `name`, `input`, and `lang` properties.
+ */
 function createCodegenTabWithData(tabData) {
   codegenTabCount++;
   const tabId = tabData.id;
@@ -800,6 +896,11 @@ function createCodegenTabWithData(tabData) {
   enableTabReordering("codegen-tabs-container");
 }
 
+/**
+ * Activates the specified code generation tab and updates the UI to reflect the selection.
+ *
+ * @param {string} tabId - The ID of the codegen tab to activate.
+ */
 function switchCodegenTab(tabId) {
   document
     .querySelectorAll("#codegen-tab-contents .json-tab-content")
@@ -841,6 +942,14 @@ function generateCode(tabId) {
   saveGlobalState();
 }
 
+/**
+ * Closes a code generation tab after user confirmation.
+ *
+ * Prompts the user to confirm closing the specified codegen tab. If confirmed, removes the tab and its content, switches to the last remaining codegen tab if any, and updates the global state.
+ *
+ * @param {string} tabId - The ID of the codegen tab to close.
+ * @param {Event} [event] - Optional event object to prevent default tab closing behavior.
+ */
 async function closeCodegenTab(tabId, event) {
   if (event) {
     event.stopPropagation();
@@ -882,6 +991,14 @@ function autoFormatTextarea(textarea) {
   }
 }
 
+/**
+ * Renders an interactive, collapsible tree view of JSON data within a specified DOM element.
+ *
+ * The tree view supports keyboard navigation (arrow keys), context menus for copying the path or value of any node, and visual distinction between objects, arrays, and primitive values.
+ *
+ * @param {*} data - The JSON-compatible data to display as a tree.
+ * @param {HTMLElement} parentElement - The DOM element where the tree view will be rendered.
+ */
 function createTreeView(data, parentElement) {
   parentElement.innerHTML = "";
   const focusedNode = null;
@@ -1039,6 +1156,14 @@ function createTreeView(data, parentElement) {
   processNode(data, parentElement);
 }
 
+/**
+ * Displays an input tooltip for renaming a tab in the specified mode.
+ *
+ * Shows a positioned input field below the selected tab button, allowing the user to rename the tab. The rename is applied on Enter or blur, and canceled on Escape. Updates the tab name and saves the global state after renaming.
+ *
+ * @param {string} tabId - The identifier of the tab to rename.
+ * @param {string} mode - The feature mode ("formatter", "compare", "codegen", or "editor") to determine the tab container.
+ */
 function openTabRenameTooltip(tabId, mode) {
   let containerSelector;
   if (mode === "formatter") containerSelector = "#formatter-tabs-container";
@@ -1079,6 +1204,15 @@ function openTabRenameTooltip(tabId, mode) {
   }
 }
 
+/**
+ * Generates TypeScript interface definitions from a JSON object structure.
+ *
+ * Recursively traverses the provided object and produces TypeScript interfaces, including nested interfaces for objects and arrays of objects.
+ *
+ * @param {object} obj - The JSON object to convert into TypeScript interfaces.
+ * @param {string} interfaceName - The name of the root interface to generate.
+ * @returns {string} TypeScript interface definitions representing the structure of {@link obj}.
+ */
 function generateTypeScript(obj, interfaceName) {
   let result = `interface ${interfaceName} {\n`;
   for (const key in obj) {
@@ -1111,6 +1245,15 @@ function generateTypeScript(obj, interfaceName) {
   return result;
 }
 
+/**
+ * Generates Python dataclass definitions from a JSON object structure.
+ *
+ * Recursively creates nested dataclasses for objects and lists of objects, inferring field types based on the input data.
+ *
+ * @param {object} obj - The JSON object to convert into Python dataclasses.
+ * @param {string} className - The name of the root dataclass.
+ * @returns {string} Python code defining the dataclasses representing the structure of {@link obj}.
+ */
 function generatePython(obj, className) {
   let result =
     "from dataclasses import dataclass\nfrom typing import Any, List\n\n";
@@ -1198,6 +1341,13 @@ function capitalize(str) {
 /* ========== Convert to Dict Functions ========== */
 let currentConvertMode = "dict-to-json";
 
+/**
+ * Switches the conversion mode between Python dict and JSON, updating the UI accordingly.
+ *
+ * Clears the input and output fields and highlights the active conversion direction tab.
+ *
+ * @param {string} mode - The conversion mode, either "dict-to-json" or "json-to-dict".
+ */
 function switchConvertDirection(mode) {
   currentConvertMode = mode;
   document.querySelectorAll("#convert-section .tab-button").forEach((btn) => {
@@ -1270,6 +1420,11 @@ const presets = {
   },
 };
 
+/**
+ * Loads a predefined mock schema preset into the mock schema input field.
+ *
+ * @param {string} name - The name of the preset to load.
+ */
 function loadMockPreset(name) {
   if (presets[name]) {
     document.getElementById("mock-schema-input").value = JSON.stringify(
@@ -1280,6 +1435,11 @@ function loadMockPreset(name) {
   }
 }
 
+/**
+ * Generates mock data records based on a user-defined schema and updates the UI with the results.
+ *
+ * Parses the schema input as JSON, generates the specified number of mock data records using the schema, and displays the output. If the schema is invalid, an error message is shown instead.
+ */
 function generateMockData() {
   const input = document.getElementById("mock-schema-input").value;
   const count = Number.parseInt(
@@ -1305,7 +1465,16 @@ function generateMockData() {
     outputContainer.innerHTML = `<pre class="code-output">❌ Error: ${e.message}</pre>`;
   }
 }
-/* global faker */
+/**
+ * Resolves a dot-separated faker.js path string and invokes the corresponding faker function.
+ *
+ * @param {string} path - Dot-separated path to a faker.js function (e.g., "internet.email").
+ * @returns {*} The value returned by the resolved faker function.
+ *
+ * @throws {Error} If {@link path} is empty.
+ * @throws {Error} If the path does not exist on the faker object.
+ * @throws {Error} If the resolved path does not point to a function.
+ */
 function resolveFakerPath(path) {
   if (!path) throw new Error("Empty faker path");
   const parts = path.split(".");
@@ -1318,6 +1487,14 @@ function resolveFakerPath(path) {
   throw new Error(`Faker path "${path}" does not resolve to a function`);
 }
 
+/**
+ * Recursively generates mock data based on a schema definition.
+ *
+ * Supports arrays, objects, and primitive schema types. String schema values can specify booleans, number ranges (e.g., "number|1-10"), or faker.js paths for realistic mock data. Nested structures are handled recursively.
+ *
+ * @param {any} schema - The schema definition describing the structure and types of the mock data.
+ * @returns {any} Mock data matching the provided schema.
+ */
 function mockFromSchema(schema) {
   if (Array.isArray(schema)) {
     return schema.map((item) => mockFromSchema(item));
@@ -1341,6 +1518,11 @@ function mockFromSchema(schema) {
   return schema;
 }
 
+/**
+ * Updates the mock data output display based on the selected view mode.
+ *
+ * Renders the generated mock data as either formatted JSON or an HTML table, depending on the user's selection.
+ */
 function updateMockView() {
   const mode = document.querySelector(
     'input[name="mock-view-mode"]:checked'
@@ -1362,6 +1544,14 @@ function updateMockView() {
   }
 }
 
+/**
+ * Creates an HTML table element representing an array of objects as tabular data.
+ *
+ * If the input is not a non-empty array of objects, returns a table with a single cell indicating no data is available. Each object property becomes a column, and each object becomes a row. Cells and headers include a tooltip with their full content. Rows with an `error` property are styled with an "error" class.
+ *
+ * @param {Array<Object>} data - The array of objects to render as a table.
+ * @returns {HTMLTableElement} An HTML table displaying the provided data.
+ */
 function renderTableFromJson(data) {
   const table = document.createElement("table");
   table.className = "mock-preview-table";
@@ -1418,6 +1608,12 @@ function renderTableFromJson(data) {
   return table;
 }
 
+/**
+ * Copies the generated mock data to the clipboard in either JSON or CSV format.
+ *
+ * @param {string} [format="json"] - The output format to copy ("json" or "csv").
+ * @remark If the mock data is empty or not an array of objects, copying as CSV is skipped.
+ */
 function copyMockOutput(format = "json") {
   let text = "";
   if (format === "json") {
@@ -1457,6 +1653,16 @@ document.getElementById("userInput").addEventListener("input", (e) => {
   //console.log("Saved input:", userInputValue); // Optional: see it live
 });
 
+/**
+ * Exports the most recently generated mock data as a JSON or CSV file.
+ *
+ * Uses the user-provided filename if available, otherwise defaults to "mock_data". If exporting as JSON and only one record exists, exports a single object; otherwise, exports an array. For CSV, only the first object's keys are used as headers.
+ *
+ * @param {string} [format="json"] - The export format, either "json" or "csv".
+ *
+ * @remark
+ * If no mock data is available, the function does nothing.
+ */
 function exportMockOutput(format = "json") {
   if (!Array.isArray(latestMockData) || latestMockData.length === 0) {
     console.error("No data available to export.");
@@ -1520,6 +1726,11 @@ const mockgenDocs = `
   \`\`\`
   `;
 
+/**
+ * Switches between the mock schema input panel and the documentation panel in the mock data generator section.
+ *
+ * @param {string} tab - The tab to activate, either "schema" or "docs".
+ */
 function switchMockTab(tab) {
   const schemaPanel = document.getElementById("mockgen-schema-panel");
   const docsPanel = document.getElementById("mockgen-docs-panel");
@@ -1539,6 +1750,9 @@ function switchMockTab(tab) {
   }
 }
 
+/**
+ * Renders the mock data generator documentation as HTML in the documentation preview area.
+ */
 function renderMockgenDocs() {
   document.getElementById("mockgen-docs-preview").innerHTML =
     marked.parse(mockgenDocs);
@@ -1548,6 +1762,15 @@ function renderMockgenDocs() {
 let editorTabCount = 0;
 const editorInstances = {};
 
+/**
+ * Creates a new markdown editor tab with a Toast UI Editor instance.
+ *
+ * If tab data is provided, restores the tab's ID, title, and content; otherwise, creates a new tab with a default title and unique ID. Sets up tab button actions for switching, renaming, and closing. Initializes the editor with saved content if available, enables tab reordering, and applies dark mode styling.
+ *
+ * @param {Object} [tabData=null] - Optional tab data for restoring a previously saved editor tab.
+ * @param {string} [tabData.id] - The unique identifier for the tab.
+ * @param {string} [tabData.title] - The display title for the tab.
+ */
 function addEditorTab(tabData = null) {
   let tabId;
   if (tabData?.id) {
@@ -1606,6 +1829,11 @@ function addEditorTab(tabData = null) {
   applyEditorTabDarkMode();
 }
 
+/**
+ * Activates the specified markdown editor tab and updates the global editor state.
+ *
+ * @param {string} tabId - The ID of the editor tab to activate.
+ */
 function switchEditorTab(tabId) {
   document
     .querySelectorAll("#editor-tab-contents .json-tab-content")
@@ -1634,6 +1862,14 @@ function saveEditorContent(tabId) {
   });
 }
 
+/**
+ * Deletes a markdown editor tab after user confirmation.
+ *
+ * Removes the tab's content from localStorage, deletes its editor instance, removes associated UI elements, switches to another tab if any remain, and updates the global editor state.
+ *
+ * @param {string} tabId - The identifier of the editor tab to delete.
+ * @param {Event} [event] - Optional event object to prevent default tab closing behavior.
+ */
 async function deleteEditorTab(tabId, event) {
   if (event) {
     event.stopPropagation();
@@ -1664,6 +1900,11 @@ async function deleteEditorTab(tabId, event) {
   updateEditorGlobalState();
 }
 
+/**
+ * Saves the current state of the markdown editor tabs, including the active tab and tab titles, to localStorage.
+ *
+ * The saved state includes the ID of the active tab and an array of all editor tabs with their IDs and titles.
+ */
 function updateEditorGlobalState() {
   const state = {
     activeTab:
@@ -1681,6 +1922,11 @@ function updateEditorGlobalState() {
   localStorage.setItem("editorState", JSON.stringify(state));
 }
 
+/**
+ * Restores markdown editor tabs and their content from saved state in localStorage.
+ *
+ * If no saved state exists, creates a default editor tab. Activates the previously active tab if available.
+ */
 function loadEditorGlobalState() {
   const stateStr = localStorage.getItem("editorState");
   const container = document.getElementById("editor-tabs-container");
@@ -1752,7 +1998,11 @@ function applyEditorTabDarkMode() {
   });
 }
 
-/* ========== Mobile Sidebar Functions ========== */
+/**
+ * Toggles the visibility of the sidebar on mobile devices.
+ *
+ * When the sidebar is opened, clicking outside of it or the toggle button will close it.
+ */
 function toggleSidebar() {
   const sidebar = document.querySelector(".sidebar");
   sidebar.classList.toggle("active");
@@ -1798,6 +2048,11 @@ document.addEventListener("DOMContentLoaded", () => {
     false
   );
 
+  /**
+   * Handles swipe gestures to open or close the sidebar on mobile devices.
+   *
+   * Opens the sidebar when a right swipe is detected near the left edge of the screen, and closes it when a left swipe is detected while the sidebar is open.
+   */
   function handleSwipe() {
     const swipeThreshold = 50;
     const swipeLength = touchEndX - touchStartX;
@@ -1822,6 +2077,11 @@ function toggleShortcutModal() {
   modal.style.display = modal.style.display === "block" ? "none" : "block";
 }
 
+/**
+ * Toggles dark mode for the application and updates the UI accordingly.
+ *
+ * If the Compare section is visible, all JSON diff previews are refreshed to reflect the new theme.
+ */
 function toggleDarkMode() {
   document.body.classList.toggle("dark-mode");
   saveGlobalState();
@@ -1872,7 +2132,14 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* ========== Tab reordering ========== */
+/**
+ * Enables drag-and-drop reordering of tab buttons within a specified container.
+ *
+ * @param {string} containerId - The ID of the container element holding the tab buttons.
+ *
+ * @remark
+ * Tab order changes are persisted by calling {@link saveGlobalState} after a successful reorder.
+ */
 function enableTabReordering(containerId) {
   const container = document.getElementById(containerId);
   const tabButtons = container.querySelectorAll(".tab-button[data-tab]");
