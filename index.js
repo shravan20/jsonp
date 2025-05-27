@@ -327,6 +327,7 @@ function createFormatterTab(tabData = null) {
   textarea.addEventListener("input", () => updateFormatterPreview(tabId));
   updateFormatterPreview(tabId);
   enableTabReordering("formatter-tabs-container");
+  applyTabButtonTheme();
 }
 
 function switchFormatterTab(tabId) {
@@ -1548,6 +1549,16 @@ function renderMockgenDocs() {
 let editorTabCount = 0;
 const editorInstances = {};
 
+function applyTabButtonTheme() {
+  const isDark = document.body.classList.contains("dark-mode");
+  const buttons = document.querySelectorAll(".tab-button[data-tab]");
+
+  buttons.forEach((button) => {
+    button.style.backgroundColor = isDark ? "#2a2a2a" : "#ffffff";
+    button.style.color = isDark ? "#ffffff" : "#000000";
+  });
+}
+
 function addEditorTab(tabData = null) {
   let tabId;
   if (tabData?.id) {
@@ -1824,6 +1835,7 @@ function toggleShortcutModal() {
 
 function toggleDarkMode() {
   document.body.classList.toggle("dark-mode");
+  applyTabButtonTheme();
   saveGlobalState();
   // If the Compare section is visible, update all diff previews
   if (document.getElementById("compare-section").style.display !== "none") {
