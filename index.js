@@ -1149,28 +1149,14 @@ function copyConvertOutput() {
 /* ========== Mock data generator ========== */
 
 let latestMockData = [];
-const presets = {
-  User: {
-    id: "number|1000-9999",
-    name: "name.fullName",
-    email: "internet.email",
-    isActive: "boolean",
-  },
-  Product: {
-    id: "number|1-1000",
-    title: "commerce.productName",
-    price: "number|10-500",
-    available: "boolean",
-  },
-};
 
 function loadMockPreset(name) {
   if (!name) return;
-
-  const preset = presets.mockgen[name];
+  
+  const preset = window.PRESETS.mockgen[name];
   if (!preset) return;
 
-  const schemaInput = document.getElementById("mock-schema-input");
+  const schemaInput = document.getElementById('mock-schema-input');
   if (schemaInput) {
     schemaInput.value = JSON.stringify(preset.schema, null, 2);
   }
