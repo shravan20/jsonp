@@ -26,6 +26,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
+    <script src="presets.js"></script>
   </head>
 
   <body>
@@ -99,6 +100,9 @@
             <button class="add-tab-button" onclick="addFormatterTab()">
               + Add Tab
             </button>
+            <select onchange="loadFormatterPreset(this.value)" class="preset-select">
+              <option value="">-- Load Preset --</option>
+            </select>
           </div>
           <div id="formatter-tab-contents">
             <!-- Formatter tab contents will be dynamically added here -->
@@ -111,6 +115,9 @@
             <button class="add-tab-button" onclick="addCompareTab()">
               + Add Tab
             </button>
+            <select onchange="loadComparePreset(this.value)" class="preset-select">
+              <option value="">-- Load Preset --</option>
+            </select>
           </div>
           <div id="compare-tab-contents">
             <!-- Compare tab contents will be dynamically added here -->
@@ -123,6 +130,9 @@
             <button class="add-tab-button" onclick="addCodegenTab()">
               + Add Tab
             </button>
+            <select onchange="loadCodegenPreset(this.value)" class="preset-select">
+              <option value="">-- Load Preset --</option>
+            </select>
           </div>
           <div id="codegen-tab-contents">
             <!-- CodeGen tab contents will be dynamically added here -->

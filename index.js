@@ -10,18 +10,12 @@ function getActiveMode() {
   }
 
   // Fallback to checking sections
-  if (document.getElementById("formatter-section").style.display !== "none")
-    return "formatter";
-  if (document.getElementById("compare-section").style.display !== "none")
-    return "compare";
-  if (document.getElementById("codegen-section").style.display !== "none")
-    return "codegen";
-  if (document.getElementById("convert-section").style.display !== "none")
-    return "convert";
-  if (document.getElementById("mockgen-section").style.display !== "none")
-    return "mockgen";
-  if (document.getElementById("editor-section").style.display !== "none")
-    return "editor";
+  if (document.getElementById("formatter-section").style.display !== "none") return "formatter";
+  if (document.getElementById("compare-section").style.display !== "none") return "compare";
+  if (document.getElementById("codegen-section").style.display !== "none") return "codegen";
+  if (document.getElementById("convert-section").style.display !== "none") return "convert";
+  if (document.getElementById("mockgen-section").style.display !== "none") return "mockgen";
+  if (document.getElementById("editor-section").style.display !== "none") return "editor";
   return "formatter"; // Default fallback
 }
 
@@ -31,75 +25,58 @@ function saveGlobalState() {
     activeMode: getActiveMode(),
     formatter: {
       activeTab:
-        document.querySelector(
-          "#formatter-tab-contents .json-tab-content.active"
-        )?.id || "",
+        document.querySelector("#formatter-tab-contents .json-tab-content.active")?.id || "",
       tabs: [],
       activeFeatureTab: {}, // Store active feature tab (Raw/Tree/Error) for each formatter tab
     },
     compare: {
-      activeTab:
-        document.querySelector("#compare-tab-contents .json-tab-content.active")
-          ?.id || "",
+      activeTab: document.querySelector("#compare-tab-contents .json-tab-content.active")?.id || "",
       tabs: [],
     },
     codegen: {
-      activeTab:
-        document.querySelector("#codegen-tab-contents .json-tab-content.active")
-          ?.id || "",
+      activeTab: document.querySelector("#codegen-tab-contents .json-tab-content.active")?.id || "",
       tabs: [],
     },
   };
   // Formatter tabs
-  document
-    .querySelectorAll("#formatter-tabs-container .tab-button[data-tab]")
-    .forEach((btn) => {
-      const tabId = btn.getAttribute("data-tab");
-      const name = btn.querySelector(".tab-name").textContent;
-      const color = btn.querySelector(".tab-color-picker")?.value || "#e0e0e0";
-      const content =
-        document.querySelector("#" + tabId + " .json-input")?.value || "";
-      state.formatter.tabs.push({
-        id: tabId,
-        name,
-        color,
-        content,
-      });
+  document.querySelectorAll("#formatter-tabs-container .tab-button[data-tab]").forEach((btn) => {
+    const tabId = btn.getAttribute("data-tab");
+    const name = btn.querySelector(".tab-name").textContent;
+    const color = btn.querySelector(".tab-color-picker")?.value || "#e0e0e0";
+    const content = document.querySelector("#" + tabId + " .json-input")?.value || "";
+    state.formatter.tabs.push({
+      id: tabId,
+      name,
+      color,
+      content,
     });
+  });
   // Compare tabs
-  document
-    .querySelectorAll("#compare-tabs-container .tab-button[data-tab]")
-    .forEach((btn) => {
-      const tabId = btn.getAttribute("data-tab");
-      const name = btn.querySelector(".tab-name").textContent;
-      const leftContent =
-        document.querySelector("#" + tabId + " .json-input-left")?.value || "";
-      const rightContent =
-        document.querySelector("#" + tabId + " .json-input-right")?.value || "";
-      state.compare.tabs.push({
-        id: tabId,
-        name,
-        leftContent,
-        rightContent,
-      });
+  document.querySelectorAll("#compare-tabs-container .tab-button[data-tab]").forEach((btn) => {
+    const tabId = btn.getAttribute("data-tab");
+    const name = btn.querySelector(".tab-name").textContent;
+    const leftContent = document.querySelector("#" + tabId + " .json-input-left")?.value || "";
+    const rightContent = document.querySelector("#" + tabId + " .json-input-right")?.value || "";
+    state.compare.tabs.push({
+      id: tabId,
+      name,
+      leftContent,
+      rightContent,
     });
+  });
   // Codegen tabs
-  document
-    .querySelectorAll("#codegen-tabs-container .tab-button[data-tab]")
-    .forEach((btn) => {
-      const tabId = btn.getAttribute("data-tab");
-      const name = btn.querySelector(".tab-name").textContent;
-      const input =
-        document.querySelector("#" + tabId + " .json-input")?.value || "";
-      const lang =
-        document.getElementById("lang-select-" + tabId)?.value || "typescript";
-      state.codegen.tabs.push({
-        id: tabId,
-        name,
-        input,
-        lang,
-      });
+  document.querySelectorAll("#codegen-tabs-container .tab-button[data-tab]").forEach((btn) => {
+    const tabId = btn.getAttribute("data-tab");
+    const name = btn.querySelector(".tab-name").textContent;
+    const input = document.querySelector("#" + tabId + " .json-input")?.value || "";
+    const lang = document.getElementById("lang-select-" + tabId)?.value || "typescript";
+    state.codegen.tabs.push({
+      id: tabId,
+      name,
+      input,
+      lang,
     });
+  });
   localStorage.setItem("jsonToolState", JSON.stringify(state));
 }
 
@@ -201,14 +178,7 @@ function copyToClipboard(text, successMessage) {
 
 /* ========== Mode Selector ========== */
 function switchMode(mode) {
-  const sections = [
-    "formatter",
-    "compare",
-    "codegen",
-    "convert",
-    "mockgen",
-    "editor",
-  ];
+  const sections = ["formatter", "compare", "codegen", "convert", "mockgen", "editor"];
   sections.forEach((s) => {
     const section = document.getElementById(`${s}-section`);
     if (section) {
@@ -225,9 +195,7 @@ function switchMode(mode) {
   document.querySelectorAll(".feature-item").forEach((item) => {
     item.classList.remove("active");
   });
-  document
-    .querySelector(`.feature-item[onclick*="${mode}"]`)
-    ?.classList.add("active");
+  document.querySelector(`.feature-item[onclick*="${mode}"]`)?.classList.add("active");
 
   if (mode === "mockgen") {
     renderMockgenDocs();
@@ -265,9 +233,7 @@ function createFormatterTab(tabData = null) {
                <input type="color" class="tab-color-picker" value="${tabColor}" onchange="updateFormatterTabColor('${tabId}', this.value)">
                <span class="close-tab" onclick="closeFormatterTab('${tabId}', event)">×</span>`;
 
-  tabButton.addEventListener("dblclick", () =>
-    openTabRenameTooltip(tabId, "formatter")
-  );
+  tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "formatter"));
 
   const tabsContainer = document.getElementById("formatter-tabs-container");
   const addButton = tabsContainer.querySelector(".add-tab-button");
@@ -320,9 +286,7 @@ function createFormatterTab(tabData = null) {
     tabContent.querySelector(".json-input").value = tabData.content;
   }
   const textarea = tabContent.querySelector(".json-input");
-  textarea.addEventListener("paste", () =>
-    setTimeout(() => autoFormatTextarea(textarea), 100)
-  );
+  textarea.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(textarea), 100));
   textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
   textarea.addEventListener("input", () => updateFormatterPreview(tabId));
   updateFormatterPreview(tabId);
@@ -336,11 +300,9 @@ function switchFormatterTab(tabId) {
     .forEach((tab) => tab.classList.remove("active"));
   const selectedTab = document.getElementById(tabId);
   if (selectedTab) selectedTab.classList.add("active");
-  document
-    .querySelectorAll("#formatter-tabs-container .tab-button[data-tab]")
-    .forEach((btn) => {
-      btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
-    });
+  document.querySelectorAll("#formatter-tabs-container .tab-button[data-tab]").forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+  });
   saveGlobalState();
 }
 
@@ -373,26 +335,17 @@ function showFormatterPreviewTab(tabId, previewType) {
   const tabContent = document.getElementById(tabId);
   const previews = tabContent.querySelectorAll(".preview-section");
   previews.forEach((section) => {
-    section.classList.toggle(
-      "active",
-      section.id === `${tabId}-${previewType}-preview`
-    );
+    section.classList.toggle("active", section.id === `${tabId}-${previewType}-preview`);
   });
   const buttons = tabContent.querySelectorAll(".tabs .tab-button");
   buttons.forEach((btn) => {
-    btn.classList.toggle(
-      "active",
-      btn.textContent.toLowerCase().includes(previewType)
-    );
+    btn.classList.toggle("active", btn.textContent.toLowerCase().includes(previewType));
   });
 }
 
 function searchFormatterJSON(tabId) {
   const tabContent = document.getElementById(tabId);
-  const searchInput = tabContent
-    .querySelector(".search-input")
-    .value.trim()
-    .toLowerCase();
+  const searchInput = tabContent.querySelector(".search-input").value.trim().toLowerCase();
   const rawPreview = tabContent.querySelector(".raw-json");
   const treeView = tabContent.querySelector(".tree-view");
   tabContent.querySelectorAll(".highlight").forEach((el) => {
@@ -400,16 +353,10 @@ function searchFormatterJSON(tabId) {
     parent.replaceChild(document.createTextNode(el.textContent), el);
   });
   if (!searchInput) return;
-  const regex = new RegExp(
-    `(${searchInput.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
-    "gi"
-  );
+  const regex = new RegExp(`(${searchInput.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi");
   if (rawPreview.classList.contains("active")) {
     const content = rawPreview.textContent;
-    rawPreview.innerHTML = content.replace(
-      regex,
-      '<span class="highlight">$1</span>'
-    );
+    rawPreview.innerHTML = content.replace(regex, '<span class="highlight">$1</span>');
   }
   if (treeView.classList.contains("active")) {
     function highlightNode(node) {
@@ -417,10 +364,7 @@ function searchFormatterJSON(tabId) {
         const matches = node.nodeValue.match(regex);
         if (matches) {
           const span = document.createElement("span");
-          span.innerHTML = node.nodeValue.replace(
-            regex,
-            '<span class="highlight">$1</span>'
-          );
+          span.innerHTML = node.nodeValue.replace(regex, '<span class="highlight">$1</span>');
           node.parentNode.replaceChild(span, node);
         }
       } else if (node.nodeType === Node.ELEMENT_NODE && node.childNodes) {
@@ -492,11 +436,8 @@ async function closeFormatterTab(tabId, event) {
   const tabContent = document.getElementById(tabId);
   if (tabButton) tabButton.remove();
   if (tabContent) tabContent.remove();
-  const remaining = document.querySelectorAll(
-    "#formatter-tab-contents .json-tab-content"
-  );
-  if (remaining.length > 0)
-    switchFormatterTab(remaining[remaining.length - 1].id);
+  const remaining = document.querySelectorAll("#formatter-tab-contents .json-tab-content");
+  if (remaining.length > 0) switchFormatterTab(remaining[remaining.length - 1].id);
   saveGlobalState();
 }
 
@@ -519,9 +460,7 @@ function createCompareTab() {
   tabButton.onclick = () => switchCompareTab(tabId);
   tabButton.innerHTML = `<span class="tab-name">Tab ${compareTabCount}</span>
                <span class="close-tab" onclick="closeCompareTab('${tabId}', event)">×</span>`;
-  tabButton.addEventListener("dblclick", () =>
-    openTabRenameTooltip(tabId, "compare")
-  );
+  tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "compare"));
   const tabsContainer = document.getElementById("compare-tabs-container");
   const addButton = tabsContainer.querySelector(".add-tab-button");
   tabsContainer.insertBefore(tabButton, addButton);
@@ -540,13 +479,9 @@ function createCompareTab() {
   document.getElementById("compare-tab-contents").appendChild(tabContent);
   const leftTA = tabContent.querySelector(".json-input-left");
   const rightTA = tabContent.querySelector(".json-input-right");
-  leftTA.addEventListener("paste", () =>
-    setTimeout(() => autoFormatTextarea(leftTA), 100)
-  );
+  leftTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(leftTA), 100));
   leftTA.addEventListener("blur", () => autoFormatTextarea(leftTA));
-  rightTA.addEventListener("paste", () =>
-    setTimeout(() => autoFormatTextarea(rightTA), 100)
-  );
+  rightTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(rightTA), 100));
   rightTA.addEventListener("blur", () => autoFormatTextarea(rightTA));
   saveGlobalState();
   enableTabReordering("compare-tabs-container");
@@ -561,9 +496,7 @@ function createCompareTabWithData(tabData) {
   tabButton.onclick = () => switchCompareTab(tabId);
   tabButton.innerHTML = `<span class="tab-name">${tabData.name}</span>
                <span class="close-tab" onclick="closeCompareTab('${tabId}', event)">×</span>`;
-  tabButton.addEventListener("dblclick", () =>
-    openTabRenameTooltip(tabId, "compare")
-  );
+  tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "compare"));
   const tabsContainer = document.getElementById("compare-tabs-container");
   const addButton = tabsContainer.querySelector(".add-tab-button");
   tabsContainer.insertBefore(tabButton, addButton);
@@ -583,13 +516,9 @@ function createCompareTabWithData(tabData) {
   const rightTA = tabContent.querySelector(".json-input-right");
   leftTA.value = tabData.leftContent;
   rightTA.value = tabData.rightContent;
-  leftTA.addEventListener("paste", () =>
-    setTimeout(() => autoFormatTextarea(leftTA), 100)
-  );
+  leftTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(leftTA), 100));
   leftTA.addEventListener("blur", () => autoFormatTextarea(leftTA));
-  rightTA.addEventListener("paste", () =>
-    setTimeout(() => autoFormatTextarea(rightTA), 100)
-  );
+  rightTA.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(rightTA), 100));
   rightTA.addEventListener("blur", () => autoFormatTextarea(rightTA));
   saveGlobalState();
   enableTabReordering("compare-tabs-container");
@@ -601,11 +530,9 @@ function switchCompareTab(tabId) {
     .forEach((tab) => tab.classList.remove("active"));
   const selectedTab = document.getElementById(tabId);
   if (selectedTab) selectedTab.classList.add("active");
-  document
-    .querySelectorAll("#compare-tabs-container .tab-button[data-tab]")
-    .forEach((btn) => {
-      btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
-    });
+  document.querySelectorAll("#compare-tabs-container .tab-button[data-tab]").forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+  });
   saveGlobalState();
 }
 
@@ -648,9 +575,7 @@ function diffJSONsPreview(leftText, rightText) {
   const isDarkMode = document.body.classList.contains("dark-mode");
   // Choose a diff color based on the theme:
   // For light mode, use a light red; for dark mode, use a darker or more muted red.
-  const diffStyle = isDarkMode
-    ? "background-color:#662222;"
-    : "background-color:#ddd;";
+  const diffStyle = isDarkMode ? "background-color:#662222;" : "background-color:#ddd;";
 
   const leftLines = leftText.split("\n");
   const rightLines = rightText.split("\n");
@@ -697,11 +622,8 @@ async function closeCompareTab(tabId, event) {
   const tabContent = document.getElementById(tabId);
   if (tabButton) tabButton.remove();
   if (tabContent) tabContent.remove();
-  const remaining = document.querySelectorAll(
-    "#compare-tab-contents .json-tab-content"
-  );
-  if (remaining.length > 0)
-    switchCompareTab(remaining[remaining.length - 1].id);
+  const remaining = document.querySelectorAll("#compare-tab-contents .json-tab-content");
+  if (remaining.length > 0) switchCompareTab(remaining[remaining.length - 1].id);
   saveGlobalState();
 }
 
@@ -724,9 +646,7 @@ function createCodegenTab() {
   tabButton.onclick = () => switchCodegenTab(tabId);
   tabButton.innerHTML = `<span class="tab-name">Tab ${codegenTabCount}</span>
                <span class="close-tab" onclick="closeCodegenTab('${tabId}', event)">×</span>`;
-  tabButton.addEventListener("dblclick", () =>
-    openTabRenameTooltip(tabId, "codegen")
-  );
+  tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "codegen"));
   const tabsContainer = document.getElementById("codegen-tabs-container");
   const addButton = tabsContainer.querySelector(".add-tab-button");
   tabsContainer.insertBefore(tabButton, addButton);
@@ -750,9 +670,7 @@ function createCodegenTab() {
              `;
   document.getElementById("codegen-tab-contents").appendChild(tabContent);
   const textarea = tabContent.querySelector(".json-input");
-  textarea.addEventListener("paste", () =>
-    setTimeout(() => autoFormatTextarea(textarea), 100)
-  );
+  textarea.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(textarea), 100));
   textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
   saveGlobalState();
 }
@@ -766,9 +684,7 @@ function createCodegenTabWithData(tabData) {
   tabButton.onclick = () => switchCodegenTab(tabId);
   tabButton.innerHTML = `<span class="tab-name">${tabData.name}</span>
                <span class="close-tab" onclick="closeCodegenTab('${tabId}', event)">×</span>`;
-  tabButton.addEventListener("dblclick", () =>
-    openTabRenameTooltip(tabId, "codegen")
-  );
+  tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "codegen"));
   const tabsContainer = document.getElementById("codegen-tabs-container");
   const addButton = tabsContainer.querySelector(".add-tab-button");
   tabsContainer.insertBefore(tabButton, addButton);
@@ -793,9 +709,7 @@ function createCodegenTabWithData(tabData) {
   textarea.value = tabData.input;
   const selectElem = document.getElementById("lang-select-" + tabId);
   selectElem.value = tabData.lang;
-  textarea.addEventListener("paste", () =>
-    setTimeout(() => autoFormatTextarea(textarea), 100)
-  );
+  textarea.addEventListener("paste", () => setTimeout(() => autoFormatTextarea(textarea), 100));
   textarea.addEventListener("blur", () => autoFormatTextarea(textarea));
   saveGlobalState();
   enableTabReordering("codegen-tabs-container");
@@ -807,11 +721,9 @@ function switchCodegenTab(tabId) {
     .forEach((tab) => tab.classList.remove("active"));
   const selectedTab = document.getElementById(tabId);
   if (selectedTab) selectedTab.classList.add("active");
-  document
-    .querySelectorAll("#codegen-tabs-container .tab-button[data-tab]")
-    .forEach((btn) => {
-      btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
-    });
+  document.querySelectorAll("#codegen-tabs-container .tab-button[data-tab]").forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+  });
   saveGlobalState();
 }
 
@@ -865,11 +777,8 @@ async function closeCodegenTab(tabId, event) {
   const tabContent = document.getElementById(tabId);
   if (tabButton) tabButton.remove();
   if (tabContent) tabContent.remove();
-  const remaining = document.querySelectorAll(
-    "#codegen-tab-contents .json-tab-content"
-  );
-  if (remaining.length > 0)
-    switchCodegenTab(remaining[remaining.length - 1].id);
+  const remaining = document.querySelectorAll("#codegen-tab-contents .json-tab-content");
+  if (remaining.length > 0) switchCodegenTab(remaining[remaining.length - 1].id);
   saveGlobalState();
 }
 
@@ -901,9 +810,7 @@ function createTreeView(data, parentElement) {
       keySpan.innerHTML = `
                   <span>${displayKey}</span>
                   <span class="node-info">${
-                    isArray
-                      ? `[${value.length}]`
-                      : `{${Object.keys(value).length}}`
+                    isArray ? `[${value.length}]` : `{${Object.keys(value).length}}`
                   }</span>
               `;
 
@@ -938,20 +845,15 @@ function createTreeView(data, parentElement) {
       const toggleNode = () => {
         keySpan.classList.toggle("expanded");
         keySpan.classList.toggle("collapsed");
-        children.style.display =
-          children.style.display === "none" ? "block" : "none";
+        children.style.display = children.style.display === "none" ? "block" : "none";
       };
 
       keySpan.addEventListener("click", toggleNode);
 
       if (isArray) {
-        value.forEach((item, index) =>
-          processNode(item, children, index, currentPath)
-        );
+        value.forEach((item, index) => processNode(item, children, index, currentPath));
       } else {
-        Object.entries(value).forEach(([k, v]) =>
-          processNode(v, children, k, currentPath)
-        );
+        Object.entries(value).forEach(([k, v]) => processNode(v, children, k, currentPath));
       }
 
       node.appendChild(keySpan);
@@ -961,9 +863,7 @@ function createTreeView(data, parentElement) {
       const valueSpan = document.createElement("span");
       valueSpan.innerHTML = `
                   <span class="tree-key">${key}: </span>
-                  <span class="${getValueTypeClass(value)}">${formatValue(
-        value
-      )}</span>
+                  <span class="${getValueTypeClass(value)}">${formatValue(value)}</span>
               `;
 
       // Value context menu
@@ -1006,8 +906,7 @@ function createTreeView(data, parentElement) {
     const copyValue = document.createElement("div");
     copyValue.className = "tree-context-menu-item";
     copyValue.textContent = "Copy Value";
-    copyValue.onclick = () =>
-      navigator.clipboard.writeText(JSON.stringify(value));
+    copyValue.onclick = () => navigator.clipboard.writeText(JSON.stringify(value));
 
     menu.appendChild(copyPath);
     menu.appendChild(copyValue);
@@ -1047,9 +946,7 @@ function openTabRenameTooltip(tabId, mode) {
   else if (mode === "codegen") containerSelector = "#codegen-tabs-container";
   else containerSelector = "#editor-tabs-container";
 
-  const tabButton = document.querySelector(
-    containerSelector + ` .tab-button[data-tab="${tabId}"]`
-  );
+  const tabButton = document.querySelector(containerSelector + ` .tab-button[data-tab="${tabId}"]`);
   const existingTooltip = document.querySelector(".tab-rename-tooltip");
   if (existingTooltip) existingTooltip.remove();
   const tooltip = document.createElement("div");
@@ -1113,8 +1010,7 @@ function generateTypeScript(obj, interfaceName) {
 }
 
 function generatePython(obj, className) {
-  let result =
-    "from dataclasses import dataclass\nfrom typing import Any, List\n\n";
+  let result = "from dataclasses import dataclass\nfrom typing import Any, List\n\n";
   result += `@dataclass\nclass ${className}:\n`;
   for (const key in obj) {
     if (!Object.hasOwn(obj, key)) continue;
@@ -1202,10 +1098,7 @@ let currentConvertMode = "dict-to-json";
 function switchConvertDirection(mode) {
   currentConvertMode = mode;
   document.querySelectorAll("#convert-section .tab-button").forEach((btn) => {
-    btn.classList.toggle(
-      "active",
-      btn.textContent.includes("Dict") === (mode === "dict-to-json")
-    );
+    btn.classList.toggle("active", btn.textContent.includes("Dict") === (mode === "dict-to-json"));
   });
   document.getElementById("convert-input").value = "";
   document.getElementById("convert-output").textContent = "";
@@ -1256,37 +1149,22 @@ function copyConvertOutput() {
 /* ========== Mock data generator ========== */
 
 let latestMockData = [];
-const presets = {
-  User: {
-    id: "number|1000-9999",
-    name: "name.fullName",
-    email: "internet.email",
-    isActive: "boolean",
-  },
-  Product: {
-    id: "number|1-1000",
-    title: "commerce.productName",
-    price: "number|10-500",
-    available: "boolean",
-  },
-};
 
 function loadMockPreset(name) {
-  if (presets[name]) {
-    document.getElementById("mock-schema-input").value = JSON.stringify(
-      presets[name],
-      null,
-      2
-    );
+  if (!name) return;
+  
+  const preset = window.PRESETS.mockgen[name];
+  if (!preset) return;
+
+  const schemaInput = document.getElementById('mock-schema-input');
+  if (schemaInput) {
+    schemaInput.value = JSON.stringify(preset.schema, null, 2);
   }
 }
 
 function generateMockData() {
   const input = document.getElementById("mock-schema-input").value;
-  const count = Number.parseInt(
-    document.getElementById("mockgen-count").value || "1",
-    10
-  );
+  const count = Number.parseInt(document.getElementById("mockgen-count").value || "1", 10);
   const outputContainer = document.getElementById("mock-output-container");
 
   try {
@@ -1298,9 +1176,7 @@ function generateMockData() {
         return { error: err.message };
       }
     });
-    document.getElementById(
-      "mock-stats"
-    ).textContent = `Showing ${count} record(s)`;
+    document.getElementById("mock-stats").textContent = `Showing ${count} record(s)`;
     updateMockView();
   } catch (e) {
     outputContainer.innerHTML = `<pre class="code-output">❌ Error: ${e.message}</pre>`;
@@ -1343,9 +1219,7 @@ function mockFromSchema(schema) {
 }
 
 function updateMockView() {
-  const mode = document.querySelector(
-    'input[name="mock-view-mode"]:checked'
-  ).value;
+  const mode = document.querySelector('input[name="mock-view-mode"]:checked').value;
   const container = document.getElementById("mock-output-container");
   container.innerHTML = "";
 
@@ -1367,11 +1241,7 @@ function renderTableFromJson(data) {
   const table = document.createElement("table");
   table.className = "mock-preview-table";
 
-  if (
-    !Array.isArray(data) ||
-    data.length === 0 ||
-    typeof data[0] !== "object"
-  ) {
+  if (!Array.isArray(data) || data.length === 0 || typeof data[0] !== "object") {
     table.innerHTML = "<tr><td>No tabular data available</td></tr>";
     return table;
   }
@@ -1430,9 +1300,7 @@ function copyMockOutput(format = "json") {
   } else if (format === "csv") {
     if (!latestMockData.length || typeof latestMockData[0] !== "object") return;
     const keys = Object.keys(latestMockData[0]);
-    const rows = latestMockData.map((obj) =>
-      keys.map((k) => JSON.stringify(obj[k] ?? ""))
-    );
+    const rows = latestMockData.map((obj) => keys.map((k) => JSON.stringify(obj[k] ?? "")));
     text = [keys.join(","), ...rows.map((r) => r.join(","))].join("\n");
   }
 
@@ -1479,9 +1347,7 @@ function exportMockOutput(format = "json") {
     if (!latestMockData.length || typeof latestMockData[0] !== "object") return;
 
     const keys = Object.keys(latestMockData[0]);
-    const rows = latestMockData.map((obj) =>
-      keys.map((k) => JSON.stringify(obj[k] ?? ""))
-    );
+    const rows = latestMockData.map((obj) => keys.map((k) => JSON.stringify(obj[k] ?? "")));
     content = [keys.join(","), ...rows.map((r) => r.join(","))].join("\n");
     filename += ".csv";
     downloadFile(content, filename, "text/csv");
@@ -1541,8 +1407,7 @@ function switchMockTab(tab) {
 }
 
 function renderMockgenDocs() {
-  document.getElementById("mockgen-docs-preview").innerHTML =
-    marked.parse(mockgenDocs);
+  document.getElementById("mockgen-docs-preview").innerHTML = marked.parse(mockgenDocs);
 }
 
 // Text Editor
@@ -1579,16 +1444,11 @@ function addEditorTab(tabData = null) {
     tabData?.title || `Note ${editorTabCount}`
   }</span><span class="close-tab" onclick="deleteEditorTab('${tabId}', event)">×</span>`;
   tabButton.onclick = () => switchEditorTab(tabId);
-  tabButton.addEventListener("dblclick", () =>
-    openTabRenameTooltip(tabId, "editor")
-  );
+  tabButton.addEventListener("dblclick", () => openTabRenameTooltip(tabId, "editor"));
 
   document
     .getElementById("editor-tabs-container")
-    .insertBefore(
-      tabButton,
-      document.querySelector("#editor-tabs-container .add-tab-button")
-    );
+    .insertBefore(tabButton, document.querySelector("#editor-tabs-container .add-tab-button"));
 
   const tabContent = document.createElement("div");
   tabContent.id = tabId;
@@ -1623,11 +1483,9 @@ function switchEditorTab(tabId) {
     .forEach((el) => el.classList.remove("active"));
   document.getElementById(tabId)?.classList.add("active");
 
-  document
-    .querySelectorAll("#editor-tabs-container .tab-button")
-    .forEach((btn) => {
-      btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
-    });
+  document.querySelectorAll("#editor-tabs-container .tab-button").forEach((btn) => {
+    btn.classList.toggle("active", btn.getAttribute("data-tab") === tabId);
+  });
   updateEditorGlobalState();
 }
 
@@ -1664,40 +1522,30 @@ async function deleteEditorTab(tabId, event) {
 
   localStorage.removeItem(tabId);
   delete editorInstances[tabId];
-  document
-    .querySelector(`#editor-tabs-container .tab-button[data-tab="${tabId}"]`)
-    ?.remove();
+  document.querySelector(`#editor-tabs-container .tab-button[data-tab="${tabId}"]`)?.remove();
   document.getElementById(tabId)?.remove();
-  const remaining = document.querySelectorAll(
-    "#editor-tab-contents .json-tab-content"
-  );
+  const remaining = document.querySelectorAll("#editor-tab-contents .json-tab-content");
   if (remaining.length > 0) switchEditorTab(remaining[0].id);
   updateEditorGlobalState();
 }
 
 function updateEditorGlobalState() {
   const state = {
-    activeTab:
-      document.querySelector("#editor-tab-contents .json-tab-content.active")
-        ?.id || "",
+    activeTab: document.querySelector("#editor-tab-contents .json-tab-content.active")?.id || "",
     tabs: [],
   };
-  document
-    .querySelectorAll("#editor-tabs-container .tab-button[data-tab]")
-    .forEach((btn) => {
-      const tabId = btn.getAttribute("data-tab");
-      const title = btn.querySelector(".tab-name").textContent;
-      state.tabs.push({ id: tabId, title });
-    });
+  document.querySelectorAll("#editor-tabs-container .tab-button[data-tab]").forEach((btn) => {
+    const tabId = btn.getAttribute("data-tab");
+    const title = btn.querySelector(".tab-name").textContent;
+    state.tabs.push({ id: tabId, title });
+  });
   localStorage.setItem("editorState", JSON.stringify(state));
 }
 
 function loadEditorGlobalState() {
   const stateStr = localStorage.getItem("editorState");
   const container = document.getElementById("editor-tabs-container");
-  container
-    .querySelectorAll(".tab-button[data-tab]")
-    .forEach((btn) => btn.remove());
+  container.querySelectorAll(".tab-button[data-tab]").forEach((btn) => btn.remove());
   document.getElementById("editor-tab-contents").innerHTML = "";
   editorTabCount = 0;
 
@@ -1727,6 +1575,7 @@ function enableEditorTabReordering() {
     });
     btn.addEventListener("dragend", () => {
       btn.classList.remove("dragging");
+      container.querySelectorAll(".tab-button").forEach((b) => b.classList.remove("drag-over"));
     });
     btn.addEventListener("dragover", (e) => {
       e.preventDefault();
@@ -1739,7 +1588,9 @@ function enableEditorTabReordering() {
       e.preventDefault();
       const draggedId = e.dataTransfer.getData("text/plain");
       const draggedBtn = container.querySelector(`[data-tab="${draggedId}"]`);
+
       btn.classList.remove("drag-over");
+
       if (draggedBtn && draggedBtn !== btn) {
         container.insertBefore(draggedBtn, btn);
         updateEditorGlobalState();
@@ -1771,10 +1622,7 @@ function toggleSidebar() {
   // Close sidebar when clicking outside
   if (sidebar.classList.contains("active")) {
     const closeOnClickOutside = (e) => {
-      if (
-        !sidebar.contains(e.target) &&
-        !e.target.matches(".mobile-sidebar-toggle")
-      ) {
+      if (!sidebar.contains(e.target) && !e.target.matches(".mobile-sidebar-toggle")) {
         sidebar.classList.remove("active");
         document.removeEventListener("click", closeOnClickOutside);
       }
@@ -1818,10 +1666,7 @@ document.addEventListener("DOMContentLoaded", () => {
       sidebar.classList.add("active");
     }
     // Swipe left to close sidebar
-    else if (
-      swipeLength < -swipeThreshold &&
-      sidebar.classList.contains("active")
-    ) {
+    else if (swipeLength < -swipeThreshold && sidebar.classList.contains("active")) {
       sidebar.classList.remove("active");
     }
   }
@@ -1839,11 +1684,9 @@ function toggleDarkMode() {
   saveGlobalState();
   // If the Compare section is visible, update all diff previews
   if (document.getElementById("compare-section").style.display !== "none") {
-    document
-      .querySelectorAll("#compare-tab-contents .json-tab-content")
-      .forEach((tab) => {
-        compareJSONs(tab.id);
-      });
+    document.querySelectorAll("#compare-tab-contents .json-tab-content").forEach((tab) => {
+      compareJSONs(tab.id);
+    });
   }
 }
 /* ========== Keyboard Shortcuts ========== */
@@ -1862,9 +1705,7 @@ document.addEventListener("keydown", (e) => {
     document.getElementById("formatter-section").style.display !== "none"
   ) {
     e.preventDefault();
-    const activeTab = document.querySelector(
-      "#formatter-tab-contents .json-tab-content.active"
-    );
+    const activeTab = document.querySelector("#formatter-tab-contents .json-tab-content.active");
     if (activeTab) closeFormatterTab(activeTab.id);
   }
   if (e.ctrlKey && (e.key === "/" || e.key === "?")) {
@@ -1877,9 +1718,7 @@ document.addEventListener("keydown", (e) => {
   }
   if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === "s") {
     e.preventDefault();
-    const activeTab = document.querySelector(
-      "#editor-tab-contents .json-tab-content.active"
-    );
+    const activeTab = document.querySelector("#editor-tab-contents .json-tab-content.active");
     if (activeTab) saveEditorContent(activeTab.id);
   }
 });
@@ -1899,9 +1738,7 @@ function enableTabReordering(containerId) {
 
     button.addEventListener("dragend", () => {
       button.classList.remove("dragging");
-      container
-        .querySelectorAll(".tab-button")
-        .forEach((b) => b.classList.remove("drag-over"));
+      container.querySelectorAll(".tab-button").forEach((b) => b.classList.remove("drag-over"));
     });
 
     button.addEventListener("dragover", (e) => {
@@ -1918,14 +1755,98 @@ function enableTabReordering(containerId) {
       const draggedId = e.dataTransfer.getData("text/plain");
       const draggedBtn = container.querySelector(`[data-tab="${draggedId}"]`);
 
-      button.classList.remove("drag-over");
+      btn.classList.remove("drag-over");
 
-      if (draggedBtn && draggedBtn !== button) {
-        container.insertBefore(draggedBtn, button);
+      if (draggedBtn && draggedBtn !== btn) {
+        container.insertBefore(draggedBtn, btn);
         saveGlobalState();
       }
     });
   });
+}
+
+/* ========== Preset Functions ========== */
+function populatePresetSelects() {
+  // Populate formatter presets
+  const formatterSelect = document.querySelector("#formatter-tabs-container .preset-select");
+  Object.keys(window.PRESETS.formatter).forEach((key) => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = window.PRESETS.formatter[key].name;
+    formatterSelect.appendChild(option);
+  });
+
+  // Populate compare presets
+  const compareSelect = document.querySelector("#compare-tabs-container .preset-select");
+  Object.keys(window.PRESETS.compare).forEach((key) => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = window.PRESETS.compare[key].name;
+    compareSelect.appendChild(option);
+  });
+
+  // Populate codegen presets
+  const codegenSelect = document.querySelector("#codegen-tabs-container .preset-select");
+  Object.keys(window.PRESETS.codegen).forEach((key) => {
+    const option = document.createElement("option");
+    option.value = key;
+    option.textContent = window.PRESETS.codegen[key].name;
+    codegenSelect.appendChild(option);
+  });
+}
+
+function loadFormatterPreset(presetName) {
+  if (!presetName) return;
+
+  const preset = window.PRESETS.formatter[presetName];
+  if (!preset) return;
+
+  const activeTab = document.querySelector("#formatter-tab-contents .json-tab-content.active");
+  if (!activeTab) return;
+
+  const textarea = activeTab.querySelector(".json-input");
+  if (textarea) {
+    textarea.value = preset.content;
+    updateFormatterPreview(activeTab.id);
+  }
+}
+
+function loadComparePreset(presetName) {
+  if (!presetName) return;
+
+  const preset = window.PRESETS.compare[presetName];
+  if (!preset) return;
+
+  const activeTab = document.querySelector("#compare-tab-contents .json-tab-content.active");
+  if (!activeTab) return;
+
+  const leftTextarea = activeTab.querySelector(".json-input-left");
+  const rightTextarea = activeTab.querySelector(".json-input-right");
+
+  if (leftTextarea && rightTextarea) {
+    leftTextarea.value = preset.leftContent;
+    rightTextarea.value = preset.rightContent;
+    compareJSONs(activeTab.id);
+  }
+}
+
+function loadCodegenPreset(presetName) {
+  if (!presetName) return;
+
+  const preset = window.PRESETS.codegen[presetName];
+  if (!preset) return;
+
+  const activeTab = document.querySelector("#codegen-tab-contents .json-tab-content.active");
+  if (!activeTab) return;
+
+  const textarea = activeTab.querySelector(".json-input");
+  const langSelect = document.getElementById("lang-select-" + activeTab.id);
+
+  if (textarea && langSelect) {
+    textarea.value = preset.input;
+    langSelect.value = preset.lang;
+    generateCode(activeTab.id);
+  }
 }
 
 /* ========== Initialization ========== */
@@ -1949,14 +1870,19 @@ window.addEventListener("load", () => {
     addEditorTab();
     switchEditorTab("editor-tab-1");
   }
+
+  populatePresetSelects();
+  applyTabButtonTheme();
+  enableTabReordering("formatter-tabs-container");
+  enableTabReordering("compare-tabs-container");
+  enableTabReordering("codegen-tabs-container");
+  enableEditorTabReordering();
+  applyEditorTabDarkMode();
 });
 
 setInterval(() => {
-  const editorVisible =
-    document.getElementById("editor-section").style.display !== "none";
-  const activeTab = document.querySelector(
-    "#editor-tab-contents .json-tab-content.active"
-  );
+  const editorVisible = document.getElementById("editor-section").style.display !== "none";
+  const activeTab = document.querySelector("#editor-tab-contents .json-tab-content.active");
 
   if (!Swal.isVisible() && editorVisible && activeTab) {
     saveEditorContent(activeTab.id);
