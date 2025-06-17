@@ -1,3 +1,14 @@
+async function loadFormatterHTML() {
+  try {
+    const response = await fetch("assets/js/features/formatter/formatter.html");
+    const html = await response.text();
+    document.getElementById("formatter-section-container").innerHTML = html;
+  } catch (error) {
+    console.error("Error loading formatter HTML:", error);
+  }
+}
+document.addEventListener("DOMContentLoaded", loadFormatterHTML);
+
 let formatterTabCount = 0;
 
 function addFormatterTab() {
