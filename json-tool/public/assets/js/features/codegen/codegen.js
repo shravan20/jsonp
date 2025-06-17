@@ -14,8 +14,18 @@ function createCodegenTab() {
   tabButton.className = "tab-button";
   tabButton.setAttribute("data-tab", tabId);
   tabButton.onclick = () => switchCodegenTab(tabId);
-  tabButton.innerHTML = `<span class="tab-name">Tab ${codegenTabCount}</span>
-               <span class="close-tab" onclick="closeCodegenTab('${tabId}', event)">×</span>`;
+
+  const nameSpan = document.createElement("span");
+  nameSpan.className = "tab-name";
+  nameSpan.textContent = `Tab ${codegenTabCount}`;
+
+  const closeSpan = document.createElement("span");
+  closeSpan.className = "close-tab";
+  closeSpan.textContent = "×";
+  closeSpan.onclick = (e) => closeCodegenTab(tabId, e);
+
+  tabButton.append(nameSpan, closeSpan);
+
   tabButton.addEventListener("dblclick", () =>
     openTabRenameTooltip(tabId, "codegen")
   );
@@ -213,7 +223,7 @@ function generatePython(obj, className, isRoot = true) {
   let result = "";
   if (isRoot) {
     result +=
-      "from dataclasses import dataclass\\nfrom typing import Any, List\\n\\n";
+      "from dataclasses import dataclass\nfrom typing import Any, List\n\n";
   }
   result += `@dataclass\\nclass ${className}:\\n`;
   for (const key in obj) {
