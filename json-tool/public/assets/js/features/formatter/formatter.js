@@ -116,7 +116,10 @@ function updateFormatterPreview(tabId) {
     createTreeView(parsed, tabContent.querySelector(".tree-view"));
     errorMessage.textContent = "";
     showFormatterPreviewTab(tabId, "raw");
-    textarea.value = formatted;
+    // Avoid resetting user cursor while typing
+    if (document.activeElement !== textarea) {
+      textarea.value = formatted;
+    }
   } catch (e) {
     errorMessage.textContent = "Error: " + e.message;
     showFormatterPreviewTab(tabId, "error");
@@ -164,14 +167,14 @@ function searchFormatterJSON(tabId) {
     `(${searchInput.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
     "gi"
   );
-  if (rawPreview.classList.contains("active")) {
+  if (rawPreview.parentElement.classList.contains("active")) {
     const content = rawPreview.textContent;
     rawPreview.innerHTML = content.replace(
       regex,
       '<span class="highlight">$1</span>'
     );
   }
-  if (treeView.classList.contains("active")) {
+  if (treeView.parentElement.classList.contains("active")) {
     function highlightNode(node) {
       if (node.nodeType === Node.TEXT_NODE) {
         const matches = node.nodeValue.match(regex);
@@ -279,14 +282,15 @@ function createTreeView(data, parentElement) {
       const keySpan = document.createElement("span");
       keySpan.className = `tree-key ${isArray ? "type-array" : "type-object"}`;
       keySpan.tabIndex = 0;
-      keySpan.innerHTML = `
-                  <span>${displayKey}</span>
-                  <span class="node-info">${
-                    isArray
-                      ? `[${value.length}]`
-                      : `{${Object.keys(value).length}}`
-                  }</span>
-              `;
+
+      const nameEl = document.createElement("span");
+      nameEl.textContent = displayKey;
+      const infoEl = document.createElement("span");
+      infoEl.className = "node-info";
+      infoEl.textContent = isArray
+        ? `[${value.length}]`
+        : `{${Object.keys(value).length}}`;
+      keySpan.append(nameEl, infoEl);
 
       // Keyboard navigation
       keySpan.addEventListener("keydown", (e) => {

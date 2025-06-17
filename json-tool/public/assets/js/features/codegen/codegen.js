@@ -22,6 +22,8 @@ function createCodegenTab() {
   const tabsContainer = document.getElementById("codegen-tabs-container");
   const addButton = tabsContainer.querySelector(".add-tab-button");
   tabsContainer.insertBefore(tabButton, addButton);
+  enableTabReordering("codegen-tabs-container");
+
   // Create tab content
   const tabContent = document.createElement("div");
   tabContent.id = tabId;
@@ -56,8 +58,18 @@ function createCodegenTabWithData(tabData) {
   tabButton.className = "tab-button";
   tabButton.setAttribute("data-tab", tabId);
   tabButton.onclick = () => switchCodegenTab(tabId);
-  tabButton.innerHTML = `<span class="tab-name">${tabData.name}</span>
-               <span class="close-tab" onclick="closeCodegenTab('${tabId}', event)">×</span>`;
+
+  const nameSpan = document.createElement("span");
+  nameSpan.className = "tab-name";
+  nameSpan.textContent = tabData.name;
+
+  const closeSpan = document.createElement("span");
+  closeSpan.className = "close-tab";
+  closeSpan.textContent = "×";
+  closeSpan.onclick = (e) => closeCodegenTab(tabId, e);
+
+  tabButton.append(nameSpan, closeSpan);
+
   tabButton.addEventListener("dblclick", () =>
     openTabRenameTooltip(tabId, "codegen")
   );
@@ -197,10 +209,13 @@ function generateTypeScript(obj, interfaceName) {
   return result;
 }
 
-function generatePython(obj, className) {
-  let result =
-    "from dataclasses import dataclass\nfrom typing import Any, List\n\n";
-  result += `@dataclass\nclass ${className}:\n`;
+function generatePython(obj, className, isRoot = true) {
+  let result = "";
+  if (isRoot) {
+    result +=
+      "from dataclasses import dataclass\\nfrom typing import Any, List\\n\\n";
+  }
+  result += `@dataclass\\nclass ${className}:\\n`;
   for (const key in obj) {
     if (!Object.hasOwn(obj, key)) continue;
     const value = obj[key];
@@ -213,7 +228,7 @@ function generatePython(obj, className) {
         if (typeof elem === "object" && elem !== null) {
           const subClass = className + capitalize(key);
           pyType = `List[${subClass}]`;
-          result += "\n" + generatePython(elem, subClass);
+          result += "\\n" + generatePython(elem, subClass, false);
         } else {
           if (typeof elem === "number") pyType = "List[float]";
           else if (typeof elem === "string") pyType = "List[str]";
@@ -226,7 +241,7 @@ function generatePython(obj, className) {
     } else if (typeof value === "object") {
       const subClass = className + capitalize(key);
       pyType = subClass;
-      result += "\n" + generatePython(value, subClass);
+      result += "\\n" + generatePython(value, subClass, false);
     } else {
       if (typeof value === "number") pyType = "float";
       else if (typeof value === "string") pyType = "str";
