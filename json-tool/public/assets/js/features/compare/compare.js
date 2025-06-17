@@ -130,12 +130,15 @@ function compareJSONs(tabId) {
   }
   const leftFormatted = JSON.stringify(leftObj, null, 2);
   const rightFormatted = JSON.stringify(rightObj, null, 2);
+  const diffPreview = diffJSONsPreview(leftFormatted, rightFormatted);
+  const sanitizedDiffPreview = DOMPurify.sanitize(diffPreview);
+
   resultDiv.innerHTML = `
                   <div style="margin-bottom: 10px;">
                       <button class="copy-button" onclick="copyCompareLeft('${tabId}')">Copy Left</button>
                       <button class="copy-button" onclick="copyCompareRight('${tabId}')">Copy Right</button>
                   </div>
-                  ${diffJSONsPreview(leftFormatted, rightFormatted)}
+                  ${sanitizedDiffPreview}
               `;
   leftTA.value = leftFormatted;
   rightTA.value = rightFormatted;

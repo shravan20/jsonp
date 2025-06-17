@@ -1,7 +1,22 @@
 /* ========== COPY FUNCTIONS ========== */
 function copyToClipboard(text, successMessage) {
-  navigator.clipboard
-    .writeText(text)
+  (navigator.clipboard?.writeText
+    ? navigator.clipboard.writeText(text)
+    : new Promise((res, rej) => {
+        try {
+          const ta = Object.assign(document.createElement("textarea"), {
+            value: text,
+            style: "position:fixed;top:-1000px",
+          });
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy") ? res() : rej();
+          ta.remove();
+        } catch (e) {
+          rej(e);
+        }
+      })
+  )
     .then(() => {
       Swal.fire({
         icon: "success",
@@ -200,4 +215,3 @@ function enableTabReordering(containerId) {
     });
   });
 }
-

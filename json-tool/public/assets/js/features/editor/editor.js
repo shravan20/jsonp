@@ -55,7 +55,7 @@ function addEditorTab(tabData = null) {
   const saved = localStorage.getItem(tabId);
   if (saved) editor.setMarkdown(saved);
 
-  enableEditorTabReordering();
+  enableTabReordering("editor-tabs-container");
   applyEditorTabDarkMode();
 }
 
@@ -73,18 +73,20 @@ function switchEditorTab(tabId) {
   updateEditorGlobalState();
 }
 
-function saveEditorContent(tabId) {
+function saveEditorContent(tabId, silent = false) {
   const content = editorInstances[tabId].getMarkdown();
   localStorage.setItem(tabId, content);
   updateEditorGlobalState();
-  Swal.fire({
-    toast: true,
-    position: "top-end",
-    icon: "success",
-    title: "Autosaved",
-    showConfirmButton: false,
-    timer: 1500,
-  });
+  if (!silent) {
+    Swal.fire({
+      toast: true,
+      position: "top-end",
+      icon: "success",
+      title: "Saved!", // Changed from Autosaved to Saved!
+      showConfirmButton: false,
+      timer: 1500,
+    });
+  }
 }
 
 async function deleteEditorTab(tabId, event) {
@@ -105,6 +107,7 @@ async function deleteEditorTab(tabId, event) {
   if (!result.isConfirmed) return;
 
   localStorage.removeItem(tabId);
+  editorInstances[tabId]?.destroy();
   delete editorInstances[tabId];
   document
     .querySelector(`#editor-tabs-container .tab-button[data-tab="${tabId}"]`)
@@ -156,38 +159,6 @@ function loadEditorGlobalState() {
   } else if (state.tabs.length > 0) {
     switchEditorTab(state.tabs[0].id);
   }
-}
-
-function enableEditorTabReordering() {
-  const container = document.getElementById("editor-tabs-container");
-  const buttons = container.querySelectorAll(".tab-button[data-tab]");
-  buttons.forEach((btn) => {
-    btn.draggable = true;
-    btn.addEventListener("dragstart", (e) => {
-      e.dataTransfer.setData("text/plain", btn.getAttribute("data-tab"));
-      btn.classList.add("dragging");
-    });
-    btn.addEventListener("dragend", () => {
-      btn.classList.remove("dragging");
-    });
-    btn.addEventListener("dragover", (e) => {
-      e.preventDefault();
-      btn.classList.add("drag-over");
-    });
-    btn.addEventListener("dragleave", () => {
-      btn.classList.remove("drag-over");
-    });
-    btn.addEventListener("drop", (e) => {
-      e.preventDefault();
-      const draggedId = e.dataTransfer.getData("text/plain");
-      const draggedBtn = container.querySelector(`[data-tab="${draggedId}"]`);
-      btn.classList.remove("drag-over");
-      if (draggedBtn && draggedBtn !== btn) {
-        container.insertBefore(draggedBtn, btn);
-        updateEditorGlobalState();
-      }
-    });
-  });
 }
 
 function applyEditorTabDarkMode() {

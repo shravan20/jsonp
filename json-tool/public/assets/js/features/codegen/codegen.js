@@ -125,7 +125,7 @@ function generateCode(tabId) {
   if (lang === "typescript") code = generateTypeScript(obj, "Root");
   else if (lang === "python") code = generatePython(obj, "Root");
   else if (lang === "go") code = generateGo(obj, "Root");
-  outputPre.innerHTML = code;
+  outputPre.textContent = code;
   saveGlobalState();
 }
 

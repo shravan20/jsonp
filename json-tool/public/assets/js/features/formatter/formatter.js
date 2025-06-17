@@ -340,12 +340,16 @@ function createTreeView(data, parentElement) {
       parent.appendChild(node);
     } else {
       const valueSpan = document.createElement("span");
-      valueSpan.innerHTML = `
-                  <span class="tree-key">${key}: </span>
-                  <span class="${getValueTypeClass(value)}">${formatValue(
-        value
-      )}</span>
-              `;
+
+      const keyEl = document.createElement("span");
+      keyEl.className = "tree-key";
+      keyEl.textContent = `${key}: `;
+
+      const valEl = document.createElement("span");
+      valEl.className = getValueTypeClass(value);
+      valEl.textContent = formatValue(value);
+
+      valueSpan.append(keyEl, valEl);
 
       // Value context menu
       valueSpan.addEventListener("contextmenu", (e) => {
