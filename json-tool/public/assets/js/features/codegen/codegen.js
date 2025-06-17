@@ -272,16 +272,41 @@ function generateGo(obj, structName) {
       goType = "interface{}";
     } else if (Array.isArray(value)) {
       if (value.length > 0) {
-        const elem = value[0];
-        if (typeof elem === "object" && elem !== null) {
-          const subStruct = structName + capitalize(key);
-          goType = `[]${subStruct}`;
-          result += generateGo(elem, subStruct);
+        // Scan all elements for type consistency
+        let firstType = null;
+        let uniform = true;
+        let subStruct = structName + capitalize(key);
+        for (let i = 0; i < value.length; i++) {
+          const elem = value[i];
+          let elemType;
+          if (elem === null) {
+            elemType = "interface{}";
+          } else if (typeof elem === "object") {
+            elemType = subStruct;
+          } else if (typeof elem === "number") {
+            elemType = "float64";
+          } else if (typeof elem === "string") {
+            elemType = "string";
+          } else if (typeof elem === "boolean") {
+            elemType = "bool";
+          } else {
+            elemType = "interface{}";
+          }
+          if (firstType === null) {
+            firstType = elemType;
+          } else if (firstType !== elemType) {
+            uniform = false;
+            break;
+          }
+        }
+        if (uniform) {
+          if (firstType === subStruct) {
+            // If array of objects, generate sub-struct
+            result += generateGo(value[0], subStruct);
+          }
+          goType = `[]${firstType}`;
         } else {
-          if (typeof elem === "number") goType = "[]float64";
-          else if (typeof elem === "string") goType = "[]string";
-          else if (typeof elem === "boolean") goType = "[]bool";
-          else goType = "[]interface{}";
+          goType = "[]interface{}";
         }
       } else {
         goType = "[]interface{}";
