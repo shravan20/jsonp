@@ -1,0 +1,401 @@
+/* Component Styles */
+/* Buttons */
+.dark-mode-toggle,
+.shortcut-preview-button {
+  padding: 8px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right: 10px;
+  font-size: 0.9rem;
+}
+
+/* Mode Selector */
+.mode-selector {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mode-selector button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.mode-selector button.active {
+  font-weight: bold;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.tab-button {
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s;
+  font-size: 0.9rem;
+}
+
+.tab-button.active {
+  background-color: #ffffff;
+  font-weight: bold;
+}
+
+.tab-button .close-tab {
+  color: red;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.tab-button .tab-color-picker {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.add-tab-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  font-size: 0.9rem;
+}
+
+/* Content Panels */
+.json-tab-content {
+  display: none;
+}
+
+.json-tab-content.active {
+  display: block;
+}
+
+textarea {
+  width: 100%;
+  height: 200px;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 0.95rem;
+  border: 1px solid;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  box-sizing: border-box;
+}
+
+/* Utility Containers */
+.search-container,
+.upload-download-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.preview-section {
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+  word-wrap: normal;
+  display: none;
+  max-height: 600px;
+}
+
+.preview-section.active {
+  display: block;
+}
+.copy-button,
+button.copy-button {
+  padding: 6px 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.copy-button:hover {
+  background-color: #218838;
+}
+
+/* Tree View */
+.tree-node {
+  margin: 4px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.tree-key {
+  cursor: pointer;
+  padding: 2px 5px;
+  border-radius: 3px;
+  display: inline-block;
+}
+
+.tree-key:hover {
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.type-string {
+  color: #4caf50;
+}
+
+.type-number {
+  color: #2196f3;
+}
+
+.type-boolean {
+  color: #9c27b0;
+}
+
+.type-null {
+  color: #666;
+}
+
+.type-object {
+  color: #ff9800;
+}
+
+.type-array {
+  color: #e91e63;
+}
+
+/* Reordering Drag Styles */
+.tab-button.dragging {
+  opacity: 0.6;
+  border: 2px dashed;
+}
+
+.tab-button.drag-over {
+  transform: translateY(2px) scale(1.02);
+  box-shadow: 0 2px 6px rgba(0, 123, 255, 0.3);
+}
+
+/* Markdown & Modal */
+.markdown-preview {
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid;
+  max-height: 500px;
+  overflow-y: auto;
+  line-height: 1.6;
+}
+
+.markdown-preview code {
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+  margin: 10% auto;
+  padding: 20px;
+  width: 400px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* Tab Rename Tooltip */
+.tab-rename-tooltip {
+  position: absolute;
+  z-index: 1000;
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* GitHub buttons */
+.github-links {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.github-button,
+.contribute-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 15px;
+  margin: 0 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  font-size: 0.9rem;
+}
+
+.github-button i,
+.contribute-button i {
+  margin-right: 8px;
+}
+
+.tree-children {
+  margin-left: 20px;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.tree-children.collapsed {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* JSON to Code preview themes */
+.code-output {
+  font-family: "Fira Code", monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 16px;
+  border-radius: 6px;
+  overflow-x: auto;
+  white-space: pre;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  margin-top: 10px;
+}
+
+.code-output .keyword {
+  font-weight: bold;
+}
+
+.code-output .comment {
+  font-style: italic;
+}
+
+/* Editor Specific */
+#editor-section .tab-button {
+  padding: 8px 12px;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 0.9rem;
+}
+
+#editor-section .tab-button.active {
+  background-color: #ffffff;
+  font-weight: bold;
+}
+
+#editor-section .add-tab-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+#editor-tab-contents .json-tab-content {
+  display: none;
+  margin-top: 10px;
+}
+
+#editor-tab-contents .json-tab-content.active {
+  display: block;
+}
+
+.toastui-editor-defaultUI {
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tree View Scrolling Fix */
+.tree-view {
+  padding: 10px;
+  font-family: monospace;
+  line-height: 1.5;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+/* Mock Data Table Styling */
+.mock-preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mock-preview-table thead {
+  border-bottom: 2px solid;
+}
+
+.mock-preview-table th {
+  padding: 12px 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.mock-preview-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid;
+  font-size: 0.9rem;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mock-preview-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Error row styling */
+.mock-preview-table tr.error td {
+  color: #dc3545;
+}
+
+/* Container for the table */
+#mock-output-container {
+  position: relative;
+  margin-top: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
