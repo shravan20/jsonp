@@ -4,15 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JSONP - Dev toolkit</title>
-    <link rel="icon" type="image/svg+xml" href="json.svg" />
-    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" type="image/svg+xml" href="../json.svg" />
+    <link rel="stylesheet" href="assets/css/base.css" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <link rel="stylesheet" href="assets/css/themes/dark.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
+    <script
+      src="https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.0/+esm"
+      type="module"
+    ></script>
     <script type="module">
-      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker/+esm";
-
+      import { faker } from "https://cdn.jsdelivr.net/npm/@faker-js/faker@8.4.0/+esm";
       window.faker = faker;
     </script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -26,7 +31,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
-    <script src="presets.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.3.10/purify.min.js"></script>
   </head>
 
   <body>
@@ -95,19 +100,7 @@
         </div>
 
         <!-- Formatter Section -->
-        <div id="formatter-section">
-          <div id="formatter-tabs-container" class="tabs">
-            <button class="add-tab-button" onclick="addFormatterTab()">
-              + Add Tab
-            </button>
-            <select onchange="loadFormatterPreset(this.value)" class="preset-select">
-              <option value="">-- Load Preset --</option>
-            </select>
-          </div>
-          <div id="formatter-tab-contents">
-            <!-- Formatter tab contents will be dynamically added here -->
-          </div>
-        </div>
+        <div id="formatter-section-container"></div>
 
         <!-- Compare Section -->
         <div id="compare-section" style="display: none">
@@ -115,9 +108,6 @@
             <button class="add-tab-button" onclick="addCompareTab()">
               + Add Tab
             </button>
-            <select onchange="loadComparePreset(this.value)" class="preset-select">
-              <option value="">-- Load Preset --</option>
-            </select>
           </div>
           <div id="compare-tab-contents">
             <!-- Compare tab contents will be dynamically added here -->
@@ -130,9 +120,6 @@
             <button class="add-tab-button" onclick="addCodegenTab()">
               + Add Tab
             </button>
-            <select onchange="loadCodegenPreset(this.value)" class="preset-select">
-              <option value="">-- Load Preset --</option>
-            </select>
           </div>
           <div id="codegen-tab-contents">
             <!-- CodeGen tab contents will be dynamically added here -->
@@ -315,6 +302,20 @@
         alt="Made with love with Open Source"
       />
     </p>
-    <script src="index.js"></script>
+    <!-- Core Utilities -->
+    <script src="assets/js/core/storage.js"></script>
+    <script src="assets/js/core/dom.js"></script>
+    <script src="assets/js/core/json-utils.js"></script>
+
+    <!-- Feature Modules -->
+    <script src="assets/js/features/formatter/formatter.js"></script>
+    <script src="assets/js/features/compare/compare.js"></script>
+    <script src="assets/js/features/codegen/codegen.js"></script>
+    <script src="assets/js/features/convert/convert.js"></script>
+    <script src="assets/js/features/mockgen/mockgen.js"></script>
+    <script src="assets/js/features/editor/editor.js"></script>
+
+    <!-- Main App Initialization -->
+    <script src="assets/js/app.js"></script>
   </body>
 </html>
